@@ -113,7 +113,7 @@ def build_timelines(facts: pd.DataFrame) -> dict[str, pd.DataFrame]:
             for filed, val, prior in builder(g):
                 rows.append((cik, filed, val, prior))
         df = pd.DataFrame(rows, columns=["cik", "filed", "val", "prior"])
-        df["filed"] = pd.to_datetime(df["filed"])
+        df["filed"] = pd.to_datetime(df["filed"]).astype("datetime64[ns]")
         # keep the LAST emission per (cik, filed) — the best estimate that day
         df = df.sort_values(["cik", "filed"]).drop_duplicates(
             ["cik", "filed"], keep="last")
@@ -135,7 +135,7 @@ def asof(timelines: dict[str, pd.DataFrame], field: str,
     if tl is None or tl.empty:
         return pd.DataFrame({"val": np.nan, "prior": np.nan}, index=ciks.index)
     left = pd.DataFrame({"cik": ciks.to_numpy(), "filed": date}).sort_values("cik")
-    left["filed"] = pd.to_datetime(left["filed"])
+    left["filed"] = pd.to_datetime(left["filed"]).astype("datetime64[ns]")
     m = pd.merge_asof(left.sort_values("filed"), tl, on="filed", by="cik",
                       direction="backward",
                       tolerance=pd.Timedelta(days=max_staleness_days))
