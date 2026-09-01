@@ -1,0 +1,13 @@
+# The database, journal and dashboard ARE the experiment's public record —
+# they are tracked and committed back by the daily GitHub Actions run.
+#
+# Ignored below: re-downloadable caches (daily prices, weekly fundamentals,
+# quarterly insider archives) that would bloat the repo for no benefit.
+# Two caches ARE kept because they're expensive to rebuild and tiny:
+#   data/cache/sic_map.parquet          (one-time sector map)
+#   data/cache/companyfacts_fill.parquet (per-company fundamentals fallback)
+data/cache/*
+!data/cache/sic_map.parquet
+!data/cache/companyfacts_fill.parquet
+__pycache__/
+*.pyc

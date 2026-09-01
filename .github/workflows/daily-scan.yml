@@ -1,0 +1,71 @@
+# Daily screener run: scan the market, track the portfolio, commit the
+# permanent record back to the repo, and publish the dashboard to Pages.
+#
+# One-time repo setup (see README):
+#   * Settings -> Pages -> Source: "GitHub Actions"
+#   * Settings -> Secrets and variables -> Actions -> New secret:
+#       SEC_CONTACT = your@email (SEC fair-use identification)
+name: daily-scan
+
+on:
+  schedule:
+    - cron: "30 21 * * 1-5"   # 21:30 UTC ≈ 5:30pm New York, after market close
+  workflow_dispatch: {}        # manual "Run workflow" button
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: daily-scan
+  cancel-in-progress: false
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run daily scan
+        env:
+          SEC_CONTACT: ${{ secrets.SEC_CONTACT }}
+        run: python run_scan.py
+
+      - name: Track portfolio
+        env:
+          SEC_CONTACT: ${{ secrets.SEC_CONTACT }}
+        run: python track_portfolio.py
+
+      - name: Commit the permanent record
+        run: |
+          git config user.name "screener-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/screener.db journal dashboard \
+                  data/cache/sic_map.parquet
+          git add -f data/cache/companyfacts_fill.parquet || true
+          git commit -m "scan: $(date -u +%F)" || echo "nothing new to commit"
+          git push
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload dashboard
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dashboard
+
+      - name: Deploy to Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
