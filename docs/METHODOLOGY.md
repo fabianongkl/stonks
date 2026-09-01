@@ -182,9 +182,15 @@ Two mechanisms, both automatic, both fully logged:
   persistently above zero means genuine predictive power; ICs of 0.02–0.05
   are respectable in practice.
 
-**Weight adaptation.** Once at least 8 scans have matured at the 63-day
-horizon, weights drift toward each factor's demonstrated mean IC
-(negative-IC factors get no positive credit):
+**Weight adaptation.** Once at least **6 independent (non-overlapping)
+evaluation windows** have matured at the 63-day horizon, weights drift toward
+each factor's demonstrated mean IC (negative-IC factors get no positive
+credit). Independence matters: daily scans with 63-day horizons overlap
+almost entirely, so consecutive matured scans are the *same quarter observed
+repeatedly* — counting them individually would let the weights chase a single
+market regime. Only windows at least 63 trading days apart count toward the
+trigger (≈1.5 years before the first adaptation); the IC point estimate then
+uses all matured scans for smoothness.
 
 ```
 target_f  = max(mean_IC_f, 0) / Σ max(mean_IC, 0)
@@ -247,6 +253,11 @@ no results were harmed in the making of these changes):
   a multi-class filer — Berkshire is the canonical case) and market cap is
   treated as missing instead of producing an absurd value score.
 - Bootstrap p-values on every matured-scan evaluation.
+
+**v0.2.1 — 2026-09-01**: learning-trigger independence fix. The weight
+adaptation threshold now counts only non-overlapping 63-day evaluation
+windows instead of raw matured-scan count — raised in an external-critique
+review: overlapping daily scans are one observation, not many.
 
 **v0.1 — 2026-09-01**: initial release (4 factors, 10 metrics, global
 Gaussian-rank scoring).

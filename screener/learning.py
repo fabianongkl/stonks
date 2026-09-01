@@ -138,20 +138,43 @@ def _evaluate(conn, scan_id: int, horizon: int, elapsed: int,
     return len(fwd)
 
 
+def _independent_eval_count(conn: sqlite3.Connection) -> int:
+    """Number of NON-OVERLAPPING matured evaluation windows at the primary
+    horizon.  Daily scans overlap almost entirely (the same quarter observed
+    many times); counting them all would let the weights 'learn' from what is
+    statistically one observation.  Greedy selection: take the earliest
+    evaluated scan, then the next one at least PRIMARY_HORIZON trading days
+    later, and so on.
+    """
+    dates = pd.read_sql_query(
+        "SELECT DISTINCT s.scan_date FROM factor_ic f JOIN scans s USING (scan_id) "
+        "WHERE f.horizon_days=? AND f.ic IS NOT NULL ORDER BY s.scan_date",
+        conn, params=(config.PRIMARY_HORIZON,))["scan_date"].tolist()
+    count, last = 0, None
+    for d in dates:
+        if last is None or _trading_days_between(last, d) >= config.PRIMARY_HORIZON:
+            count += 1
+            last = d
+    return count
+
+
 def maybe_update_weights(conn: sqlite3.Connection) -> dict[str, float] | None:
-    """Adapt factor weights if enough evidence has accumulated.
+    """Adapt factor weights if enough INDEPENDENT evidence has accumulated.
 
     Returns the new weights if they changed, else None.
     """
     ics = pd.read_sql_query(
         "SELECT scan_id, factor, ic FROM factor_ic WHERE horizon_days=? AND ic IS NOT NULL",
         conn, params=(config.PRIMARY_HORIZON,))
-    n_scans = ics["scan_id"].nunique()
-    if n_scans < config.MIN_SCANS_BEFORE_LEARNING:
-        log.info("Learning: %d/%d matured scans at %dd horizon — weights unchanged",
-                 n_scans, config.MIN_SCANS_BEFORE_LEARNING, config.PRIMARY_HORIZON)
+    n_indep = _independent_eval_count(conn)
+    if n_indep < config.MIN_INDEPENDENT_EVALS:
+        log.info("Learning: %d/%d independent (non-overlapping) evaluations at "
+                 "%dd horizon — weights unchanged",
+                 n_indep, config.MIN_INDEPENDENT_EVALS, config.PRIMARY_HORIZON)
         return None
 
+    # Point estimate still uses ALL matured scans (more data smooths noise);
+    # only the trigger requires independence.
     mean_ic = ics.groupby("factor")["ic"].mean()
     current = db.get_current_weights(conn)
 
@@ -173,7 +196,8 @@ def maybe_update_weights(conn: sqlite3.Connection) -> dict[str, float] | None:
     if all(abs(new[f] - current.get(f, 0)) < 0.005 for f in FACTOR_NAMES):
         return None
 
-    reason = (f"IC-based update over {n_scans} matured scans at "
+    reason = (f"IC-based update over {ics['scan_id'].nunique()} matured scans "
+              f"({n_indep} independent windows) at "
               f"{config.PRIMARY_HORIZON}d horizon. Mean ICs: "
               + ", ".join(f"{f}={mean_ic.get(f, float('nan')):.4f}" for f in FACTOR_NAMES))
     db.set_weights(conn, new, date.today().isoformat(), reason)

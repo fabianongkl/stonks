@@ -65,7 +65,12 @@ MIN_SECTOR_GROUP = 30
 # ---------------------------------------------------------------------------
 EVAL_HORIZONS_DAYS = [21, 63, 126]   # ~1, 3, 6 months of trading days
 PRIMARY_HORIZON = 63                 # weight learning keys off 3-month results
-MIN_SCANS_BEFORE_LEARNING = 8        # don't re-weight until this many matured scans
+# Daily scans with 63-day horizons overlap almost entirely — 8 consecutive
+# matured scans are ~1.5 independent observations, not 8.  The learning
+# trigger therefore counts only NON-OVERLAPPING evaluation windows (scans at
+# least PRIMARY_HORIZON trading days apart), so weights can't start chasing
+# one market regime observed many times.
+MIN_INDEPENDENT_EVALS = 6            # ≈ 1.5 years of distinct quarters
 WEIGHT_FLOOR = 0.05                  # no factor's weight ever drops below this
 WEIGHT_LEARNING_RATE = 0.25          # how far weights move toward IC-implied weights
 TOP_DECILE = 0.10                    # "picks" tracked = top 10% by composite score
