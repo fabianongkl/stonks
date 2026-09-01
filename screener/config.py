@@ -80,3 +80,10 @@ TOP_DECILE = 0.10                    # "picks" tracked = top 10% by composite sc
 # ---------------------------------------------------------------------------
 PRICE_LOOKBACK_DAYS = 420   # ~14 months of BUSINESS days back for momentum calc
 YF_BATCH_SIZE = 250         # tickers per yfinance bulk request
+YF_BATCH_RETRIES = 3        # retries per batch when Yahoo throttles (cloud IPs)
+
+# Data-quality floor: a scan is REFUSED (hard error, nothing recorded) when
+# price coverage collapses — a throttled data source must fail the run loudly,
+# never silently replace a good scan with a degraded one.
+MIN_PRICED_FRACTION = 0.60      # priced symbols / universe
+MAX_SHRINK_VS_EXISTING = 0.80   # scored vs an existing same-date scan

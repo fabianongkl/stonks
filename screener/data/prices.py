@@ -48,27 +48,43 @@ def fetch_prices(symbols: list[str], use_cache: bool = True) -> pd.DataFrame:
 
 
 def _download(symbols: list[str]) -> pd.DataFrame:
+    import time
+
     start = date.today() - timedelta(days=config.PRICE_LOOKBACK_DAYS + 40)
     chunks = [symbols[i:i + config.YF_BATCH_SIZE]
               for i in range(0, len(symbols), config.YF_BATCH_SIZE)]
     out = []
     for i, chunk in enumerate(chunks, 1):
         log.info("Downloading prices: batch %d/%d (%d tickers)", i, len(chunks), len(chunk))
-        try:
-            raw = yf.download(
-                tickers=chunk,
-                start=start.isoformat(),
-                auto_adjust=True,
-                progress=False,
-                group_by="ticker",
-                threads=True,
-            )
-        except Exception as e:  # network hiccup on one batch shouldn't kill the scan
-            log.warning("Batch %d failed (%s); skipping", i, e)
-            continue
-        if raw is None or raw.empty:
-            continue
-        out.append(_to_long(raw, chunk))
+        # Yahoo throttles datacenter IPs (GitHub runners) hard: a throttled
+        # batch comes back mostly empty rather than erroring.  Retry with
+        # backoff until the batch returns a sane fraction of its tickers.
+        part = None
+        for attempt in range(1, config.YF_BATCH_RETRIES + 1):
+            try:
+                raw = yf.download(
+                    tickers=chunk,
+                    start=start.isoformat(),
+                    auto_adjust=True,
+                    progress=False,
+                    group_by="ticker",
+                    threads=True,
+                )
+            except Exception as e:
+                log.warning("Batch %d attempt %d failed (%s)", i, attempt, e)
+                raw = None
+            part = _to_long(raw, chunk) if raw is not None and not raw.empty else None
+            got = part["symbol"].nunique() if part is not None else 0
+            if got >= 0.5 * len(chunk):
+                break
+            if attempt < config.YF_BATCH_RETRIES:
+                wait = 20 * attempt
+                log.warning("Batch %d returned %d/%d tickers — throttled? "
+                            "retrying in %ds", i, got, len(chunk), wait)
+                time.sleep(wait)
+        if part is not None and not part.empty:
+            out.append(part)
+        time.sleep(1.0)   # gentle pacing between batches
     if not out:
         return pd.DataFrame(columns=["symbol", "date", "close", "volume"])
     df = pd.concat(out, ignore_index=True)

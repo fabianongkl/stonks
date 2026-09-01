@@ -61,6 +61,13 @@ def main() -> int:
     if px.empty:
         log.error("No price data retrieved — aborting scan.")
         return 1
+    priced = px["symbol"].nunique()
+    if not args.sample and priced < config.MIN_PRICED_FRACTION * len(uni):
+        log.error("DATA-QUALITY ABORT: only %d/%d symbols priced (< %.0f%%). "
+                  "The price source is throttled or down — refusing to record "
+                  "a degraded scan. Nothing was saved.",
+                  priced, len(uni), config.MIN_PRICED_FRACTION * 100)
+        return 1
 
     # 5. Metrics ------------------------------------------------------------
     pm = factors.price_metrics(px)
@@ -108,6 +115,16 @@ def main() -> int:
     scored = scored.rename(columns={"last_close": "close"})
 
     # 8. Persist ------------------------------------------------------------
+    # Never replace an existing same-date scan with a clearly worse one.
+    existing = conn.execute(
+        "SELECT scored_size FROM scans WHERE scan_date=?", (today,)).fetchone()
+    if (not args.sample and existing
+            and len(scored) < config.MAX_SHRINK_VS_EXISTING * existing[0]):
+        log.error("DATA-QUALITY ABORT: this run scored %d stocks but a scan "
+                  "for %s already exists with %d — refusing to overwrite good "
+                  "data with a degraded rerun.", len(scored), today, existing[0])
+        conn.close()
+        return 1
     scan_id = db.save_scan(conn, today, universe_size, scored, weights,
                            notes="sample run" if args.sample else "")
     log.info("Scan %d saved: %s, %d scored, %d with full factor coverage",
