@@ -21,7 +21,7 @@ from datetime import datetime
 import numpy as np
 import pandas as pd
 
-from . import config, db, learning
+from . import commentary, config, db, learning
 from .factors import FACTOR_NAMES
 
 # ---------------------------------------------------------------------------
@@ -98,11 +98,8 @@ def build_payload(conn: sqlite3.Connection, scan_id: int) -> dict:
 
     pct = scores[[c for c, *_ in _REASON_RULES] + ["dollar_volume"]].rank(pct=True)
 
-    full = scores[scores["n_factors"] == 4]
-    top = full.nsmallest(100, "rank")
-    picks = []
-    for display_rank, (_, row) in enumerate(top.iterrows(), start=1):
-        picks.append({
+    def _pick(row, display_rank: int) -> dict:
+        return {
             "rank": display_rank,
             "symbol": row["symbol"],
             "name": (row["name"] or "")[:60],
@@ -115,7 +112,35 @@ def build_payload(conn: sqlite3.Connection, scan_id: int) -> dict:
                         for f in FACTOR_NAMES},
             "reasons": _reasons(row, pct),
             "flags": _flags(row, pct),
-        })
+        }
+
+    full = commentary.full_coverage(scores)
+    picks = [_pick(row, int(row["fc_rank"]))
+             for _, row in full.head(100).iterrows()]
+
+    # previous scan (different date) for movers/entrants commentary
+    prev_row = conn.execute(
+        "SELECT scan_id FROM scans WHERE scan_date < ? "
+        "ORDER BY scan_date DESC, scan_id DESC LIMIT 1",
+        (scan["scan_date"],)).fetchone()
+    prev_full = None
+    if prev_row:
+        prev_scores = db.get_scores(conn, prev_row[0])
+        if not prev_scores.empty and "sector" in prev_scores.columns:
+            prev_full = commentary.full_coverage(prev_scores)
+
+    overall_text = commentary.overall(full, prev_full, scan["scan_date"],
+                                      int(scan["scored_size"]))
+    sector_data = {}
+    for sec_name, cnt in full["sector"].value_counts().items():
+        if not sec_name or cnt < 5:
+            continue
+        sec_top = full[full["sector"] == sec_name].head(10)
+        sector_data[sec_name] = {
+            "commentary": commentary.sector(full, prev_full, sec_name),
+            "picks": [_pick(row, int(row["fc_rank"]))
+                      for _, row in sec_top.iterrows()],
+        }
 
     # Track record
     tr = learning.track_record(conn)
@@ -157,6 +182,8 @@ def build_payload(conn: sqlite3.Connection, scan_id: int) -> dict:
         "full_coverage": int(scan["full_coverage"]),
         "weights": weights,
         "picks": picks,
+        "overall_commentary": overall_text,
+        "sectors": sector_data,
         "track": track,
         "factor_ics": ics,
         "weight_history": weight_history,
@@ -290,6 +317,8 @@ tr:hover td{background:color-mix(in srgb, var(--ink) 4%, transparent)}
 input[type=search]{background:var(--surface);color:var(--ink);
   border:1px solid var(--axis);border-radius:8px;padding:7px 12px;
   font:inherit;width:230px;margin-bottom:10px}
+select{background:var(--surface);color:var(--ink);border:1px solid var(--axis);
+  border-radius:8px;padding:7px 10px;font:inherit}
 .note{color:var(--muted);font-size:.8rem;margin-top:8px}
 .disclaimer{border:1px solid var(--border);border-left:3px solid var(--warn);
   border-radius:8px;padding:10px 14px;margin:26px 0;color:var(--ink2);font-size:.85rem}
@@ -314,6 +343,15 @@ a{color:var(--pos)}
     its place by beating its own industry's peers, not by belonging to an
     industry that flatters the metric. Mini-bars show Value, Quality, Momentum
     and Low-Vol scores (up = above sector average, down = below).
+  </div>
+  <div class="card" style="margin-bottom:12px">
+    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+      <label for="sector-sel" style="color:var(--ink2);font-size:.85rem">View:</label>
+      <select id="sector-sel"></select>
+    </div>
+    <div id="commentary" style="margin-top:10px;font-size:.9rem"></div>
+    <div class="note">Auto-generated from scan data by fixed rules — every
+      sentence is derived from the numbers, no AI involved in the daily run.</div>
   </div>
   <div class="card">
     <input type="search" id="q" placeholder="Filter by ticker or name…">
@@ -393,9 +431,26 @@ function fbars(f) {
     return `<span class="${cls}" style="height:${h}px;align-self:${z<0?'flex-start':'flex-end'}" title="${k}: ${z>0?'+':''}${z}"></span>`;
   }).join('') + '</div>';
 }
+/* --- sector selector & commentary --- */
+const sel = $('#sector-sel');
+const sectorNames = Object.keys(D.sectors || {});
+sel.innerHTML = '<option value="ALL">All sectors (top 100)</option>' +
+  sectorNames.map(s => `<option value="${esc(s)}">${esc(s)} (top 10)</option>`).join('');
+function currentPicks() {
+  const v = sel.value;
+  return v === 'ALL' ? D.picks : (D.sectors[v]?.picks || []);
+}
+function renderCommentary() {
+  const v = sel.value;
+  $('#commentary').textContent = v === 'ALL'
+    ? (D.overall_commentary || '')
+    : (D.sectors[v]?.commentary || '');
+}
+sel.addEventListener('change', () => { renderCommentary(); renderPicks($('#q').value); });
+
 function renderPicks(filter) {
   const q = (filter || '').trim().toUpperCase();
-  const rows = D.picks.filter(p => !q ||
+  const rows = currentPicks().filter(p => !q ||
     p.symbol.includes(q) || p.name.toUpperCase().includes(q));
   $('#picks tbody').innerHTML = rows.map(p => `
     <tr>
@@ -412,6 +467,7 @@ function renderPicks(filter) {
     </tr>`).join('') ||
     '<tr><td colspan="9" class="empty">No matches.</td></tr>';
 }
+renderCommentary();
 renderPicks('');
 $('#q').addEventListener('input', e => renderPicks(e.target.value));
 

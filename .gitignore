@@ -9,5 +9,6 @@
 data/cache/*
 !data/cache/sic_map.parquet
 !data/cache/companyfacts_fill.parquet
+backtest/cache/
 __pycache__/
 *.pyc
