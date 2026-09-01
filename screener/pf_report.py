@@ -11,11 +11,17 @@ import pandas as pd
 from . import config, portfolio
 
 
-def build_payload(conn: sqlite3.Connection) -> dict:
-    pos = portfolio.position_table(conn)
-    snaps = pd.read_sql_query("SELECT * FROM pf_snapshots ORDER BY date", conn)
-    tx = pd.read_sql_query("SELECT * FROM pf_txns ORDER BY txn_id", conn)
-    c = portfolio.cash(conn)
+def build_payload(conn: sqlite3.Connection, book: str = "core") -> dict:
+    cfg = portfolio.BOOKS[book]
+    start_cash = cfg["start_cash"]
+    pos = portfolio.position_table(conn, book)
+    snaps = pd.read_sql_query(
+        "SELECT * FROM pf_snapshots WHERE book=? ORDER BY date",
+        conn, params=(book,))
+    tx = pd.read_sql_query(
+        "SELECT * FROM pf_txns WHERE book=? ORDER BY txn_id",
+        conn, params=(book,))
+    c = portfolio.cash(conn, book)
     total = round(float(pos["value"].sum()) + c, 2) if not pos.empty else c
 
     curve = []
@@ -26,19 +32,29 @@ def build_payload(conn: sqlite3.Connection) -> dict:
         curve.append({
             "date": s["date"],
             "total": s["total"],
-            "pf_idx": round(s["total"] / portfolio.START_CASH * 100, 2),
+            "pf_idx": round(s["total"] / start_cash * 100, 2),
             "spy_idx": (round(s["spy_close"] / spy0 * 100, 2)
                         if spy0 and s["spy_close"] else None),
         })
 
+    other = [b for b in portfolio.BOOKS if b != book][0]
     fees = round(float(tx["fee"].sum()), 2) if not tx.empty else 0.0
     return {
         "generated": datetime.now().isoformat(timespec="seconds"),
-        "start_cash": portfolio.START_CASH,
+        "label": cfg["label"],
+        "book": book,
+        "desc": ("the screener's own composite, patient rules"
+                 if cfg["weights"] is None else
+                 "momentum-dominant weighting ("
+                 + ", ".join(f"{k} {v:.0%}" for k, v in cfg["weights"].items())
+                 + "), concentrated and fast-rotating"),
+        "other_label": portfolio.BOOKS[other]["label"],
+        "other_page": portfolio.BOOKS[other]["page"],
+        "start_cash": start_cash,
         "total": total,
         "cash": c,
-        "pnl": round(total - portfolio.START_CASH, 2),
-        "pnl_pct": round((total / portfolio.START_CASH - 1) * 100, 2),
+        "pnl": round(total - start_cash, 2),
+        "pnl_pct": round((total / start_cash - 1) * 100, 2),
         "fees_paid": fees,
         "positions": pos.to_dict("records") if not pos.empty else [],
         "curve": curve,
@@ -48,16 +64,24 @@ def build_payload(conn: sqlite3.Connection) -> dict:
              "note": t["note"]}
             for _, t in tx.iterrows()
         ],
-        "max_held_rank": portfolio.MAX_HELD_RANK,
+        "max_held_rank": cfg["max_held_rank"],
     }
 
 
-def generate(conn: sqlite3.Connection) -> str:
-    payload = build_payload(conn)
-    html = _TEMPLATE.replace("__PAYLOAD__", json.dumps(payload))
-    out = config.DASHBOARD_DIR / "portfolio.html"
+def generate(conn: sqlite3.Connection, book: str = "core") -> str:
+    payload = build_payload(conn, book)
+    html = (_TEMPLATE
+            .replace("__TITLE__", payload["label"])
+            .replace("__PAYLOAD__", json.dumps(payload)))
+    out = config.DASHBOARD_DIR / portfolio.BOOKS[book]["page"]
     out.write_text(html, encoding="utf-8")
     return str(out)
+
+
+def generate_all(conn: sqlite3.Connection) -> list[str]:
+    return [generate(conn, b) for b in portfolio.BOOKS
+            if not portfolio.holdings(conn, b).empty
+            or b == "core"]
 
 
 _TEMPLATE = r"""<!doctype html>
@@ -65,7 +89,7 @@ _TEMPLATE = r"""<!doctype html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Claude's Picks</title>
+<title>__TITLE__</title>
 <style>
 :root{
   color-scheme: light;
@@ -130,10 +154,8 @@ a{color:var(--pos)}
 </head>
 <body>
 <div class="wrap">
-  <h1>Claude's Picks</h1>
-  <div class="sub">A hypothetical $10,000 portfolio deployed into the screener's
-    top-ranked stocks — tracked daily, fees included, versus buy-and-hold SPY.
-    <a href="index.html">← screener dashboard</a></div>
+  <h1 id="pf-title"></h1>
+  <div class="sub" id="pf-sub"></div>
 
   <div class="tiles" id="tiles"></div>
 
@@ -167,8 +189,7 @@ a{color:var(--pos)}
   <div class="disclaimer"><b>Hypothetical portfolio — no real money.</b>
     This is a live accountability experiment for the screener's rankings,
     including IBKR-style commissions. It is not investment advice, and its
-    aggressive concentration (10 stocks) is a research choice, not a
-    recommendation.</div>
+    concentration is a research choice, not a recommendation.</div>
   <div class="note" id="footer"></div>
 </div>
 <div class="tooltip" id="tip"></div>
@@ -183,6 +204,8 @@ const money = v => '$' + Number(v).toLocaleString(undefined,
 const cls = v => v > 0 ? 'up' : v < 0 ? 'down' : '';
 const sign = v => (v > 0 ? '+' : '') + v;
 
+$('#pf-title').textContent = D.label;
+$('#pf-sub').innerHTML = `A hypothetical ${money(D.start_cash)} paper book — ${esc(D.desc)} — tracked daily, fees included, versus buy-and-hold SPY. <a href="index.html">← screener dashboard</a> · <a href="${esc(D.other_page)}">${esc(D.other_label)} →</a>`;
 $('#mhr').textContent = '#' + D.max_held_rank;
 $('#tiles').innerHTML = [
   [money(D.total), 'total value'],

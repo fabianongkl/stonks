@@ -1,17 +1,21 @@
-"""Claude's Picks — the live hypothetical portfolio experiment.
+"""The hypothetical portfolio experiment — now TWO books, one ledger.
 
-A $10,000 paper portfolio deployed into the screener's top-ranked stocks and
-tracked daily against buy-and-hold SPY. The point is not the money (there is
-none); it is accountability: the screener's rankings are abstract until they
-are forced to live inside a portfolio with fees, concentration and drawdowns.
+  core        "Claude's Picks" — $10,000, 10 positions, the scan's own
+              composite, patient rules.  The balanced reference book.
+  aggressive  "Hyper-Aggressive" — $100,000, 8 concentrated positions,
+              momentum-dominant weighting (0.50/0.20/0.20/0.10 across
+              momentum/low-vol/quality/value), faster rotation (rank
+              tolerance 100 on ITS OWN ranking).  This tilt was openly
+              informed by the 5-year backtest's factor ICs — which makes
+              this book a live A/B test of "follow the backtest" against
+              the core book's "trust the priors".  The live record judges.
 
-Strategy (documented fully in docs/PORTFOLIO_EXPERIMENT.md):
-  * Equal-weight the top 10 composite-ranked stocks with full factor coverage.
-  * Whole shares only; residual stays as cash.
-  * IBKR Fixed commission model: $0.005/share, min $1, max 1% of trade value.
-  * Monthly review (--review): any holding whose composite rank has decayed
-    beyond MAX_HELD_RANK is sold and replaced by the best-ranked stock not
-    already held.  No other trading — no stops, no daily churn.
+Neither book uses leverage or options: simulating margin calls and IV
+without real borrow/options data would be fantasy math on the permanent
+record.  Aggression here means concentration, tilt and turnover.
+
+Fees: IBKR Fixed commission model on every trade.
+Rules documented in docs/PORTFOLIO_EXPERIMENT.md.
 """
 
 from __future__ import annotations
@@ -20,23 +24,47 @@ import logging
 import sqlite3
 from datetime import date
 
+import numpy as np
 import pandas as pd
 
-from . import config, db
+from . import db
+from .factors import FACTOR_NAMES
 
 log = logging.getLogger(__name__)
 
-START_CASH = 10_000.00
-N_POSITIONS = 10
-MAX_HELD_RANK = 50      # sell at review if rank (among full-coverage) decays past this
-MAX_PER_SECTOR = 2      # selection cap so the book is stock picks, not one sector bet
+MAX_PER_SECTOR = 2      # selection cap for every book
+
+BOOKS: dict[str, dict] = {
+    "core": {
+        "label": "Claude's Picks",
+        "start_cash": 10_000.0,
+        "n_positions": 10,
+        "max_held_rank": 50,
+        "weights": None,          # None -> the scan's stored composite
+        "page": "portfolio.html",
+    },
+    "aggressive": {
+        "label": "Hyper-Aggressive",
+        "start_cash": 100_000.0,
+        "n_positions": 8,
+        "max_held_rank": 100,
+        "weights": {"momentum": 0.50, "low_vol": 0.20,
+                    "quality": 0.20, "value": 0.10},
+        "page": "aggressive.html",
+    },
+}
+
+# kept for older callers/docs
+START_CASH = BOOKS["core"]["start_cash"]
+N_POSITIONS = BOOKS["core"]["n_positions"]
+MAX_HELD_RANK = BOOKS["core"]["max_held_rank"]
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS pf_txns (
     txn_id  INTEGER PRIMARY KEY AUTOINCREMENT,
     date    TEXT NOT NULL,
     symbol  TEXT NOT NULL,
-    side    TEXT NOT NULL,            -- BUY / SELL
+    side    TEXT NOT NULL,
     shares  REAL NOT NULL,
     price   REAL NOT NULL,
     fee     REAL NOT NULL,
@@ -60,54 +88,80 @@ def ibkr_fee(shares: float, price: float) -> float:
 def connect() -> sqlite3.Connection:
     conn = db.connect()
     conn.executescript(SCHEMA)
+    _migrate_books(conn)
     return conn
+
+
+def _migrate_books(conn: sqlite3.Connection) -> None:
+    """Add the `book` dimension to ledger tables created before it existed."""
+    cols = {r[1] for r in conn.execute("PRAGMA table_info(pf_txns)")}
+    if "book" not in cols:
+        conn.execute("ALTER TABLE pf_txns ADD COLUMN book TEXT NOT NULL DEFAULT 'core'")
+    cols = {r[1] for r in conn.execute("PRAGMA table_info(pf_snapshots)")}
+    if "book" not in cols:
+        conn.executescript("""
+            CREATE TABLE pf_snapshots_v2 (
+                date TEXT NOT NULL, book TEXT NOT NULL,
+                positions_value REAL, cash REAL, total REAL, spy_close REAL,
+                PRIMARY KEY (date, book)
+            );
+            INSERT INTO pf_snapshots_v2
+                SELECT date, 'core', positions_value, cash, total, spy_close
+                FROM pf_snapshots;
+            DROP TABLE pf_snapshots;
+            ALTER TABLE pf_snapshots_v2 RENAME TO pf_snapshots;
+        """)
+    conn.commit()
 
 
 # ---------------------------------------------------------------------------
 # State
 # ---------------------------------------------------------------------------
 
-def holdings(conn) -> pd.DataFrame:
-    """Net position per symbol with average cost (fees capitalised into cost)."""
-    tx = pd.read_sql_query("SELECT * FROM pf_txns ORDER BY txn_id", conn)
+def holdings(conn, book: str = "core") -> pd.DataFrame:
+    tx = pd.read_sql_query(
+        "SELECT * FROM pf_txns WHERE book=? ORDER BY txn_id", conn, params=(book,))
     if tx.empty:
         return pd.DataFrame(columns=["symbol", "shares", "cost_basis"])
-    rows = {}
+    rows: dict[str, dict] = {}
     for _, t in tx.iterrows():
         h = rows.setdefault(t["symbol"], {"shares": 0.0, "cost": 0.0})
         if t["side"] == "BUY":
             h["cost"] += t["shares"] * t["price"] + t["fee"]
             h["shares"] += t["shares"]
         else:
-            if h["shares"] > 0:  # reduce cost proportionally on sells
+            if h["shares"] > 0:
                 h["cost"] *= (h["shares"] - t["shares"]) / h["shares"]
             h["shares"] -= t["shares"]
-    out = pd.DataFrame(
+    return pd.DataFrame(
         [{"symbol": s, "shares": v["shares"], "cost_basis": round(v["cost"], 2)}
          for s, v in rows.items() if v["shares"] > 1e-9])
-    return out
 
 
-def cash(conn) -> float:
-    tx = pd.read_sql_query("SELECT side, shares, price, fee FROM pf_txns", conn)
-    c = START_CASH
+def cash(conn, book: str = "core") -> float:
+    tx = pd.read_sql_query(
+        "SELECT side, shares, price, fee FROM pf_txns WHERE book=?",
+        conn, params=(book,))
+    c = BOOKS[book]["start_cash"]
     for _, t in tx.iterrows():
         flow = t["shares"] * t["price"]
         c += (flow - t["fee"]) if t["side"] == "SELL" else -(flow + t["fee"])
     return round(c, 2)
 
 
-def _record(conn, day: str, symbol: str, side: str, shares: float,
+def _record(conn, book: str, day: str, symbol: str, side: str, shares: float,
             price: float, note: str) -> None:
     fee = ibkr_fee(shares, price)
     conn.execute(
-        "INSERT INTO pf_txns (date, symbol, side, shares, price, fee, note) "
-        "VALUES (?,?,?,?,?,?,?)", (day, symbol, side, shares, price, fee, note))
-    log.info("%s %s %g @ $%.2f (fee $%.2f) — %s", side, symbol, shares, price, fee, note)
+        "INSERT INTO pf_txns (book, date, symbol, side, shares, price, fee, note)"
+        " VALUES (?,?,?,?,?,?,?,?)",
+        (book, day, symbol, side, shares, price, fee, note))
+    log.info("[%s] %s %s %g @ $%.2f (fee $%.2f) — %s",
+             book, side, symbol, shares, price, fee, note)
 
 
 # ---------------------------------------------------------------------------
-# Latest scan helpers
+# Latest scan / ranking per book
 # ---------------------------------------------------------------------------
 
 def latest_scan(conn) -> tuple[int, str, pd.DataFrame]:
@@ -116,14 +170,23 @@ def latest_scan(conn) -> tuple[int, str, pd.DataFrame]:
     ).fetchone()
     if not row:
         raise RuntimeError("No scans in database — run run_scan.py first.")
-    scores = db.get_scores(conn, row[0])
-    return row[0], row[1], scores
+    return row[0], row[1], db.get_scores(conn, row[0])
 
 
-def full_coverage_ranked(scores: pd.DataFrame) -> pd.DataFrame:
-    """Full-coverage stocks re-ranked 1..N by composite (the pickable set)."""
+def book_ranked(scores: pd.DataFrame, book: str) -> pd.DataFrame:
+    """Full-coverage stocks ranked 1..N by THIS book's scoring."""
     full = scores[scores["n_factors"] == 4].copy()
-    full = full.sort_values("composite", ascending=False).reset_index(drop=True)
+    w = BOOKS[book]["weights"]
+    if w is None:
+        full["book_score"] = full["composite"]
+    else:
+        fs = full[[f"{f}_score" for f in FACTOR_NAMES]]
+        ws = pd.Series({f"{f}_score": w.get(f, 0.0) for f in FACTOR_NAMES})
+        avail = fs.notna()
+        wsum = avail.mul(ws, axis=1).sum(axis=1)
+        full["book_score"] = (fs.fillna(0).mul(ws, axis=1).sum(axis=1)
+                              / wsum.replace(0, np.nan))
+    full = full.sort_values("book_score", ascending=False).reset_index(drop=True)
     full["fc_rank"] = full.index + 1
     return full
 
@@ -146,8 +209,6 @@ def spy_close() -> float | None:
 
 def _select_diversified(ranked: pd.DataFrame, n: int,
                         sector_counts: dict[str, int] | None = None) -> pd.DataFrame:
-    """Walk down the ranking, skipping stocks whose sector is already at the
-    MAX_PER_SECTOR cap (added 2026-09-01 with sector-aware scoring)."""
     counts: dict[str, int] = dict(sector_counts or {})
     rows = []
     for _, p in ranked.iterrows():
@@ -161,89 +222,93 @@ def _select_diversified(ranked: pd.DataFrame, n: int,
     return pd.DataFrame(rows)
 
 
-def init_portfolio(conn) -> None:
-    if not holdings(conn).empty:
-        raise RuntimeError("Portfolio already initialised — refusing to re-seed.")
+def init_portfolio(conn, book: str = "core") -> None:
+    if not holdings(conn, book).empty:
+        raise RuntimeError(f"Book '{book}' already initialised — refusing to re-seed.")
+    cfg = BOOKS[book]
     _, day, scores = latest_scan(conn)
-    picks = _select_diversified(full_coverage_ranked(scores), N_POSITIONS)
-    slice_cash = START_CASH / N_POSITIONS
+    picks = _select_diversified(book_ranked(scores, book), cfg["n_positions"])
+    slice_cash = cfg["start_cash"] / cfg["n_positions"]
     for _, p in picks.iterrows():
         shares = int(slice_cash // p["close"])
         if shares <= 0:
             continue
-        _record(conn, day, p["symbol"], "BUY", shares, p["close"],
-                f"initial deployment — composite rank #{p['fc_rank']}")
+        _record(conn, book, day, p["symbol"], "BUY", shares, p["close"],
+                f"initial deployment — {cfg['label']} rank #{int(p['fc_rank'])}")
     conn.commit()
 
 
-def review(conn) -> list[str]:
-    """Monthly review: replace holdings whose rank decayed past MAX_HELD_RANK."""
+def review(conn, book: str = "core") -> list[str]:
+    """Monthly review: replace holdings whose book-rank decayed past tolerance."""
+    cfg = BOOKS[book]
     _, day, scores = latest_scan(conn)
-    ranked = full_coverage_ranked(scores).set_index("symbol")
-    held = holdings(conn)
+    ranked = book_ranked(scores, book).set_index("symbol")
+    held = holdings(conn, book)
     actions = []
     for _, h in held.iterrows():
         sym = h["symbol"]
         rank = int(ranked.at[sym, "fc_rank"]) if sym in ranked.index else None
-        if rank is None or rank > MAX_HELD_RANK:
-            px = float(ranked.at[sym, "close"]) if sym in ranked.index else None
-            if px is None:
-                px_row = scores[scores["symbol"] == sym]
-                px = float(px_row["close"].iloc[0]) if not px_row.empty else None
+        if rank is None or rank > cfg["max_held_rank"]:
+            px_row = scores[scores["symbol"] == sym]
+            px = float(px_row["close"].iloc[0]) if not px_row.empty else None
             if px is None:
                 actions.append(f"HOLD {sym}: no price in latest scan — manual review needed")
                 continue
-            _record(conn, day, sym, "SELL", h["shares"], px,
-                    f"review: rank decayed to {rank or 'unranked'} (> {MAX_HELD_RANK})")
-            # replacement: best-ranked stock not held, respecting the sector cap
-            still_held = set(holdings(conn)["symbol"])
+            _record(conn, book, day, sym, "SELL", h["shares"], px,
+                    f"review: rank decayed to {rank or 'unranked'} "
+                    f"(> {cfg['max_held_rank']})")
+            still_held = set(holdings(conn, book)["symbol"])
             sector_counts: dict[str, int] = {}
             for hs in still_held:
-                sec = ranked.at[hs, "sector"] if hs in ranked.index else "Other"
-                sector_counts[sec or "Other"] = sector_counts.get(sec or "Other", 0) + 1
+                sec = (ranked.at[hs, "sector"] if hs in ranked.index else "Other") or "Other"
+                sector_counts[sec] = sector_counts.get(sec, 0) + 1
             candidates = ranked[~ranked.index.isin(still_held)].reset_index()
             repl = _select_diversified(candidates, 1, sector_counts)
             if not repl.empty:
                 r = repl.iloc[0]
-                budget = min(cash(conn), START_CASH / N_POSITIONS * 1.2)
+                budget = min(cash(conn, book),
+                             cfg["start_cash"] / cfg["n_positions"] * 1.2)
                 shares = int(budget // r["close"])
                 if shares > 0:
-                    _record(conn, day, r["symbol"], "BUY", shares, r["close"],
-                            f"review: replacement, composite rank #{int(r['fc_rank'])}")
+                    _record(conn, book, day, r["symbol"], "BUY", shares, r["close"],
+                            f"review: replacement, {cfg['label']} rank "
+                            f"#{int(r['fc_rank'])}")
                     actions.append(f"SWAP {sym} -> {r['symbol']}")
     conn.commit()
     return actions
 
 
-def snapshot(conn) -> dict:
-    """Mark the portfolio to market off the latest scan; store daily snapshot."""
+def snapshot(conn, book: str = "core",
+             spy: float | None = None) -> dict:
     _, day, scores = latest_scan(conn)
     px = scores.set_index("symbol")["close"]
-    held = holdings(conn)
+    held = holdings(conn, book)
     pos_val = 0.0
     for _, h in held.iterrows():
         p = px.get(h["symbol"])
         if p is None or pd.isna(p):
             last = conn.execute(
-                "SELECT price FROM pf_txns WHERE symbol=? ORDER BY txn_id DESC LIMIT 1",
-                (h["symbol"],)).fetchone()
+                "SELECT price FROM pf_txns WHERE book=? AND symbol=? "
+                "ORDER BY txn_id DESC LIMIT 1", (book, h["symbol"])).fetchone()
             p = last[0] if last else 0.0
-            log.warning("%s missing from latest scan — using last known price", h["symbol"])
+            log.warning("[%s] %s missing from latest scan — using last known price",
+                        book, h["symbol"])
         pos_val += h["shares"] * float(p)
-    c = cash(conn)
-    spy = spy_close()
-    conn.execute("INSERT OR REPLACE INTO pf_snapshots VALUES (?,?,?,?,?)",
-                 (day, round(pos_val, 2), c, round(pos_val + c, 2), spy))
+    c = cash(conn, book)
+    if spy is None:
+        spy = spy_close()
+    conn.execute("INSERT OR REPLACE INTO pf_snapshots VALUES (?,?,?,?,?,?)",
+                 (day, book, round(pos_val, 2), c, round(pos_val + c, 2), spy))
     conn.commit()
-    return {"date": day, "positions_value": round(pos_val, 2), "cash": c,
-            "total": round(pos_val + c, 2), "spy_close": spy}
+    return {"date": day, "book": book, "positions_value": round(pos_val, 2),
+            "cash": c, "total": round(pos_val + c, 2), "spy_close": spy}
 
 
-def position_table(conn) -> pd.DataFrame:
+def position_table(conn, book: str = "core") -> pd.DataFrame:
     _, _, scores = latest_scan(conn)
-    ranked = full_coverage_ranked(scores).set_index("symbol")
+    ranked = book_ranked(scores, book).set_index("symbol")
     px = scores.set_index("symbol")["close"]
-    held = holdings(conn)
+    held = holdings(conn, book)
     rows = []
     for _, h in held.iterrows():
         sym = h["symbol"]
@@ -259,4 +324,7 @@ def position_table(conn) -> pd.DataFrame:
             "pnl_pct": round((val / h["cost_basis"] - 1) * 100, 2) if h["cost_basis"] else None,
             "rank_now": int(ranked.at[sym, "fc_rank"]) if sym in ranked.index else None,
         })
+    if not rows:
+        return pd.DataFrame(columns=["symbol", "shares", "cost_basis", "price",
+                                     "value", "pnl", "pnl_pct", "rank_now"])
     return pd.DataFrame(rows).sort_values("value", ascending=False)

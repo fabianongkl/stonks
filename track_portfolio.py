@@ -1,8 +1,10 @@
-"""Track the Claude's Picks hypothetical portfolio.  Run AFTER run_scan.py:
+"""Track the hypothetical portfolio books.  Run AFTER run_scan.py:
 
-    python track_portfolio.py            # daily: mark to market, update page
-    python track_portfolio.py --init     # one-time: deploy the $10,000
-    python track_portfolio.py --review   # monthly: apply the replacement rule
+    python track_portfolio.py                      # daily: snapshot all books
+    python track_portfolio.py --init               # one-time: seed core book
+    python track_portfolio.py --init --book aggressive   # seed a book
+    python track_portfolio.py --review             # monthly rule, all books
+    python track_portfolio.py --review --book core # monthly rule, one book
 
 Strategy and rationale: docs/PORTFOLIO_EXPERIMENT.md
 """
@@ -18,8 +20,11 @@ from screener import pf_report, portfolio
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--init", action="store_true", help="seed the initial portfolio")
+    ap.add_argument("--init", action="store_true", help="seed a book's initial positions")
     ap.add_argument("--review", action="store_true", help="apply monthly replacement rule")
+    ap.add_argument("--book", choices=list(portfolio.BOOKS), default=None,
+                    help="restrict --init/--review to one book (default: core for "
+                         "--init, all books for --review)")
     args = ap.parse_args()
 
     logging.basicConfig(level=logging.INFO,
@@ -28,24 +33,34 @@ def main() -> int:
     conn = portfolio.connect()
 
     if args.init:
-        portfolio.init_portfolio(conn)
+        portfolio.init_portfolio(conn, args.book or "core")
     elif args.review:
-        actions = portfolio.review(conn)
-        for a in actions:
-            print("  ", a)
-        if not actions:
-            print("Review: all holdings still within rank tolerance — no trades.")
+        books = [args.book] if args.book else list(portfolio.BOOKS)
+        for b in books:
+            if portfolio.holdings(conn, b).empty:
+                continue
+            actions = portfolio.review(conn, b)
+            for a in actions:
+                print(f"  [{b}]", a)
+            if not actions:
+                print(f"Review [{b}]: all holdings within rank tolerance — no trades.")
 
-    snap = portfolio.snapshot(conn)
-    page = pf_report.generate(conn)
+    spy = portfolio.spy_close()
+    for b in portfolio.BOOKS:
+        if portfolio.holdings(conn, b).empty:
+            continue
+        snap = portfolio.snapshot(conn, b, spy=spy)
+        cfg = portfolio.BOOKS[b]
+        pos = portfolio.position_table(conn, b)
+        print(f"\n[{cfg['label']}] {snap['date']}  positions "
+              f"${snap['positions_value']:,.2f} + cash ${snap['cash']:,.2f} "
+              f"= total ${snap['total']:,.2f}  "
+              f"(P&L {snap['total'] - cfg['start_cash']:+,.2f})")
+        if not pos.empty:
+            print(pos.to_string(index=False))
 
-    pos = portfolio.position_table(conn)
-    print(f"\n{snap['date']}  positions ${snap['positions_value']:,.2f}"
-          f" + cash ${snap['cash']:,.2f} = total ${snap['total']:,.2f}"
-          f"  (P&L {snap['total'] - portfolio.START_CASH:+,.2f})")
-    if not pos.empty:
-        print(pos.to_string(index=False))
-    print(f"\nPortfolio page: {page}")
+    for page in pf_report.generate_all(conn):
+        print("page:", page)
     conn.close()
     return 0
 

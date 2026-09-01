@@ -59,6 +59,29 @@ Why this strategy and not day-trading or options:
 - Any single pick is barely better than a coin flip (mean IC of a good
   factor ≈ 0.03–0.05). The portfolio, not the pick, is the unit of account.
 
+## The second book: "Hyper-Aggressive" (added 2026-09-01, same day)
+
+A **$100,000** paper book run alongside the core book as a live A/B test.
+Rules (mechanical, like everything here):
+
+1. **8 positions**, equal-weighted at inception, whole shares.
+2. **Its own ranking:** momentum 50%, low-volatility 20%, quality 20%,
+   value 10% — openly informed by the 5-year backtest's factor ICs. That is
+   the experiment: the core book trusts the literature's priors; this book
+   follows the backtest. The live record decides which philosophy was right.
+3. **Faster rotation:** monthly review sells a holding whose rank (on this
+   book's own scoring) decays past **#100**; sector cap of 2 applies to all
+   replacements.
+4. **No leverage, no options.** Simulating margin calls and option IV
+   without real borrow/quote data would put fantasy numbers on the permanent
+   record. Aggression = concentration + tilt + turnover, honestly costed
+   (IBKR commissions).
+5. Same benchmark (SPY), same ledger tables (`book` column), own dashboard
+   page (`aggressive.html`).
+
+Deployed 2026-09-01: FLXS, MAAS, CBL, TD, PAGP, APLE, DAC, ALTO at ~$12.5k
+each; $29.88 fees; $184.62 residual cash.
+
 ## Daily workflow
 
 ```
