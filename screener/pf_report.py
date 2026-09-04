@@ -246,8 +246,7 @@ const cls = v => v > 0 ? 'up' : v < 0 ? 'down' : '';
 const sign = v => (v > 0 ? '+' : '') + v;
 
 $('#pf-title').textContent = D.label;
-$('#pf-sub').innerHTML = `A hypothetical ${money(D.start_cash)} paper book — ${esc(D.desc)} — tracked daily, fees included, versus buy-and-hold SPY. <a href="index.html">← screener dashboard</a>` +
-  D.others.map(o => ` · <a href="${esc(o.page)}">${esc(o.label)} →</a>`).join('');
+$('#pf-sub').textContent = `A hypothetical ${money(D.start_cash)} paper book — ${D.desc} — tracked daily, fees included, versus buy-and-hold SPY.`;
 $('#rule-note').textContent = D.rule_note;
 $('#tiles').innerHTML = [
   [money(D.total), 'total value'],

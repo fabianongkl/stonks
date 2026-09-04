@@ -407,11 +407,8 @@ const $ = s => document.querySelector(s);
 const esc = s => String(s).replace(/[&<>"]/g, c =>
   ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
-$('#head-sub').innerHTML =
-  `Scan of ${D.scan_date} · a transparent, self-improving factor screener · generated ${D.generated}` +
-  ` · <a href="portfolio.html">Claude's Picks portfolio →</a>` +
-  ` · <a href="backtest.html">5-year backtest →</a>` +
-  ` · <a href="sp500.html">S&P 500 lens →</a>`;
+$('#head-sub').textContent =
+  `Scan of ${D.scan_date} · a transparent, self-improving factor screener · generated ${D.generated}`;
 
 /* --- stat tiles --- */
 const matured = new Set(D.track.map(t => t.date)).size;

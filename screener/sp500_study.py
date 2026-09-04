@@ -318,7 +318,7 @@ a{color:var(--pos)}
 __NAV__
 <div class="wrap">
   <h1>S&amp;P 500 Lens</h1>
-  <div class="sub" id="sub"><a href="index.html">← screener dashboard</a></div>
+  <div class="sub" id="sub"></div>
 
   <div class="disclaimer"><b>Read first.</b> This section uses TODAY'S index
   membership — companies dropped from the index in past years are invisible,
@@ -376,7 +376,7 @@ const esc = s => String(s ?? '').replace(/[&<>"]/g, c =>
   ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const pc = v => (v>0?'+':'')+(v*100).toFixed(1)+'%';
 const cls = v => v>0?'up':v<0?'down':'';
-$('#sub').innerHTML = `Scan of ${D.scan_date} · ${D.n_members} members, ${D.n_scored} with full factor data · <a href="index.html">← screener dashboard</a>`;
+$('#sub').textContent = `Scan of ${D.scan_date} · ${D.n_members} members, ${D.n_scored} with full factor data`;
 
 const S = D.study;
 const persisted = S.mean_spread > 0.005;

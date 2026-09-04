@@ -209,7 +209,7 @@ a{color:var(--pos)}
 __NAV__
 <div class="wrap">
   <h1>Backtest — plumbing &amp; behavior test</h1>
-  <div class="sub" id="sub"><a href="index.html">← screener dashboard</a></div>
+  <div class="sub" id="sub"></div>
 
   <div class="disclaimer"><b>Survivorship-biased by construction</b> — the
   universe is today's listings, so companies that died during the window are
@@ -230,7 +230,7 @@ __NAV__
 <script>
 const D = __PAYLOAD__;
 const $ = s => document.querySelector(s);
-$('#sub').innerHTML = `${D.months} monthly rebalances · ${D.period} · fixed v0.2 weights · <a href="index.html">← screener dashboard</a>`;
+$('#sub').textContent = `${D.months} monthly rebalances · ${D.period} · fixed v0.2 weights`;
 const pct = v => (v>0?'+':'')+(v*100).toFixed(1)+'%';
 $('#tiles').innerHTML = [
   [pct(D.ann_top),'top decile / yr'],
