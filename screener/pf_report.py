@@ -37,13 +37,37 @@ def build_payload(conn: sqlite3.Connection, book: str = "core") -> dict:
                         if spy0 and s["spy_close"] else None),
         })
 
-    if cfg.get("style") == "ritual":
+    if cfg.get("style") == "ritual" and cfg.get("worst"):
+        desc = ("the Loser Reversal ritual: each January, sell everything and "
+                "buy the prior calendar year's three WORST S&P 500 performers "
+                "(the Top-3 Ritual's mirror image)")
+        rule_note = ("Rank now = trailing-12-month return rank from the "
+                     "bottom among S&P 500 members (informational). One "
+                     "trade a year — the January rotation — no reviews, "
+                     "no stops.")
+    elif cfg.get("style") == "ritual":
         desc = ("the Top-3 ritual: each January, sell everything and buy the "
                 "prior calendar year's three biggest S&P 500 gainers")
         rule_note = ("Rank now = trailing-12-month return rank among current "
                      "S&P 500 members (informational). This book trades "
                      "exactly once a year — the January rotation — no "
                      "monthly reviews, no stops.")
+    elif cfg.get("style") == "monkey":
+        desc = ("the control group: 10 stocks drawn at random (seeded, "
+                "reproducible) from the same pool the factor books pick "
+                "from, redrawn each January")
+        rule_note = ("Rank now = the screener's composite rank for each "
+                     "random pick (informational — what the model thinks of "
+                     "the monkey's luck). Any book that can't beat this one "
+                     "has no business claiming skill.")
+    elif cfg.get("style") == "insider":
+        desc = ("follow the insiders: the 8 stocks with the largest net "
+                "insider open-market buying relative to market cap "
+                "(SEC Form 4 data), rotated each calendar quarter")
+        rule_note = ("Rank now = net-insider-buying rank (market cap ≥ "
+                     "$250M). Rotates on the first scan of each quarter; "
+                     "the underlying SEC data set publishes with a lag of "
+                     "one to two quarters — a documented limitation.")
     elif cfg["weights"] is None:
         desc = "the screener's own composite, patient rules"
         rule_note = (f"Rank now = current composite rank among full-coverage "

@@ -45,11 +45,10 @@ def main() -> int:
             if not actions:
                 print(f"Review [{b}]: all holdings within rank tolerance — no trades.")
 
-    # ritual book: mechanical January rotation, fires automatically on the
-    # first scan of a new calendar year (no-op otherwise)
-    if not portfolio.holdings(conn, "ritual").empty:
-        for a in portfolio.ritual_rotate_if_due(conn):
-            print("  [ritual]", a)
+    # mechanical rotations (ritual/reversal/monkey: each January;
+    # insider: each calendar quarter) — no-ops when not due
+    for a in portfolio.auto_rotate_if_due(conn):
+        print(" ", a)
 
     spy = portfolio.spy_close()
     for b in portfolio.BOOKS:

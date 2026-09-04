@@ -66,7 +66,50 @@ BOOKS: dict[str, dict] = {
         "style": "ritual",
         "page": "ritual.html",
     },
+    # Mirror of the ritual: each January buy the prior calendar year's THREE
+    # WORST S&P performers (De Bondt & Thaler reversal).  Together the two
+    # rituals turn "do winners persist?" into a real experiment.
+    "reversal": {
+        "label": "Loser Reversal",
+        "start_cash": 10_000.0,
+        "n_positions": 3,
+        "max_held_rank": None,
+        "weights": None,
+        "style": "ritual",
+        "worst": True,
+        "page": "reversal.html",
+    },
+    # The control group: 10 stocks drawn at RANDOM from the same
+    # full-coverage pool the factor books pick from, held for a year,
+    # redrawn each January.  Seeded by the year (rng seed = year*7919+101)
+    # so anyone can reproduce the draw.  Any book that can't beat the
+    # monkey has no business claiming skill.
+    "monkey": {
+        "label": "Monkey Control",
+        "start_cash": 10_000.0,
+        "n_positions": 10,
+        "max_held_rank": None,
+        "weights": None,
+        "style": "monkey",
+        "page": "monkey.html",
+    },
+    # Follow the insiders: the 8 stocks with the largest net insider
+    # open-market BUYING scaled by market cap (SEC Form 4 data, 1-2
+    # quarters stale by publication), market cap >= $250M, rotated on the
+    # first scan of each calendar quarter.  Evidence: Seyhun 1986;
+    # Lakonishok & Lee 2001.
+    "insider": {
+        "label": "Insider Buying",
+        "start_cash": 10_000.0,
+        "n_positions": 8,
+        "max_held_rank": None,
+        "weights": None,
+        "style": "insider",
+        "page": "insider.html",
+    },
 }
+
+INSIDER_MIN_MCAP = 250e6
 
 # kept for older callers/docs
 START_CASH = BOOKS["core"]["start_cash"]
@@ -197,16 +240,28 @@ def _sp500_symbols() -> set[str]:
 
 
 def book_ranked(scores: pd.DataFrame, book: str) -> pd.DataFrame:
-    """Stocks ranked 1..N by THIS book's scoring."""
-    if BOOKS[book].get("style") == "ritual":
-        # ritual ranking: trailing 12-month price momentum among current
-        # S&P 500 members (informational rank between rotations)
+    """Stocks ranked 1..N by THIS book's scoring (informational between
+    rotations for the auto-rotating styles)."""
+    style = BOOKS[book].get("style")
+    if style == "ritual":
+        # trailing 12-month momentum among S&P members; reversal book ranks
+        # from the bottom (its "best" pick is the worst performer)
         mem = _sp500_symbols()
         sp = scores[scores["symbol"].isin(mem)].copy()
-        sp = sp.sort_values("mom_12_1", ascending=False).reset_index(drop=True)
+        asc = bool(BOOKS[book].get("worst"))
+        sp = sp.sort_values("mom_12_1", ascending=asc).reset_index(drop=True)
         sp["book_score"] = sp["mom_12_1"]
         sp["fc_rank"] = sp.index + 1
         return sp
+    if style == "insider":
+        sub = scores[(scores["market_cap"] >= INSIDER_MIN_MCAP)
+                     & (scores["insider_net_mcap"].notna())].copy()
+        sub = sub.sort_values("insider_net_mcap", ascending=False).reset_index(drop=True)
+        sub["book_score"] = sub["insider_net_mcap"]
+        sub["fc_rank"] = sub.index + 1
+        return sub
+    # monkey ranks informationally by the screener composite — showing what
+    # the model thinks of the random draw is half the fun
     full = scores[scores["n_factors"] == 4].copy()
     w = BOOKS[book]["weights"]
     if w is None:
@@ -254,8 +309,10 @@ def _select_diversified(ranked: pd.DataFrame, n: int,
     return pd.DataFrame(rows)
 
 
-def _ritual_top3(scores: pd.DataFrame, calendar_year: int | None = None) -> pd.DataFrame:
-    """The ritual's picks: top 3 S&P members by formation return.
+def _ritual_top3(scores: pd.DataFrame, calendar_year: int | None = None,
+                 worst: bool = False) -> pd.DataFrame:
+    """Ritual picks: top (or, for the reversal book, BOTTOM) 3 S&P members
+    by formation return.
 
     calendar_year=None -> trailing 12 months (inception); otherwise the
     prior calendar year's return (the true January rule).  Formation windows
@@ -280,7 +337,7 @@ def _ritual_top3(scores: pd.DataFrame, calendar_year: int | None = None) -> pd.D
     coverage = window.notna().mean()
     ok = form.dropna().index[(coverage[form.dropna().index] > 0.9)]
     ok = [s for s in ok if s != "SPY"]
-    top = form[ok].nlargest(3)
+    top = form[ok].nsmallest(3) if worst else form[ok].nlargest(3)
     px = scores.set_index("symbol")["close"]
     rows = [{"symbol": s, "formation": float(top[s]),
              "close": float(px.get(s, float("nan")))} for s in top.index]
@@ -290,23 +347,48 @@ def _ritual_top3(scores: pd.DataFrame, calendar_year: int | None = None) -> pd.D
     return out
 
 
-def ritual_rotate_if_due(conn) -> list[str]:
-    """January rule: on the first scan of a new calendar year, sell all and
-    buy the prior calendar year's top 3.  No-op the rest of the year."""
-    book = "ritual"
-    held = holdings(conn, book)
-    if held.empty:
-        return []
-    _, day, scores = latest_scan(conn)
-    scan_year = int(day[:4])
-    last_buy = conn.execute(
-        "SELECT MAX(date) FROM pf_txns WHERE book=? AND side='BUY'",
-        (book,)).fetchone()[0]
-    if not last_buy or int(last_buy[:4]) >= scan_year:
-        return []
+def _monkey_picks(scores: pd.DataFrame, year: int, n: int) -> pd.DataFrame:
+    """n stocks drawn uniformly at random from the full-coverage pool.
+    Seeded by the draw year so the pick is reproducible by anyone."""
+    pool = sorted(scores[scores["n_factors"] == 4]["symbol"].tolist())
+    rng = np.random.default_rng(year * 7919 + 101)
+    chosen = list(rng.choice(pool, size=min(n, len(pool)), replace=False))
+    px = scores.set_index("symbol")["close"]
+    return pd.DataFrame([{"symbol": s, "formation": float("nan"),
+                          "close": float(px[s])} for s in chosen])
+
+
+def _insider_picks(scores: pd.DataFrame, n: int) -> pd.DataFrame:
+    """Top n by net insider open-market buying / market cap."""
+    sub = scores[(scores["market_cap"] >= INSIDER_MIN_MCAP)
+                 & (scores["insider_net_mcap"] > 0)]
+    sub = sub.sort_values("insider_net_mcap", ascending=False).head(n)
+    if len(sub) < n:
+        raise RuntimeError(f"Only {len(sub)} stocks with positive insider "
+                           f"buying above the size floor")
+    return pd.DataFrame([{"symbol": r["symbol"],
+                          "formation": float(r["insider_net_mcap"]),
+                          "close": float(r["close"])}
+                         for _, r in sub.iterrows()])
+
+
+def _buy_equal(conn, book: str, day: str, picks: pd.DataFrame,
+               budget: float, note_of) -> None:
+    """Equal-weight fractional-share deployment with fee headroom."""
+    slice_cash = budget / len(picks) - 2.0
+    for _, p in picks.iterrows():
+        shares = round(slice_cash / p["close"], 4)
+        if shares > 0:
+            _record(conn, book, day, p["symbol"], "BUY", shares, p["close"],
+                    note_of(p))
+    conn.commit()
+
+
+def _sell_all(conn, book: str, day: str, scores: pd.DataFrame,
+              reason: str) -> list[str]:
     actions = []
     px = scores.set_index("symbol")["close"]
-    for _, h in held.iterrows():
+    for _, h in holdings(conn, book).iterrows():
         p = px.get(h["symbol"])
         if p is None or pd.isna(p):
             last = conn.execute(
@@ -315,22 +397,58 @@ def ritual_rotate_if_due(conn) -> list[str]:
             p = last[0] if last else 0.0
         if p and p > 0:
             _record(conn, book, day, h["symbol"], "SELL", h["shares"], float(p),
-                    f"ritual: annual rotation out ({scan_year})")
+                    reason)
             actions.append(f"SELL {h['symbol']}")
-    picks = _ritual_top3(scores, calendar_year=scan_year - 1)
-    # fractional shares (IBKR supports them for US stocks): with only 3
-    # positions and 4-digit share prices, whole shares would leave ~15%
-    # idle cash and distort the experiment
-    slice_cash = cash(conn, book) / len(picks) - 2.0
-    for _, p in picks.iterrows():
-        shares = round(slice_cash / p["close"], 4)
-        if shares > 0:
-            _record(conn, book, day, p["symbol"], "BUY", shares, p["close"],
-                    f"ritual: {scan_year - 1} winner ({p['formation']:+.0%}), "
-                    f"held for {scan_year}")
-            actions.append(f"BUY {p['symbol']}")
-    conn.commit()
     return actions
+
+
+def auto_rotate_if_due(conn) -> list[str]:
+    """Mechanical rotations, checked daily and firing only when due:
+    ritual/reversal/monkey rotate on the first scan of a new CALENDAR YEAR;
+    the insider book on the first scan of a new CALENDAR QUARTER."""
+    _, day, scores = latest_scan(conn)
+    scan_year = int(day[:4])
+    scan_q = (scan_year, (int(day[5:7]) - 1) // 3 + 1)
+    all_actions = []
+    for book, cfg in BOOKS.items():
+        style = cfg.get("style")
+        if style not in ("ritual", "monkey", "insider"):
+            continue
+        if holdings(conn, book).empty:
+            continue
+        last_buy = conn.execute(
+            "SELECT MAX(date) FROM pf_txns WHERE book=? AND side='BUY'",
+            (book,)).fetchone()[0]
+        if not last_buy:
+            continue
+        if style == "insider":
+            last_q = (int(last_buy[:4]), (int(last_buy[5:7]) - 1) // 3 + 1)
+            due = scan_q > last_q
+        else:
+            due = int(last_buy[:4]) < scan_year
+        if not due:
+            continue
+        acts = _sell_all(conn, book, day, scores,
+                         f"{style}: scheduled rotation out")
+        budget = cash(conn, book)
+        if style == "ritual":
+            picks = _ritual_top3(scores, calendar_year=scan_year - 1,
+                                 worst=bool(cfg.get("worst")))
+            kind = "loser" if cfg.get("worst") else "winner"
+            note = (lambda p, k=kind, y=scan_year:
+                    f"ritual: {y - 1} {k} ({p['formation']:+.0%}), held for {y}")
+        elif style == "monkey":
+            picks = _monkey_picks(scores, scan_year, cfg["n_positions"])
+            note = (lambda p, y=scan_year:
+                    f"monkey: random draw for {y} (seed {y}*7919+101)")
+        else:
+            picks = _insider_picks(scores, cfg["n_positions"])
+            note = (lambda p:
+                    f"insider: net buying {p['formation']:.2%} of mcap")
+        _buy_equal(conn, book, day, picks, budget, note)
+        all_actions += [f"[{book}] {a}" for a in acts]
+        all_actions += [f"[{book}] BUY {p['symbol']}" for _, p in picks.iterrows()]
+    return all_actions
 
 
 def init_portfolio(conn, book: str = "core") -> None:
@@ -338,16 +456,27 @@ def init_portfolio(conn, book: str = "core") -> None:
         raise RuntimeError(f"Book '{book}' already initialised — refusing to re-seed.")
     cfg = BOOKS[book]
     _, day, scores = latest_scan(conn)
-    if cfg.get("style") == "ritual":
-        picks = _ritual_top3(scores)
-        slice_cash = cfg["start_cash"] / len(picks) - 2.0   # fee headroom
-        for _, p in picks.iterrows():
-            shares = round(slice_cash / p["close"], 4)      # fractional
-            if shares > 0:
-                _record(conn, book, day, p["symbol"], "BUY", shares, p["close"],
-                        f"inception: trailing-12m winner ({p['formation']:+.0%}); "
-                        f"first calendar rotation Jan {int(day[:4]) + 1}")
-        conn.commit()
+    style = cfg.get("style")
+    if style == "ritual":
+        worst = bool(cfg.get("worst"))
+        picks = _ritual_top3(scores, worst=worst)
+        kind = "loser" if worst else "winner"
+        _buy_equal(conn, book, day, picks, cfg["start_cash"],
+                   lambda p, k=kind: f"inception: trailing-12m {k} "
+                   f"({p['formation']:+.0%}); first calendar rotation "
+                   f"Jan {int(day[:4]) + 1}")
+        return
+    if style == "monkey":
+        picks = _monkey_picks(scores, int(day[:4]), cfg["n_positions"])
+        _buy_equal(conn, book, day, picks, cfg["start_cash"],
+                   lambda p, y=int(day[:4]):
+                   f"inception: random draw (seed {y}*7919+101); redraw each Jan")
+        return
+    if style == "insider":
+        picks = _insider_picks(scores, cfg["n_positions"])
+        _buy_equal(conn, book, day, picks, cfg["start_cash"],
+                   lambda p: f"inception: net insider buying "
+                   f"{p['formation']:.2%} of mcap; quarterly rotation")
         return
     picks = _select_diversified(book_ranked(scores, book), cfg["n_positions"])
     slice_cash = cfg["start_cash"] / cfg["n_positions"]
@@ -363,10 +492,11 @@ def init_portfolio(conn, book: str = "core") -> None:
 def review(conn, book: str = "core") -> list[str]:
     """Monthly review: replace holdings whose book-rank decayed past tolerance.
 
-    The ritual book has no monthly rule — it only rotates each January
-    (ritual_rotate_if_due), so review is a deliberate no-op for it."""
+    Auto-rotating books (ritual, reversal, monkey, insider) have no monthly
+    rule — their schedules live in auto_rotate_if_due — so review is a
+    deliberate no-op for them."""
     cfg = BOOKS[book]
-    if cfg.get("style") == "ritual":
+    if cfg.get("style") in ("ritual", "monkey", "insider"):
         return []
     _, day, scores = latest_scan(conn)
     ranked = book_ranked(scores, book).set_index("symbol")

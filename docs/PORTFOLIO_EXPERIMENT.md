@@ -102,6 +102,32 @@ tested — live and therefore free of survivorship bias:
    priors (core), backtest-informed tilt (aggressive), and naive momentum
    ritual — same fees, same benchmark, same public ledger.
 
+## Books four through six (added 2026-09-04)
+
+All $10,000, fractional shares, IBKR fees, same ledger and benchmark:
+
+**Loser Reversal** — the Top-3 Ritual's mirror: each January buy the prior
+calendar year's three WORST S&P performers (De Bondt & Thaler 1985).
+Together the two rituals turn "do winners persist?" into a controlled
+experiment. Inception (trailing-12m losers): TTD, CSGP, FISV.
+
+**Monkey Control** — 10 stocks drawn uniformly at random from the same
+full-coverage pool the factor books pick from, redrawn each January.
+Seeded by the year (`rng seed = year*7919+101`) so anyone can reproduce
+the draw. This is the experiment's control group: a book that cannot beat
+the monkey has demonstrated nothing. Inception draw: RGLD, AI, DEI, NGVC,
+IRT, RARE, INVX, COGT, OI, TASK.
+
+**Insider Buying** — the 8 stocks with the largest net insider open-market
+buying relative to market cap (SEC Form 4 bulk data; market cap ≥ $250M;
+positive net buying required), rotated on the first scan of each calendar
+quarter to match the data's publication cadence. Known limitation: the SEC
+data set lags one to two quarters. Evidence: Seyhun 1986; Lakonishok & Lee
+2001. Inception: SGP, MPLT, EVMN, BETA, THM, UAA, EIKN, AKTS.
+
+All rotations are mechanical and fire automatically inside the daily run
+(`auto_rotate_if_due`) — no human discretion anywhere in any book.
+
 ## Daily workflow
 
 ```
