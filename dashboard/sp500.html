@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>S&amp;P 500 Lens</title>
+<style>
+:root{color-scheme:light;
+  --page:#f9f9f7;--surface:#fcfcfb;--ink:#0b0b0b;--ink2:#52514e;--muted:#898781;
+  --grid:#e1e0d9;--axis:#c3c2b7;--border:rgba(11,11,11,.10);
+  --pos:#2a78d6;--neg:#e34948;--spy:#eb6834;--med:#898781;--warn:#b45309}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){color-scheme:dark;
+  --page:#0d0d0d;--surface:#1a1a19;--ink:#fff;--ink2:#c3c2b7;--muted:#898781;
+  --grid:#2c2c2a;--axis:#383835;--border:rgba(255,255,255,.10);
+  --pos:#3987e5;--neg:#e66767;--spy:#d95926;--med:#898781;--warn:#fab219}}
+:root[data-theme="dark"]{color-scheme:dark;
+  --page:#0d0d0d;--surface:#1a1a19;--ink:#fff;--ink2:#c3c2b7;--muted:#898781;
+  --grid:#2c2c2a;--axis:#383835;--border:rgba(255,255,255,.10);
+  --pos:#3987e5;--neg:#e66767;--spy:#d95926;--med:#898781;--warn:#fab219}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--page);color:var(--ink);
+  font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;padding:24px 16px}
+.wrap{max-width:1000px;margin:0 auto}
+h1{font-size:1.5rem}h2{font-size:1.05rem;margin:28px 0 10px}
+.sub{color:var(--ink2)}
+.tiles{display:flex;flex-wrap:wrap;gap:12px;margin:18px 0}
+.tile{background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:12px 16px;min-width:150px;flex:1}
+.tile .v{font-size:1.35rem;font-weight:650}.tile .l{color:var(--ink2);font-size:.8rem}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:16px;overflow-x:auto;margin-bottom:14px}
+table{border-collapse:collapse;width:100%;font-size:.87rem}
+th{color:var(--ink2);font-weight:600;text-align:left;padding:6px 10px;
+  border-bottom:1px solid var(--axis);white-space:nowrap}
+td{padding:6px 10px;border-bottom:1px solid var(--grid)}
+td.num{font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
+.up{color:#0ca30c}.down{color:var(--neg)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;color:var(--ink2);font-size:.8rem;margin:8px 0}
+.legend span{display:inline-flex;align-items:center;gap:5px}
+.sw{width:10px;height:10px;border-radius:2px;display:inline-block}
+svg text{fill:var(--ink2);font:11px system-ui,sans-serif}
+.disclaimer{border:1px solid var(--border);border-left:3px solid var(--warn);
+  border-radius:8px;padding:10px 14px;margin:20px 0;color:var(--ink2);font-size:.85rem}
+a{color:var(--pos)}
+.answer{font-size:.95rem;background:var(--surface);border:1px solid var(--border);
+  border-radius:10px;padding:14px 16px;margin:14px 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>S&amp;P 500 Lens</h1>
+  <div class="sub" id="sub"><a href="index.html">← screener dashboard</a></div>
+
+  <div class="disclaimer"><b>Read first.</b> This section uses TODAY'S index
+  membership — companies dropped from the index in past years are invisible,
+  which flatters historical "winners" somewhat. Rolling windows overlap, and
+  ~5 years is a short sample: these numbers describe <i>this window</i>, not a
+  law of markets. The scan scores shown are the main screener's, unchanged —
+  this page is a lens, not a different model.</div>
+
+  <div class="answer" id="answer"></div>
+  <div class="tiles" id="tiles"></div>
+
+  <h2>Year by year: last year's top-50 vs the field, following 12 months</h2>
+  <div class="card" id="calchart"></div>
+  <div class="card"><table id="cal">
+    <thead><tr><th>Formation year end</th><th class="num">Winners next-12m</th>
+    <th class="num">Losers next-12m</th><th class="num">Median member</th>
+    <th class="num">SPY</th><th class="num">Winners − median</th></tr></thead>
+    <tbody></tbody></table></div>
+
+  <h2>Today's trailing-12-month winners — and what the screener thinks of them</h2>
+  <div class="card"><table id="winners">
+    <thead><tr><th>Ticker</th><th class="num">Trailing 12m</th>
+    <th class="num">Screener composite</th><th class="num">Rank in S&amp;P 500</th></tr></thead>
+    <tbody></tbody></table>
+    <div class="note sub" style="font-size:.8rem;margin-top:8px">
+      Composite/rank from the latest daily scan (sector-neutral, all four
+      factors) — a winner with a weak composite is momentum the model
+      distrusts; a winner with a strong composite has broad support.</div></div>
+
+  <h2>S&amp;P 500 members ranked by the screener today (top 30)</h2>
+  <div class="card"><table id="top30">
+    <thead><tr><th>#</th><th>Ticker</th><th>Company</th><th>GICS sector</th>
+    <th class="num">Composite</th><th class="num">12-1 mom</th>
+    <th class="num">Rank all-market</th></tr></thead><tbody></tbody></table></div>
+  <div class="sub" style="font-size:.8rem" id="footer"></div>
+</div>
+<script>
+const D = {"generated": "2026-09-04T23:31:48", "scan_date": "2026-09-03", "n_members": 503, "n_scored": 492, "study": {"rolling_n": 55, "mean_winners": 0.3223437153494274, "mean_losers": 0.2090329573916515, "mean_median": 0.08917814445528281, "mean_spy": 0.13739872398327205, "mean_spread": 0.23316557089414464, "hit_rate": 0.9090909090909091, "calendar": [{"anchor": "2021-12", "winners_fwd": -0.019396710369741818, "losers_fwd": -0.1436935260293849, "median_fwd": -0.11876881989257099, "spy_fwd": -0.18175368123865743, "n": 488}, {"anchor": "2022-12", "winners_fwd": 0.1468468442922282, "losers_fwd": 0.8944932286396149, "median_fwd": 0.15041670902751392, "spy_fwd": 0.2617578836134973, "n": 492}, {"anchor": "2023-12", "winners_fwd": 0.6827855419222674, "losers_fwd": 0.04748863107135739, "median_fwd": 0.14828520309473336, "spy_fwd": 0.24886476304115313, "n": 494}, {"anchor": "2024-12", "winners_fwd": 0.44751138694520093, "losers_fwd": 0.10489814210807849, "median_fwd": 0.09045165521408483, "spy_fwd": 0.17719055511914772, "n": 496}], "partial": {"anchor": "2025-12", "through": "2026-09", "winners_fwd": 0.36163288097381263, "median_fwd": 0.0893014908079961, "spy_fwd": 0.13383854993878175}}, "top30": [{"sp_rank": 1, "rank_all": 31, "symbol": "TRV", "name": "The Travelers Companies, Inc. Common Stock", "gics": "Financials", "composite": 0.79, "mom_12_1": 47.7}, {"sp_rank": 2, "rank_all": 33, "symbol": "DD", "name": "DuPont de Nemours, Inc. Common Stock", "gics": "Industrials", "composite": 0.77, "mom_12_1": 68.6}, {"sp_rank": 3, "rank_all": 56, "symbol": "FTV", "name": "Fortive Corporation Common Stock ", "gics": "Industrials", "composite": 0.71, "mom_12_1": 30.5}, {"sp_rank": 4, "rank_all": 62, "symbol": "HST", "name": "Host Hotels & Resorts, Inc. - Common Stock", "gics": "Real Estate", "composite": 0.7, "mom_12_1": 73.3}, {"sp_rank": 5, "rank_all": 80, "symbol": "BDX", "name": "Becton, Dickinson and Company Common Stock", "gics": "Health Care", "composite": 0.65, "mom_12_1": 24.3}, {"sp_rank": 6, "rank_all": 87, "symbol": "AIZ", "name": "Assurant, Inc. Common Stock", "gics": "Financials", "composite": 0.65, "mom_12_1": 62.1}, {"sp_rank": 7, "rank_all": 106, "symbol": "VTRS", "name": "Viatris Inc. - Common Stock", "gics": "Health Care", "composite": 0.63, "mom_12_1": 105.2}, {"sp_rank": 8, "rank_all": 107, "symbol": "DGX", "name": "Quest Diagnostics Incorporated Common Stock", "gics": "Health Care", "composite": 0.63, "mom_12_1": 39.2}, {"sp_rank": 9, "rank_all": 126, "symbol": "EG", "name": "Everest Group, Ltd. Common Stock", "gics": "Financials", "composite": 0.61, "mom_12_1": 15.9}, {"sp_rank": 10, "rank_all": 127, "symbol": "IFF", "name": "International Flavors & Fragrances, Inc. Common ", "gics": "Materials", "composite": 0.6, "mom_12_1": 28.6}, {"sp_rank": 11, "rank_all": 130, "symbol": "JNJ", "name": "Johnson & Johnson Common Stock", "gics": "Health Care", "composite": 0.6, "mom_12_1": 54.4}, {"sp_rank": 12, "rank_all": 135, "symbol": "BMY", "name": "Bristol-Myers Squibb Company Common Stock", "gics": "Health Care", "composite": 0.6, "mom_12_1": 46.9}, {"sp_rank": 13, "rank_all": 140, "symbol": "PNW", "name": "Pinnacle West Capital Corporation Common Stock", "gics": "Utilities", "composite": 0.59, "mom_12_1": 14.3}, {"sp_rank": 14, "rank_all": 156, "symbol": "ABBV", "name": "AbbVie Inc. Common Stock", "gics": "Health Care", "composite": 0.58, "mom_12_1": 28.7}, {"sp_rank": 15, "rank_all": 167, "symbol": "V", "name": "Visa Inc.", "gics": "Financials", "composite": 0.57, "mom_12_1": 8.6}, {"sp_rank": 16, "rank_all": 178, "symbol": "JCI", "name": "Johnson Controls International plc Ordinary Shar", "gics": "Industrials", "composite": 0.56, "mom_12_1": 45.1}, {"sp_rank": 17, "rank_all": 182, "symbol": "HPQ", "name": "HP Inc. Common Stock", "gics": "Information Technology", "composite": 0.56, "mom_12_1": 20.1}, {"sp_rank": 18, "rank_all": 188, "symbol": "FRT", "name": "Federal Realty Investment Trust Common Stock", "gics": "Real Estate", "composite": 0.55, "mom_12_1": 38.9}, {"sp_rank": 19, "rank_all": 199, "symbol": "APA", "name": "APA Corporation - Common Stock", "gics": "Energy", "composite": 0.54, "mom_12_1": 96.3}, {"sp_rank": 20, "rank_all": 202, "symbol": "GL", "name": "Globe Life Inc. Common Stock", "gics": "Financials", "composite": 0.54, "mom_12_1": 33.0}, {"sp_rank": 21, "rank_all": 204, "symbol": "IEX", "name": "IDEX Corporation Common Stock", "gics": "Industrials", "composite": 0.54, "mom_12_1": 52.0}, {"sp_rank": 22, "rank_all": 207, "symbol": "DVA", "name": "DaVita Inc. Common Stock", "gics": "Health Care", "composite": 0.54, "mom_12_1": 35.2}, {"sp_rank": 23, "rank_all": 212, "symbol": "NTAP", "name": "NetApp, Inc. - Common Stock", "gics": "Information Technology", "composite": 0.53, "mom_12_1": 83.9}, {"sp_rank": 24, "rank_all": 213, "symbol": "NUE", "name": "Nucor Corporation Common Stock", "gics": "Materials", "composite": 0.53, "mom_12_1": 103.3}, {"sp_rank": 25, "rank_all": 216, "symbol": "HPE", "name": "Hewlett Packard Enterprise Company Common Stock", "gics": "Information Technology", "composite": 0.53, "mom_12_1": 171.4}, {"sp_rank": 26, "rank_all": 220, "symbol": "LH", "name": "Labcorp Holdings Inc. Common Stock", "gics": "Health Care", "composite": 0.53, "mom_12_1": 20.2}, {"sp_rank": 27, "rank_all": 224, "symbol": "WST", "name": "West Pharmaceutical Services, Inc. Common Stock", "gics": "Health Care", "composite": 0.52, "mom_12_1": 47.7}, {"sp_rank": 28, "rank_all": 230, "symbol": "SNA", "name": "Snap-On Incorporated Common Stock", "gics": "Industrials", "composite": 0.52, "mom_12_1": 34.9}, {"sp_rank": 29, "rank_all": 232, "symbol": "TDY", "name": "Teledyne Technologies Incorporated Common Stock", "gics": "Information Technology", "composite": 0.52, "mom_12_1": 23.8}, {"sp_rank": 30, "rank_all": 234, "symbol": "AME", "name": "AMETEK, Inc.", "gics": "Industrials", "composite": 0.52, "mom_12_1": 39.0}], "cur_winners": [{"symbol": "SNDK", "trailing_12m": 1405.6, "composite": 0.13, "sp_rank": 268}, {"symbol": "MU", "trailing_12m": 498.6, "composite": 0.48, "sp_rank": 40}, {"symbol": "MRNA", "trailing_12m": 456.8, "composite": -0.06, "sp_rank": 376}, {"symbol": "LITE", "trailing_12m": 433.6, "composite": 0.09, "sp_rank": 294}, {"symbol": "WDC", "trailing_12m": 283.5, "composite": 0.31, "sp_rank": 141}, {"symbol": "DELL", "trailing_12m": 272.4, "composite": 0.44, "sp_rank": 59}, {"symbol": "STX", "trailing_12m": 256.0, "composite": 0.1, "sp_rank": 291}, {"symbol": "AMD", "trailing_12m": 190.0, "composite": 0.22, "sp_rank": 203}, {"symbol": "INTC", "trailing_12m": 182.9, "composite": 0.23, "sp_rank": 197}, {"symbol": "MRVL", "trailing_12m": 162.1, "composite": 0.24, "sp_rank": 194}, {"symbol": "COHR", "trailing_12m": 161.1, "composite": -0.12, "sp_rank": 402}, {"symbol": "TER", "trailing_12m": 157.3, "composite": 0.24, "sp_rank": 191}, {"symbol": "LRCX", "trailing_12m": 126.2, "composite": 0.23, "sp_rank": 196}, {"symbol": "AMAT", "trailing_12m": 122.8, "composite": 0.35, "sp_rank": 112}, {"symbol": "VLO", "trailing_12m": 122.2, "composite": 0.43, "sp_rank": 64}, {"symbol": "CIEN", "trailing_12m": 118.3, "composite": 0.12, "sp_rank": 275}, {"symbol": "HPE", "trailing_12m": 117.7, "composite": 0.53, "sp_rank": 25}, {"symbol": "MPC", "trailing_12m": 105.1, "composite": 0.27, "sp_rank": 168}, {"symbol": "JBHT", "trailing_12m": 103.8, "composite": 0.48, "sp_rank": 39}, {"symbol": "FIX", "trailing_12m": 94.6, "composite": 0.01, "sp_rank": 348}], "n_group": 50};
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c =>
+  ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const pc = v => (v>0?'+':'')+(v*100).toFixed(1)+'%';
+const cls = v => v>0?'up':v<0?'down':'';
+$('#sub').innerHTML = `Scan of ${D.scan_date} · ${D.n_members} members, ${D.n_scored} with full factor data · <a href="index.html">← screener dashboard</a>`;
+
+const S = D.study;
+const persisted = S.mean_spread > 0.005;
+$('#answer').innerHTML = `<b>Did last year's winners keep winning?</b>
+  In this window (${S.rolling_n} rolling 12-month tests): winners averaged
+  <b class="${cls(S.mean_winners)}">${pc(S.mean_winners)}</b> over the following year vs
+  <b>${pc(S.mean_median)}</b> for the median member and <b>${pc(S.mean_spy)}</b> for SPY —
+  a winners-minus-median spread of <b class="${cls(S.mean_spread)}">${pc(S.mean_spread)}</b>,
+  positive in ${(S.hit_rate*100).toFixed(0)}% of tests.
+  ${persisted ? 'So yes — persistence showed up, on average, in this period' : 'So no — persistence did not reliably show up in this period'},
+  though the year-by-year table shows how uneven it is. Last year's <i>losers</i>
+  averaged ${pc(S.mean_losers)}.`;
+
+$('#tiles').innerHTML = [
+  [pc(S.mean_spread), 'winners − median, avg next-12m'],
+  [(S.hit_rate*100).toFixed(0)+'%', 'tests where winners beat median'],
+  [pc(S.mean_winners), 'winners avg next-12m'],
+  [pc(S.mean_losers), 'losers avg next-12m'],
+  [S.rolling_n, 'rolling monthly tests'],
+].map(([v,l])=>`<div class="tile"><div class="v">${v}</div><div class="l">${l}</div></div>`).join('');
+
+$('#cal tbody').innerHTML = S.calendar.map(c=>`
+  <tr><td>${c.anchor}</td>
+  <td class="num ${cls(c.winners_fwd)}">${pc(c.winners_fwd)}</td>
+  <td class="num ${cls(c.losers_fwd)}">${pc(c.losers_fwd)}</td>
+  <td class="num">${pc(c.median_fwd)}</td>
+  <td class="num">${pc(c.spy_fwd)}</td>
+  <td class="num ${cls(c.winners_fwd-c.median_fwd)}"><b>${pc(c.winners_fwd-c.median_fwd)}</b></td></tr>`).join('')
+  + (S.partial ? `<tr><td>${S.partial.anchor} (through ${S.partial.through}, partial)</td>
+     <td class="num ${cls(S.partial.winners_fwd)}">${pc(S.partial.winners_fwd)}</td><td class="num">—</td>
+     <td class="num">${pc(S.partial.median_fwd)}</td><td class="num">${pc(S.partial.spy_fwd)}</td>
+     <td class="num ${cls(S.partial.winners_fwd-S.partial.median_fwd)}"><b>${pc(S.partial.winners_fwd-S.partial.median_fwd)}</b></td></tr>` : '');
+
+(function(){
+  const rows = S.calendar; if(!rows.length) return;
+  const W=940,H=230,pl=48,pr=10,pt=12,pb=30, groups=rows.length;
+  const series=[['winners_fwd','var(--pos)'],['median_fwd','var(--med)'],['spy_fwd','var(--spy)']];
+  const all=rows.flatMap(r=>series.map(([k])=>r[k]));
+  let lo=Math.min(0,...all), hi=Math.max(0,...all); const span=(hi-lo)||1; lo-=span*.08; hi+=span*.08;
+  const y=v=>pt+(hi-v)/(hi-lo)*(H-pt-pb);
+  const gw=(W-pl-pr)/groups, bw=Math.min(22,(gw-14)/3);
+  let g='';
+  for(let i=0;i<=4;i++){const v=lo+(hi-lo)*i/4,yy=y(v);
+    g+=`<line x1="${pl}" x2="${W-pr}" y1="${yy}" y2="${yy}" stroke="var(--grid)"/>`+
+       `<text x="${pl-6}" y="${yy+4}" text-anchor="end">${(v*100).toFixed(0)}%</text>`;}
+  g+=`<line x1="${pl}" x2="${W-pr}" y1="${y(0)}" y2="${y(0)}" stroke="var(--axis)"/>`;
+  rows.forEach((r,i)=>{
+    series.forEach(([k,c],j)=>{
+      const x=pl+i*gw+7+j*(bw+2);
+      const y0=y(Math.max(0,r[k])), h=Math.abs(y(r[k])-y(0))||1;
+      g+=`<rect x="${x}" y="${y0}" width="${bw}" height="${h}" rx="3" fill="${c}"/>`;});
+    g+=`<text x="${pl+i*gw+gw/2}" y="${H-8}" text-anchor="middle">${r.anchor.slice(0,4)}</text>`;});
+  $('#calchart').innerHTML=`<div class="legend">
+    <span><span class="sw" style="background:var(--pos)"></span>prior-year winners</span>
+    <span><span class="sw" style="background:var(--med)"></span>median member</span>
+    <span><span class="sw" style="background:var(--spy)"></span>SPY</span></div>
+    <svg viewBox="0 0 ${W} ${H}" width="100%" role="img"
+      aria-label="Next-12-month returns by formation year">${g}</svg>`;
+})();
+
+$('#winners tbody').innerHTML = D.cur_winners.map(w=>`
+  <tr><td><b>${esc(w.symbol)}</b></td>
+  <td class="num up">+${w.trailing_12m}%</td>
+  <td class="num">${w.composite===null?'—':(w.composite>0?'+':'')+w.composite.toFixed(2)}</td>
+  <td class="num">${w.sp_rank ?? '—'}</td></tr>`).join('');
+
+$('#top30 tbody').innerHTML = D.top30.map(r=>`
+  <tr><td class="num">${r.sp_rank}</td><td><b>${esc(r.symbol)}</b></td>
+  <td>${esc(r.name)}</td><td>${esc(r.gics)}</td>
+  <td class="num">${(r.composite>0?'+':'')+r.composite.toFixed(2)}</td>
+  <td class="num ${cls(r.mom_12_1)}">${r.mom_12_1===null?'—':(r.mom_12_1>0?'+':'')+r.mom_12_1+'%'}</td>
+  <td class="num">${r.rank_all}</td></tr>`).join('');
+
+$('#footer').textContent = `Generated ${D.generated} · winners/losers = top/bottom ${D.n_group} by trailing 12-month return at each month-end · membership: Wikipedia (current constituents).`;
+</script>
+</body>
+</html>

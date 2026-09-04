@@ -48,6 +48,11 @@ jobs:
           SEC_CONTACT: ${{ secrets.SEC_CONTACT }}
         run: python track_portfolio.py
 
+      - name: S&P 500 lens
+        env:
+          SEC_CONTACT: ${{ secrets.SEC_CONTACT }}
+        run: python run_sp500.py
+
       - name: Commit the permanent record
         run: |
           git config user.name "screener-bot"
