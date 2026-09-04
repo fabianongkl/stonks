@@ -37,19 +37,36 @@ def build_payload(conn: sqlite3.Connection, book: str = "core") -> dict:
                         if spy0 and s["spy_close"] else None),
         })
 
-    other = [b for b in portfolio.BOOKS if b != book][0]
+    if cfg.get("style") == "ritual":
+        desc = ("the Top-3 ritual: each January, sell everything and buy the "
+                "prior calendar year's three biggest S&P 500 gainers")
+        rule_note = ("Rank now = trailing-12-month return rank among current "
+                     "S&P 500 members (informational). This book trades "
+                     "exactly once a year — the January rotation — no "
+                     "monthly reviews, no stops.")
+    elif cfg["weights"] is None:
+        desc = "the screener's own composite, patient rules"
+        rule_note = (f"Rank now = current composite rank among full-coverage "
+                     f"stocks. Holdings are reviewed monthly; a rank decayed "
+                     f"past #{cfg['max_held_rank']} triggers replacement.")
+    else:
+        desc = ("momentum-dominant weighting ("
+                + ", ".join(f"{k} {v:.0%}" for k, v in cfg["weights"].items())
+                + "), concentrated and fast-rotating")
+        rule_note = (f"Rank now = this book's own momentum-tilted rank. "
+                     f"Holdings are reviewed monthly; a rank decayed past "
+                     f"#{cfg['max_held_rank']} triggers replacement.")
+
     fees = round(float(tx["fee"].sum()), 2) if not tx.empty else 0.0
     return {
         "generated": datetime.now().isoformat(timespec="seconds"),
         "label": cfg["label"],
         "book": book,
-        "desc": ("the screener's own composite, patient rules"
-                 if cfg["weights"] is None else
-                 "momentum-dominant weighting ("
-                 + ", ".join(f"{k} {v:.0%}" for k, v in cfg["weights"].items())
-                 + "), concentrated and fast-rotating"),
-        "other_label": portfolio.BOOKS[other]["label"],
-        "other_page": portfolio.BOOKS[other]["page"],
+        "desc": desc,
+        "rule_note": rule_note,
+        "others": [{"label": portfolio.BOOKS[b]["label"],
+                    "page": portfolio.BOOKS[b]["page"]}
+                   for b in portfolio.BOOKS if b != book],
         "start_cash": start_cash,
         "total": total,
         "cash": c,
@@ -172,9 +189,7 @@ a{color:var(--pos)}
         <th class="num">Rank now</th>
       </tr></thead><tbody></tbody>
     </table>
-    <div class="note">Rank now = current composite rank among full-coverage
-      stocks. Holdings are reviewed monthly; a rank decayed past
-      <span id="mhr"></span> triggers replacement.</div>
+    <div class="note" id="rule-note"></div>
   </div>
 
   <h2>Transaction log</h2>
@@ -205,8 +220,9 @@ const cls = v => v > 0 ? 'up' : v < 0 ? 'down' : '';
 const sign = v => (v > 0 ? '+' : '') + v;
 
 $('#pf-title').textContent = D.label;
-$('#pf-sub').innerHTML = `A hypothetical ${money(D.start_cash)} paper book — ${esc(D.desc)} — tracked daily, fees included, versus buy-and-hold SPY. <a href="index.html">← screener dashboard</a> · <a href="${esc(D.other_page)}">${esc(D.other_label)} →</a>`;
-$('#mhr').textContent = '#' + D.max_held_rank;
+$('#pf-sub').innerHTML = `A hypothetical ${money(D.start_cash)} paper book — ${esc(D.desc)} — tracked daily, fees included, versus buy-and-hold SPY. <a href="index.html">← screener dashboard</a>` +
+  D.others.map(o => ` · <a href="${esc(o.page)}">${esc(o.label)} →</a>`).join('');
+$('#rule-note').textContent = D.rule_note;
 $('#tiles').innerHTML = [
   [money(D.total), 'total value'],
   [`<span class="${cls(D.pnl)}">${sign(D.pnl_pct)}%</span>`, `P&L (${money(D.pnl)})`],

@@ -82,6 +82,26 @@ Rules (mechanical, like everything here):
 Deployed 2026-09-01: FLXS, MAAS, CBL, TD, PAGP, APLE, DAC, ALTO at ~$12.5k
 each; $29.88 fees; $184.62 residual cash.
 
+## The third book: "Top-3 Ritual" (added 2026-09-04)
+
+A **$10,000** paper book running the naive strategy the 15-year simulation
+tested — live and therefore free of survivorship bias:
+
+1. Each **January**, on the first scan of the year: sell everything, buy the
+   prior calendar year's **three biggest S&P 500 gainers**, equal-weight,
+   fractional shares (IBKR supports them; whole shares would strand ~15% in
+   cash at 4-digit share prices). One decision a year; no reviews, no stops,
+   no sector cap, no factor scores.
+2. Formation windows must be >90% covered by price data (guards against
+   listings mid-window); membership = current S&P constituents at rotation.
+3. Inception 2026-09-03 used the *trailing 12 months* (SNDK, MU, LITE at
+   ~$3,332 each); the first true calendar rotation is January 2027.
+4. Purpose: the 15-year backtest of this ritual is inflated by survivorship
+   in a way that cannot be repaired with free data. Running it forward is
+   the only honest measurement. Three live books now compete: literature
+   priors (core), backtest-informed tilt (aggressive), and naive momentum
+   ritual — same fees, same benchmark, same public ledger.
+
 ## Daily workflow
 
 ```

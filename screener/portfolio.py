@@ -52,6 +52,20 @@ BOOKS: dict[str, dict] = {
                     "quality": 0.20, "value": 0.10},
         "page": "aggressive.html",
     },
+    # The user's "Top-3 ritual", run live with zero survivorship bias:
+    # each January, sell everything and buy the prior calendar year's three
+    # biggest S&P 500 gainers, equal-weight. No factor scores, no sector
+    # cap, no monthly reviews — one mechanical decision a year.  Inception
+    # (2026-09) uses the trailing 12 months; first true rotation Jan 2027.
+    "ritual": {
+        "label": "Top-3 Ritual",
+        "start_cash": 10_000.0,
+        "n_positions": 3,
+        "max_held_rank": None,
+        "weights": None,
+        "style": "ritual",
+        "page": "ritual.html",
+    },
 }
 
 # kept for older callers/docs
@@ -173,8 +187,26 @@ def latest_scan(conn) -> tuple[int, str, pd.DataFrame]:
     return row[0], row[1], db.get_scores(conn, row[0])
 
 
+def _sp500_symbols() -> set[str]:
+    from .data import sp500
+    try:
+        return set(sp500.fetch_members()["symbol"])
+    except Exception as e:
+        log.warning("S&P membership fetch failed: %s", e)
+        return set()
+
+
 def book_ranked(scores: pd.DataFrame, book: str) -> pd.DataFrame:
-    """Full-coverage stocks ranked 1..N by THIS book's scoring."""
+    """Stocks ranked 1..N by THIS book's scoring."""
+    if BOOKS[book].get("style") == "ritual":
+        # ritual ranking: trailing 12-month price momentum among current
+        # S&P 500 members (informational rank between rotations)
+        mem = _sp500_symbols()
+        sp = scores[scores["symbol"].isin(mem)].copy()
+        sp = sp.sort_values("mom_12_1", ascending=False).reset_index(drop=True)
+        sp["book_score"] = sp["mom_12_1"]
+        sp["fc_rank"] = sp.index + 1
+        return sp
     full = scores[scores["n_factors"] == 4].copy()
     w = BOOKS[book]["weights"]
     if w is None:
@@ -222,11 +254,101 @@ def _select_diversified(ranked: pd.DataFrame, n: int,
     return pd.DataFrame(rows)
 
 
+def _ritual_top3(scores: pd.DataFrame, calendar_year: int | None = None) -> pd.DataFrame:
+    """The ritual's picks: top 3 S&P members by formation return.
+
+    calendar_year=None -> trailing 12 months (inception); otherwise the
+    prior calendar year's return (the true January rule).  Formation windows
+    must be fully covered by price data.
+    """
+    from .data import sp500
+    members = sp500.fetch_members()
+    hist = sp500.fetch_history(members["symbol"].tolist())
+    C = hist.pivot_table(index="date", columns="symbol", values="close")
+    C.index = pd.to_datetime(C.index)
+    C = C.sort_index().ffill(limit=10)
+    if calendar_year is not None:
+        ye = C.groupby(C.index.year).tail(1)
+        y_idx = {int(d.year): d for d in ye.index}
+        if calendar_year not in y_idx or calendar_year - 1 not in y_idx:
+            raise RuntimeError(f"No year-end prices for {calendar_year}")
+        form = ye.loc[y_idx[calendar_year]] / ye.loc[y_idx[calendar_year - 1]] - 1
+        window = C[(C.index.year == calendar_year)]
+    else:
+        form = C.iloc[-1] / C.iloc[-253] - 1
+        window = C.iloc[-253:]
+    coverage = window.notna().mean()
+    ok = form.dropna().index[(coverage[form.dropna().index] > 0.9)]
+    ok = [s for s in ok if s != "SPY"]
+    top = form[ok].nlargest(3)
+    px = scores.set_index("symbol")["close"]
+    rows = [{"symbol": s, "formation": float(top[s]),
+             "close": float(px.get(s, float("nan")))} for s in top.index]
+    out = pd.DataFrame(rows).dropna(subset=["close"])
+    if len(out) < 3:
+        raise RuntimeError("Ritual picks missing prices in latest scan")
+    return out
+
+
+def ritual_rotate_if_due(conn) -> list[str]:
+    """January rule: on the first scan of a new calendar year, sell all and
+    buy the prior calendar year's top 3.  No-op the rest of the year."""
+    book = "ritual"
+    held = holdings(conn, book)
+    if held.empty:
+        return []
+    _, day, scores = latest_scan(conn)
+    scan_year = int(day[:4])
+    last_buy = conn.execute(
+        "SELECT MAX(date) FROM pf_txns WHERE book=? AND side='BUY'",
+        (book,)).fetchone()[0]
+    if not last_buy or int(last_buy[:4]) >= scan_year:
+        return []
+    actions = []
+    px = scores.set_index("symbol")["close"]
+    for _, h in held.iterrows():
+        p = px.get(h["symbol"])
+        if p is None or pd.isna(p):
+            last = conn.execute(
+                "SELECT price FROM pf_txns WHERE book=? AND symbol=? "
+                "ORDER BY txn_id DESC LIMIT 1", (book, h["symbol"])).fetchone()
+            p = last[0] if last else 0.0
+        if p and p > 0:
+            _record(conn, book, day, h["symbol"], "SELL", h["shares"], float(p),
+                    f"ritual: annual rotation out ({scan_year})")
+            actions.append(f"SELL {h['symbol']}")
+    picks = _ritual_top3(scores, calendar_year=scan_year - 1)
+    # fractional shares (IBKR supports them for US stocks): with only 3
+    # positions and 4-digit share prices, whole shares would leave ~15%
+    # idle cash and distort the experiment
+    slice_cash = cash(conn, book) / len(picks) - 2.0
+    for _, p in picks.iterrows():
+        shares = round(slice_cash / p["close"], 4)
+        if shares > 0:
+            _record(conn, book, day, p["symbol"], "BUY", shares, p["close"],
+                    f"ritual: {scan_year - 1} winner ({p['formation']:+.0%}), "
+                    f"held for {scan_year}")
+            actions.append(f"BUY {p['symbol']}")
+    conn.commit()
+    return actions
+
+
 def init_portfolio(conn, book: str = "core") -> None:
     if not holdings(conn, book).empty:
         raise RuntimeError(f"Book '{book}' already initialised — refusing to re-seed.")
     cfg = BOOKS[book]
     _, day, scores = latest_scan(conn)
+    if cfg.get("style") == "ritual":
+        picks = _ritual_top3(scores)
+        slice_cash = cfg["start_cash"] / len(picks) - 2.0   # fee headroom
+        for _, p in picks.iterrows():
+            shares = round(slice_cash / p["close"], 4)      # fractional
+            if shares > 0:
+                _record(conn, book, day, p["symbol"], "BUY", shares, p["close"],
+                        f"inception: trailing-12m winner ({p['formation']:+.0%}); "
+                        f"first calendar rotation Jan {int(day[:4]) + 1}")
+        conn.commit()
+        return
     picks = _select_diversified(book_ranked(scores, book), cfg["n_positions"])
     slice_cash = cfg["start_cash"] / cfg["n_positions"]
     for _, p in picks.iterrows():
@@ -239,8 +361,13 @@ def init_portfolio(conn, book: str = "core") -> None:
 
 
 def review(conn, book: str = "core") -> list[str]:
-    """Monthly review: replace holdings whose book-rank decayed past tolerance."""
+    """Monthly review: replace holdings whose book-rank decayed past tolerance.
+
+    The ritual book has no monthly rule — it only rotates each January
+    (ritual_rotate_if_due), so review is a deliberate no-op for it."""
     cfg = BOOKS[book]
+    if cfg.get("style") == "ritual":
+        return []
     _, day, scores = latest_scan(conn)
     ranked = book_ranked(scores, book).set_index("symbol")
     held = holdings(conn, book)
