@@ -99,6 +99,109 @@ def winners_study(hist: pd.DataFrame) -> dict:
     }
 
 
+def top3_sim(members: pd.DataFrame, start_year: int = 2011,
+             start_cash: float = 10_000.0) -> dict:
+    """The user's ritual: each New Year, buy last calendar year's top-3
+    S&P performers equal-weight; sell at year end; repeat.  Versus SPY.
+
+    Eligibility per formation year: current members whose index 'date added'
+    precedes the formation year's end AND who have prices spanning it —
+    removed companies remain invisible (survivorship, stated on the page).
+    Fees: IBKR Fixed model per trade (6 trades/year).
+    """
+    from .portfolio import ibkr_fee
+
+    hist = sp500.fetch_history(members["symbol"].tolist(),
+                               start=f"{start_year - 1}-06-01", tag="hist15")
+    C = hist.pivot_table(index="date", columns="symbol", values="close")
+    C.index = pd.to_datetime(C.index)
+    C = C.sort_index().ffill(limit=10)
+    year_end = C.groupby(C.index.year).tail(1)
+    years = [int(d.year) for d in year_end.index]
+    added = pd.to_datetime(
+        members.set_index("symbol")["date_added"], errors="coerce")
+
+    spy_ye = year_end["SPY"]
+    val, spy_val = start_cash, start_cash
+    rows, curve = [], []
+    for i, fy in enumerate(years[:-1]):
+        hold_year = fy + 1
+        if fy < start_year - 1:
+            continue
+        prev_idx = i - 1
+        if prev_idx < 0:
+            continue
+        form = year_end.iloc[i] / year_end.iloc[prev_idx] - 1
+        eligible = [s for s in form.dropna().index if s != "SPY"
+                    and (pd.isna(added.get(s)) or added[s].year <= fy)]
+        if len(eligible) < 100:
+            continue
+        top3 = form[eligible].nlargest(3)
+        nxt = year_end.iloc[i + 1] / year_end.iloc[i] - 1
+        pick_rets = [float(nxt.get(s)) if pd.notna(nxt.get(s)) else 0.0
+                     for s in top3.index]
+        # fees: sell 3 old + buy 3 new positions at ~val/3 each
+        fees = 0.0
+        for s in top3.index:
+            px = float(year_end.iloc[i].get(s, 100.0))
+            sh = (val / 3) / px
+            fees += 2 * ibkr_fee(sh, px)
+        strat_ret = float(np.mean(pick_rets))
+        val = (val - fees) * (1 + strat_ret)
+        spy_ret = float(spy_ye.iloc[i + 1] / spy_ye.iloc[i] - 1)
+        spy_val *= 1 + spy_ret
+        rows.append({
+            "hold_year": hold_year,
+            "picks": [{"symbol": s,
+                       "formation": round(float(top3[s]) * 100, 1),
+                       "next_ret": round(float(nxt.get(s, np.nan)) * 100, 1)
+                       if pd.notna(nxt.get(s)) else None}
+                      for s in top3.index],
+            "strat_ret": round(strat_ret * 100, 1),
+            "spy_ret": round(spy_ret * 100, 1),
+            "value": round(val, 0),
+            "spy_value": round(spy_val, 0),
+            "n_eligible": len(eligible),
+        })
+        # monthly curve within the held year
+        mask = (C.index.year == hold_year)
+        month_last = C[mask].groupby(C[mask].index.month).tail(1)
+        base = year_end.iloc[i]
+        v0 = rows[-1]["value"] / (1 + strat_ret)
+        s0 = spy_val / (1 + spy_ret)
+        for d in month_last.index:
+            pr = np.mean([float(month_last.loc[d].get(s, np.nan) / base.get(s) - 1)
+                          if pd.notna(month_last.loc[d].get(s)) else 0.0
+                          for s in top3.index])
+            curve.append({
+                "date": d.strftime("%Y-%m"),
+                "strat": round(v0 * (1 + pr), 0),
+                "spy": round(s0 * float(month_last.loc[d]["SPY"] / base["SPY"]), 0),
+            })
+
+    # a final row covering the still-running year is partial — label it and
+    # compound CAGR over fractional years, not a phantom full year
+    last_month = int(C.index[-1].month)
+    if rows and years[-1] == C.index[-1].year and last_month < 12:
+        rows[-1]["partial"] = True
+        rows[-1]["through"] = C.index[-1].strftime("%Y-%m")
+    n_years = len(rows)
+    years_frac = (n_years - 1 + last_month / 12.0
+                  if rows and rows[-1].get("partial") else float(n_years))
+    cagr = (val / start_cash) ** (1 / years_frac) - 1 if n_years else float("nan")
+    spy_cagr = (spy_val / start_cash) ** (1 / years_frac) - 1 if n_years else float("nan")
+    cs = pd.Series([c["strat"] for c in curve], dtype=float)
+    maxdd = float((cs / cs.cummax() - 1).min()) if len(cs) else float("nan")
+    return {
+        "start_cash": start_cash, "years": n_years,
+        "final": round(val, 0), "spy_final": round(spy_val, 0),
+        "cagr": round(cagr * 100, 1), "spy_cagr": round(spy_cagr * 100, 1),
+        "maxdd": round(maxdd * 100, 1),
+        "beat_years": sum(1 for r in rows if r["strat_ret"] > r["spy_ret"]),
+        "rows": rows, "curve": curve,
+    }
+
+
 def build_payload(conn) -> dict:
     members = sp500.fetch_members()
     hist = sp500.fetch_history(members["symbol"].tolist())
@@ -146,6 +249,7 @@ def build_payload(conn) -> dict:
         "n_members": len(members),
         "n_scored": len(sp),
         "study": study,
+        "top3": top3_sim(members),
         "top30": top30,
         "cur_winners": cur_winners,
         "n_group": N_GROUP,
@@ -231,6 +335,20 @@ a{color:var(--pos)}
     <th class="num">SPY</th><th class="num">Winners − median</th></tr></thead>
     <tbody></tbody></table></div>
 
+  <h2>The Top-3 ritual: buy each year's 3 biggest winners, hold a year, repeat</h2>
+  <div class="answer" id="t3answer"></div>
+  <div class="card" id="t3chart"></div>
+  <div class="card"><table id="t3">
+    <thead><tr><th>Held year</th><th>The 3 picks (prior-year gain → held-year return)</th>
+    <th class="num">Strategy year</th><th class="num">SPY year</th>
+    <th class="num">Strategy $</th><th class="num">SPY $</th></tr></thead>
+    <tbody></tbody></table>
+    <div class="sub" style="font-size:.8rem;margin-top:8px">Eligibility uses each
+    company's index join date, so members added later are excluded from earlier
+    years — but companies REMOVED from the index are invisible (survivorship),
+    and picks that later delisted are marked at last price. IBKR-model fees
+    included (6 trades/yr). Equal-weight thirds, fractional shares.</div></div>
+
   <h2>Today's trailing-12-month winners — and what the screener thinks of them</h2>
   <div class="card"><table id="winners">
     <thead><tr><th>Ticker</th><th class="num">Trailing 12m</th>
@@ -314,6 +432,55 @@ $('#cal tbody').innerHTML = S.calendar.map(c=>`
     <span><span class="sw" style="background:var(--spy)"></span>SPY</span></div>
     <svg viewBox="0 0 ${W} ${H}" width="100%" role="img"
       aria-label="Next-12-month returns by formation year">${g}</svg>`;
+})();
+
+/* --- top-3 ritual --- */
+(function(){
+  const T = D.top3; if(!T || !T.rows.length){ return; }
+  const money = v => '$' + Number(v).toLocaleString();
+  const won = T.final > T.spy_final;
+  $('#t3answer').innerHTML = `Over ${T.years} years, ${money(T.start_cash)} became
+    <b class="${won?'up':'down'}">${money(T.final)}</b> (${T.cagr}%/yr) following the ritual,
+    vs <b>${money(T.spy_final)}</b> (${T.spy_cagr}%/yr) just holding SPY.
+    The ritual beat SPY in ${T.beat_years} of ${T.years} years, with a worst
+    peak-to-trough drawdown of <b class="down">${T.maxdd}%</b>.
+    ${won ? 'It won this window — but read the warning below before believing the dollar figure.'
+          : 'Concentration cost it this window: the occasional blow-up year outweighed the wins.'}
+    <br><br><b>⚠ Why this number is inflated, badly:</b> the pick pool is
+    TODAY'S index members, so any past winner that later collapsed and was
+    removed from the index (the strategy's true disasters — think past
+    winners that went to zero or faded away) is retroactively erased from
+    the simulation. A 3-stock strategy amplifies this survivorship bias more
+    than any other design on this site — notice how often the same
+    still-famous names recur in the picks. Treat this as an upper fantasy
+    bound on the idea, not an expectation. The rolling top-50 study above is
+    the more trustworthy read on winner persistence.`;
+  $('#t3 tbody').innerHTML = T.rows.map(r=>`
+    <tr><td>${r.hold_year}${r.partial ? ` (partial, through ${r.through})` : ''}</td>
+    <td>${r.picks.map(p=>`<b>${esc(p.symbol)}</b> (+${p.formation}% → ${p.next_ret===null?'—':(p.next_ret>0?'+':'')+p.next_ret+'%'})`).join(' · ')}</td>
+    <td class="num ${cls(r.strat_ret)}">${(r.strat_ret>0?'+':'')+r.strat_ret}%</td>
+    <td class="num ${cls(r.spy_ret)}">${(r.spy_ret>0?'+':'')+r.spy_ret}%</td>
+    <td class="num">${money(r.value)}</td><td class="num">${money(r.spy_value)}</td></tr>`).join('');
+  const rows = T.curve; if(rows.length<2) return;
+  const W=940,H=240,pl=56,pr=10,pt=12,pb=30;
+  const all=rows.flatMap(r=>[r.strat,r.spy]);
+  const lo=Math.log(Math.min(...all))*0.999, hi=Math.log(Math.max(...all))*1.001;
+  const x=i=>pl+i/(rows.length-1)*(W-pl-pr);
+  const y=v=>pt+(hi-Math.log(v))/(hi-lo)*(H-pt-pb);
+  let g='';
+  for(let i=0;i<=4;i++){const lv=lo+(hi-lo)*i/4,yy=pt+(hi-lv)/(hi-lo)*(H-pt-pb);
+    g+=`<line x1="${pl}" x2="${W-pr}" y1="${yy}" y2="${yy}" stroke="var(--grid)"/>`+
+       `<text x="${pl-6}" y="${yy+4}" text-anchor="end">$${Math.round(Math.exp(lv)/1000)}k</text>`;}
+  const path=(k,c)=>`<polyline fill="none" stroke="${c}" stroke-width="2" points="${rows.map((r,i)=>`${x(i)},${y(r[k])}`).join(' ')}"/>`;
+  g+=path('spy','var(--spy)')+path('strat','var(--pos)');
+  rows.forEach((r,i)=>{if(i%12===0)
+    g+=`<text x="${x(i)}" y="${H-8}" text-anchor="middle">${r.date.slice(0,4)}</text>`;});
+  $('#t3chart').innerHTML=`<div class="legend">
+    <span><span class="sw" style="background:var(--pos)"></span>Top-3 ritual</span>
+    <span><span class="sw" style="background:var(--spy)"></span>SPY buy &amp; hold</span>
+    <span>log scale</span></div>
+    <svg viewBox="0 0 ${W} ${H}" width="100%" role="img"
+      aria-label="Growth of the top-3 strategy vs SPY">${g}</svg>`;
 })();
 
 $('#winners tbody').innerHTML = D.cur_winners.map(w=>`

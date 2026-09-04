@@ -42,20 +42,27 @@ def fetch_members(use_cache: bool = True) -> pd.DataFrame:
     tables = pd.read_html(io.StringIO(r.text))
     tbl = next(t for t in tables
                if "Symbol" in t.columns and len(t) > 400)
+    date_added = (pd.to_datetime(tbl.get("Date added"), errors="coerce")
+                  if "Date added" in tbl.columns else pd.Series(pd.NaT, index=tbl.index))
     out = pd.DataFrame({
         "symbol": tbl["Symbol"].astype(str).map(normalize_symbol),
         "name": tbl["Security"].astype(str),
         "gics_sector": tbl["GICS Sector"].astype(str),
+        # when the CURRENT member joined the index — lets historical studies
+        # exclude anachronistic members (half the survivorship fix; removed
+        # companies remain invisible, stated in the page caveat)
+        "date_added": date_added.dt.strftime("%Y-%m-%d"),
     }).drop_duplicates("symbol").reset_index(drop=True)
     log.info("S&P 500 members from Wikipedia: %d", len(out))
     out.to_parquet(cache, index=False)
     return out
 
 
-def fetch_history(symbols: list[str], use_cache: bool = True) -> pd.DataFrame:
-    """Long DataFrame [symbol, date, close] since HISTORY_START, incl. SPY."""
+def fetch_history(symbols: list[str], use_cache: bool = True,
+                  start: str = HISTORY_START, tag: str = "hist") -> pd.DataFrame:
+    """Long DataFrame [symbol, date, close] since `start`, incl. SPY."""
     week = date.today().isocalendar()
-    cache = config.CACHE_DIR / f"sp500_hist_{week.year}w{week.week:02d}.parquet"
+    cache = config.CACHE_DIR / f"sp500_{tag}_{week.year}w{week.week:02d}.parquet"
     if use_cache and cache.exists():
         return pd.read_parquet(cache)
 
@@ -66,7 +73,7 @@ def fetch_history(symbols: list[str], use_cache: bool = True) -> pd.DataFrame:
         chunk = want[i:i + 250]
         log.info("S&P history batch %d (%d tickers)", i // 250 + 1, len(chunk))
         try:
-            raw = yf.download(tickers=chunk, start=HISTORY_START,
+            raw = yf.download(tickers=chunk, start=start,
                               auto_adjust=True, progress=False,
                               group_by="ticker", threads=True)
         except Exception as e:
