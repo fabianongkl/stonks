@@ -8,7 +8,7 @@ from datetime import datetime
 
 import pandas as pd
 
-from . import config, portfolio
+from . import config, nav, portfolio
 
 
 def build_payload(conn: sqlite3.Connection, book: str = "core") -> dict:
@@ -113,6 +113,7 @@ def generate(conn: sqlite3.Connection, book: str = "core") -> str:
     payload = build_payload(conn, book)
     html = (_TEMPLATE
             .replace("__TITLE__", payload["label"])
+            .replace("__NAV__", nav.nav_html(portfolio.BOOKS[book]["page"]))
             .replace("__PAYLOAD__", json.dumps(payload)))
     out = config.DASHBOARD_DIR / portfolio.BOOKS[book]["page"]
     out.write_text(html, encoding="utf-8")
@@ -194,6 +195,7 @@ a{color:var(--pos)}
 </style>
 </head>
 <body>
+__NAV__
 <div class="wrap">
   <h1 id="pf-title"></h1>
   <div class="sub" id="pf-sub"></div>

@@ -67,6 +67,71 @@ a{color:var(--pos)}
 </style>
 </head>
 <body>
+
+<style>
+.osnav-btn{position:fixed;top:12px;right:12px;z-index:60;width:42px;height:42px;
+  border-radius:10px;border:1px solid var(--border);background:var(--surface);
+  color:var(--ink);font-size:1.15rem;line-height:1;cursor:pointer;
+  box-shadow:0 2px 10px rgba(0,0,0,.12)}
+.osnav-btn:hover{border-color:var(--pos)}
+.osnav-scrim{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:61;
+  opacity:0;pointer-events:none;transition:opacity .18s}
+.osnav{position:fixed;top:0;right:0;bottom:0;width:300px;max-width:85vw;z-index:62;
+  background:var(--surface);border-left:1px solid var(--border);
+  transform:translateX(102%);transition:transform .2s ease;overflow-y:auto;
+  padding:16px 14px 24px;font:14px/1.4 system-ui,-apple-system,"Segoe UI",sans-serif}
+.osnav.open{transform:none}
+.osnav-scrim.open{opacity:1;pointer-events:auto}
+.osnav-title{font-weight:700;color:var(--ink);font-size:1rem;margin:4px 4px 2px}
+.osnav-sub{color:var(--muted);font-size:.75rem;margin:0 4px 10px}
+.osnav-group{color:var(--muted);font-size:.72rem;text-transform:uppercase;
+  letter-spacing:.08em;margin:14px 4px 4px}
+.osnav-link{display:block;padding:8px 10px;border-radius:8px;text-decoration:none;
+  margin:2px 0}
+.osnav-link:hover{background:color-mix(in srgb, var(--ink) 6%, transparent)}
+.osnav-link.active{background:color-mix(in srgb, var(--pos) 14%, transparent)}
+.osnav-name{display:block;color:var(--ink);font-weight:600}
+.osnav-blurb{display:block;color:var(--ink2);font-size:.76rem}
+.osnav-foot{margin-top:16px;padding-top:12px;border-top:1px solid var(--border)}
+.osnav-foot a{color:var(--pos);font-size:.8rem;text-decoration:none}
+</style>
+<button class="osnav-btn" id="osnav-btn" aria-label="Open site menu"
+  aria-expanded="false" aria-controls="osnav">☰</button>
+<div class="osnav-scrim" id="osnav-scrim"></div>
+<nav class="osnav" id="osnav" aria-label="Site">
+  <div class="osnav-title">Open Screener</div>
+  <div class="osnav-sub">a public, self-improving factor experiment</div>
+  <div class="osnav-group">Overview</div>
+<a class="osnav-link" href="index.html"><span class="osnav-name">Daily Screener</span><span class="osnav-blurb">today's scan, rankings & commentary</span></a>
+<div class="osnav-group">Research</div>
+<a class="osnav-link" href="backtest.html"><span class="osnav-name">5-Year Backtest</span><span class="osnav-blurb">the methodology vs history</span></a>
+<a class="osnav-link" href="sp500.html"><span class="osnav-name">S&P 500 Lens</span><span class="osnav-blurb">index view & winner-persistence</span></a>
+<div class="osnav-group">Paper Books</div>
+<a class="osnav-link active" href="portfolio.html"><span class="osnav-name">Claude's Picks</span><span class="osnav-blurb">$10k · the factor model's own top ten</span></a>
+<a class="osnav-link" href="aggressive.html"><span class="osnav-name">Hyper-Aggressive</span><span class="osnav-blurb">$100k · backtest-informed momentum tilt</span></a>
+<a class="osnav-link" href="ritual.html"><span class="osnav-name">Top-3 Ritual</span><span class="osnav-blurb">$10k · each January: last year's 3 biggest winners</span></a>
+<a class="osnav-link" href="reversal.html"><span class="osnav-name">Loser Reversal</span><span class="osnav-blurb">$10k · each January: last year's 3 worst losers</span></a>
+<a class="osnav-link" href="monkey.html"><span class="osnav-name">Monkey Control</span><span class="osnav-blurb">$10k · 10 random picks — the control group</span></a>
+<a class="osnav-link" href="insider.html"><span class="osnav-name">Insider Buying</span><span class="osnav-blurb">$10k · follow SEC Form-4 net buying</span></a>
+  <div class="osnav-foot"><a href="https://github.com/fabianongkl/stonks">Source, data &amp; methodology on GitHub →</a></div>
+</nav>
+<script>
+(function () {
+  const btn = document.getElementById('osnav-btn'),
+        nav = document.getElementById('osnav'),
+        scrim = document.getElementById('osnav-scrim');
+  function set(open) {
+    nav.classList.toggle('open', open);
+    scrim.classList.toggle('open', open);
+    btn.setAttribute('aria-expanded', String(open));
+    btn.textContent = open ? '✕' : '☰';
+  }
+  btn.addEventListener('click', () => set(!nav.classList.contains('open')));
+  scrim.addEventListener('click', () => set(false));
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') set(false); });
+})();
+</script>
+
 <div class="wrap">
   <h1 id="pf-title"></h1>
   <div class="sub" id="pf-sub"></div>
@@ -107,7 +172,7 @@ a{color:var(--pos)}
 <div class="tooltip" id="tip"></div>
 
 <script>
-const D = {"generated": "2026-09-04T23:56:53", "label": "Claude's Picks", "book": "core", "desc": "the screener's own composite, patient rules", "rule_note": "Rank now = current composite rank among full-coverage stocks. Holdings are reviewed monthly; a rank decayed past #50 triggers replacement.", "others": [{"label": "Hyper-Aggressive", "page": "aggressive.html"}, {"label": "Top-3 Ritual", "page": "ritual.html"}, {"label": "Loser Reversal", "page": "reversal.html"}, {"label": "Monkey Control", "page": "monkey.html"}, {"label": "Insider Buying", "page": "insider.html"}], "start_cash": 10000.0, "total": 10082.7, "cash": 151.75, "pnl": 82.7, "pnl_pct": 0.83, "fees_paid": 11.3, "positions": [{"symbol": "UVE", "shares": 23.0, "cost_basis": 989.54, "price": 44.77, "value": 1029.71, "pnl": 40.17, "pnl_pct": 4.06, "rank_now": 43}, {"symbol": "INSW", "shares": 10.0, "cost_basis": 987.4, "price": 102.24, "value": 1022.4, "pnl": 35.0, "pnl_pct": 3.54, "rank_now": 146}, {"symbol": "APA", "shares": 23.0, "cost_basis": 993.45, "price": 44.18, "value": 1016.14, "pnl": 22.69, "pnl_pct": 2.28, "rank_now": 199}, {"symbol": "VISN", "shares": 158.0, "cost_basis": 997.98, "price": 6.37, "value": 1006.46, "pnl": 8.48, "pnl_pct": 0.85, "rank_now": 22}, {"symbol": "TBPH", "shares": 58.0, "cost_basis": 989.32, "price": 17.08, "value": 990.64, "pnl": 1.32, "pnl_pct": 0.13, "rank_now": 566}, {"symbol": "ACT", "shares": 20.0, "cost_basis": 965.0, "price": 49.51, "value": 990.2, "pnl": 25.2, "pnl_pct": 2.61, "rank_now": 86}, {"symbol": "SHO", "shares": 89.0, "cost_basis": 995.13, "price": 11.01, "value": 979.89, "pnl": -15.24, "pnl_pct": -1.53, "rank_now": 14}, {"symbol": "BFH", "shares": 9.0, "cost_basis": 941.23, "price": 108.79, "value": 979.11, "pnl": 37.88, "pnl_pct": 4.02, "rank_now": 3}, {"symbol": "PAGP", "shares": 35.0, "cost_basis": 988.7, "price": 27.68, "value": 968.8, "pnl": -19.9, "pnl_pct": -2.01, "rank_now": 10}, {"symbol": "SABR", "shares": 460.0, "cost_basis": 1000.5, "price": 2.06, "value": 947.6, "pnl": -52.9, "pnl_pct": -5.29, "rank_now": 97}], "curve": [{"date": "2026-09-01", "total": 9988.7, "pf_idx": 99.89, "spy_idx": 100.0}, {"date": "2026-09-02", "total": 10079.48, "pf_idx": 100.79, "spy_idx": 99.75}, {"date": "2026-09-03", "total": 10082.7, "pf_idx": 100.83, "spy_idx": 100.36}], "txns": [{"date": "2026-09-01", "side": "BUY", "symbol": "PAGP", "shares": 35.0, "price": 28.219999313354492, "fee": 1.0, "note": "initial deployment \u2014 composite rank #1"}, {"date": "2026-09-01", "side": "BUY", "symbol": "APA", "shares": 23.0, "price": 43.150001525878906, "fee": 1.0, "note": "initial deployment \u2014 composite rank #2"}, {"date": "2026-09-01", "side": "BUY", "symbol": "VISN", "shares": 158.0, "price": 6.309999942779541, "fee": 1.0, "note": "initial deployment \u2014 composite rank #3"}, {"date": "2026-09-01", "side": "BUY", "symbol": "SABR", "shares": 460.0, "price": 2.1700000762939453, "fee": 2.3, "note": "initial deployment \u2014 composite rank #4"}, {"date": "2026-09-01", "side": "BUY", "symbol": "TBPH", "shares": 58.0, "price": 17.040000915527344, "fee": 1.0, "note": "initial deployment \u2014 composite rank #5"}, {"date": "2026-09-01", "side": "BUY", "symbol": "INSW", "shares": 10.0, "price": 98.63999938964844, "fee": 1.0, "note": "initial deployment \u2014 composite rank #6"}, {"date": "2026-09-01", "side": "BUY", "symbol": "BFH", "shares": 9.0, "price": 104.47000122070312, "fee": 1.0, "note": "initial deployment \u2014 composite rank #7"}, {"date": "2026-09-01", "side": "BUY", "symbol": "ACT", "shares": 20.0, "price": 48.20000076293945, "fee": 1.0, "note": "initial deployment \u2014 composite rank #8"}, {"date": "2026-09-01", "side": "BUY", "symbol": "SHO", "shares": 89.0, "price": 11.170000076293945, "fee": 1.0, "note": "initial deployment \u2014 composite rank #9"}, {"date": "2026-09-01", "side": "BUY", "symbol": "UVE", "shares": 23.0, "price": 42.97999954223633, "fee": 1.0, "note": "initial deployment \u2014 composite rank #10"}], "max_held_rank": 50};
+const D = {"generated": "2026-09-05T00:01:12", "label": "Claude's Picks", "book": "core", "desc": "the screener's own composite, patient rules", "rule_note": "Rank now = current composite rank among full-coverage stocks. Holdings are reviewed monthly; a rank decayed past #50 triggers replacement.", "others": [{"label": "Hyper-Aggressive", "page": "aggressive.html"}, {"label": "Top-3 Ritual", "page": "ritual.html"}, {"label": "Loser Reversal", "page": "reversal.html"}, {"label": "Monkey Control", "page": "monkey.html"}, {"label": "Insider Buying", "page": "insider.html"}], "start_cash": 10000.0, "total": 10082.7, "cash": 151.75, "pnl": 82.7, "pnl_pct": 0.83, "fees_paid": 11.3, "positions": [{"symbol": "UVE", "shares": 23.0, "cost_basis": 989.54, "price": 44.77, "value": 1029.71, "pnl": 40.17, "pnl_pct": 4.06, "rank_now": 43}, {"symbol": "INSW", "shares": 10.0, "cost_basis": 987.4, "price": 102.24, "value": 1022.4, "pnl": 35.0, "pnl_pct": 3.54, "rank_now": 146}, {"symbol": "APA", "shares": 23.0, "cost_basis": 993.45, "price": 44.18, "value": 1016.14, "pnl": 22.69, "pnl_pct": 2.28, "rank_now": 199}, {"symbol": "VISN", "shares": 158.0, "cost_basis": 997.98, "price": 6.37, "value": 1006.46, "pnl": 8.48, "pnl_pct": 0.85, "rank_now": 22}, {"symbol": "TBPH", "shares": 58.0, "cost_basis": 989.32, "price": 17.08, "value": 990.64, "pnl": 1.32, "pnl_pct": 0.13, "rank_now": 566}, {"symbol": "ACT", "shares": 20.0, "cost_basis": 965.0, "price": 49.51, "value": 990.2, "pnl": 25.2, "pnl_pct": 2.61, "rank_now": 86}, {"symbol": "SHO", "shares": 89.0, "cost_basis": 995.13, "price": 11.01, "value": 979.89, "pnl": -15.24, "pnl_pct": -1.53, "rank_now": 14}, {"symbol": "BFH", "shares": 9.0, "cost_basis": 941.23, "price": 108.79, "value": 979.11, "pnl": 37.88, "pnl_pct": 4.02, "rank_now": 3}, {"symbol": "PAGP", "shares": 35.0, "cost_basis": 988.7, "price": 27.68, "value": 968.8, "pnl": -19.9, "pnl_pct": -2.01, "rank_now": 10}, {"symbol": "SABR", "shares": 460.0, "cost_basis": 1000.5, "price": 2.06, "value": 947.6, "pnl": -52.9, "pnl_pct": -5.29, "rank_now": 97}], "curve": [{"date": "2026-09-01", "total": 9988.7, "pf_idx": 99.89, "spy_idx": 100.0}, {"date": "2026-09-02", "total": 10079.48, "pf_idx": 100.79, "spy_idx": 99.75}, {"date": "2026-09-03", "total": 10082.7, "pf_idx": 100.83, "spy_idx": 100.36}], "txns": [{"date": "2026-09-01", "side": "BUY", "symbol": "PAGP", "shares": 35.0, "price": 28.219999313354492, "fee": 1.0, "note": "initial deployment \u2014 composite rank #1"}, {"date": "2026-09-01", "side": "BUY", "symbol": "APA", "shares": 23.0, "price": 43.150001525878906, "fee": 1.0, "note": "initial deployment \u2014 composite rank #2"}, {"date": "2026-09-01", "side": "BUY", "symbol": "VISN", "shares": 158.0, "price": 6.309999942779541, "fee": 1.0, "note": "initial deployment \u2014 composite rank #3"}, {"date": "2026-09-01", "side": "BUY", "symbol": "SABR", "shares": 460.0, "price": 2.1700000762939453, "fee": 2.3, "note": "initial deployment \u2014 composite rank #4"}, {"date": "2026-09-01", "side": "BUY", "symbol": "TBPH", "shares": 58.0, "price": 17.040000915527344, "fee": 1.0, "note": "initial deployment \u2014 composite rank #5"}, {"date": "2026-09-01", "side": "BUY", "symbol": "INSW", "shares": 10.0, "price": 98.63999938964844, "fee": 1.0, "note": "initial deployment \u2014 composite rank #6"}, {"date": "2026-09-01", "side": "BUY", "symbol": "BFH", "shares": 9.0, "price": 104.47000122070312, "fee": 1.0, "note": "initial deployment \u2014 composite rank #7"}, {"date": "2026-09-01", "side": "BUY", "symbol": "ACT", "shares": 20.0, "price": 48.20000076293945, "fee": 1.0, "note": "initial deployment \u2014 composite rank #8"}, {"date": "2026-09-01", "side": "BUY", "symbol": "SHO", "shares": 89.0, "price": 11.170000076293945, "fee": 1.0, "note": "initial deployment \u2014 composite rank #9"}, {"date": "2026-09-01", "side": "BUY", "symbol": "UVE", "shares": 23.0, "price": 42.97999954223633, "fee": 1.0, "note": "initial deployment \u2014 composite rank #10"}], "max_held_rank": 50};
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"]/g, c =>
   ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));

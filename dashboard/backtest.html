@@ -42,6 +42,71 @@ a{color:var(--pos)}
 </style>
 </head>
 <body>
+
+<style>
+.osnav-btn{position:fixed;top:12px;right:12px;z-index:60;width:42px;height:42px;
+  border-radius:10px;border:1px solid var(--border);background:var(--surface);
+  color:var(--ink);font-size:1.15rem;line-height:1;cursor:pointer;
+  box-shadow:0 2px 10px rgba(0,0,0,.12)}
+.osnav-btn:hover{border-color:var(--pos)}
+.osnav-scrim{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:61;
+  opacity:0;pointer-events:none;transition:opacity .18s}
+.osnav{position:fixed;top:0;right:0;bottom:0;width:300px;max-width:85vw;z-index:62;
+  background:var(--surface);border-left:1px solid var(--border);
+  transform:translateX(102%);transition:transform .2s ease;overflow-y:auto;
+  padding:16px 14px 24px;font:14px/1.4 system-ui,-apple-system,"Segoe UI",sans-serif}
+.osnav.open{transform:none}
+.osnav-scrim.open{opacity:1;pointer-events:auto}
+.osnav-title{font-weight:700;color:var(--ink);font-size:1rem;margin:4px 4px 2px}
+.osnav-sub{color:var(--muted);font-size:.75rem;margin:0 4px 10px}
+.osnav-group{color:var(--muted);font-size:.72rem;text-transform:uppercase;
+  letter-spacing:.08em;margin:14px 4px 4px}
+.osnav-link{display:block;padding:8px 10px;border-radius:8px;text-decoration:none;
+  margin:2px 0}
+.osnav-link:hover{background:color-mix(in srgb, var(--ink) 6%, transparent)}
+.osnav-link.active{background:color-mix(in srgb, var(--pos) 14%, transparent)}
+.osnav-name{display:block;color:var(--ink);font-weight:600}
+.osnav-blurb{display:block;color:var(--ink2);font-size:.76rem}
+.osnav-foot{margin-top:16px;padding-top:12px;border-top:1px solid var(--border)}
+.osnav-foot a{color:var(--pos);font-size:.8rem;text-decoration:none}
+</style>
+<button class="osnav-btn" id="osnav-btn" aria-label="Open site menu"
+  aria-expanded="false" aria-controls="osnav">☰</button>
+<div class="osnav-scrim" id="osnav-scrim"></div>
+<nav class="osnav" id="osnav" aria-label="Site">
+  <div class="osnav-title">Open Screener</div>
+  <div class="osnav-sub">a public, self-improving factor experiment</div>
+  <div class="osnav-group">Overview</div>
+<a class="osnav-link" href="index.html"><span class="osnav-name">Daily Screener</span><span class="osnav-blurb">today's scan, rankings & commentary</span></a>
+<div class="osnav-group">Research</div>
+<a class="osnav-link active" href="backtest.html"><span class="osnav-name">5-Year Backtest</span><span class="osnav-blurb">the methodology vs history</span></a>
+<a class="osnav-link" href="sp500.html"><span class="osnav-name">S&P 500 Lens</span><span class="osnav-blurb">index view & winner-persistence</span></a>
+<div class="osnav-group">Paper Books</div>
+<a class="osnav-link" href="portfolio.html"><span class="osnav-name">Claude's Picks</span><span class="osnav-blurb">$10k · the factor model's own top ten</span></a>
+<a class="osnav-link" href="aggressive.html"><span class="osnav-name">Hyper-Aggressive</span><span class="osnav-blurb">$100k · backtest-informed momentum tilt</span></a>
+<a class="osnav-link" href="ritual.html"><span class="osnav-name">Top-3 Ritual</span><span class="osnav-blurb">$10k · each January: last year's 3 biggest winners</span></a>
+<a class="osnav-link" href="reversal.html"><span class="osnav-name">Loser Reversal</span><span class="osnav-blurb">$10k · each January: last year's 3 worst losers</span></a>
+<a class="osnav-link" href="monkey.html"><span class="osnav-name">Monkey Control</span><span class="osnav-blurb">$10k · 10 random picks — the control group</span></a>
+<a class="osnav-link" href="insider.html"><span class="osnav-name">Insider Buying</span><span class="osnav-blurb">$10k · follow SEC Form-4 net buying</span></a>
+  <div class="osnav-foot"><a href="https://github.com/fabianongkl/stonks">Source, data &amp; methodology on GitHub →</a></div>
+</nav>
+<script>
+(function () {
+  const btn = document.getElementById('osnav-btn'),
+        nav = document.getElementById('osnav'),
+        scrim = document.getElementById('osnav-scrim');
+  function set(open) {
+    nav.classList.toggle('open', open);
+    scrim.classList.toggle('open', open);
+    btn.setAttribute('aria-expanded', String(open));
+    btn.textContent = open ? '✕' : '☰';
+  }
+  btn.addEventListener('click', () => set(!nav.classList.contains('open')));
+  scrim.addEventListener('click', () => set(false));
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') set(false); });
+})();
+</script>
+
 <div class="wrap">
   <h1>Backtest — plumbing &amp; behavior test</h1>
   <div class="sub" id="sub"><a href="index.html">← screener dashboard</a></div>

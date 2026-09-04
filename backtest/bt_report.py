@@ -10,6 +10,7 @@ import numpy as np
 import pandas as pd
 
 from screener import config as live_config
+from screener import nav
 from . import config_bt
 
 log = logging.getLogger("bt.report")
@@ -153,7 +154,9 @@ def write_report(s: dict) -> str:
 
 
 def write_html(s: dict) -> str:
-    html = _TEMPLATE.replace("__PAYLOAD__", json.dumps(s))
+    html = (_TEMPLATE
+            .replace("__NAV__", nav.nav_html("backtest.html"))
+            .replace("__PAYLOAD__", json.dumps(s)))
     out = live_config.DASHBOARD_DIR / "backtest.html"
     out.write_text(html, encoding="utf-8")
     return str(out)
@@ -203,6 +206,7 @@ a{color:var(--pos)}
 </style>
 </head>
 <body>
+__NAV__
 <div class="wrap">
   <h1>Backtest — plumbing &amp; behavior test</h1>
   <div class="sub" id="sub"><a href="index.html">← screener dashboard</a></div>

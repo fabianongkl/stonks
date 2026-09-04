@@ -21,7 +21,7 @@ from datetime import datetime
 import numpy as np
 import pandas as pd
 
-from . import commentary, config, db, learning
+from . import commentary, config, db, learning, nav
 from .factors import FACTOR_NAMES
 
 # ---------------------------------------------------------------------------
@@ -232,7 +232,9 @@ def write_journal_entry(conn: sqlite3.Connection, scan_id: int, today: str) -> N
 
 def generate_dashboard(conn: sqlite3.Connection, scan_id: int) -> str:
     payload = build_payload(conn, scan_id)
-    html = _TEMPLATE.replace("__PAYLOAD__", json.dumps(payload))
+    html = (_TEMPLATE
+            .replace("__NAV__", nav.nav_html("index.html"))
+            .replace("__PAYLOAD__", json.dumps(payload)))
     out = config.DASHBOARD_DIR / "index.html"
     out.write_text(html, encoding="utf-8")
     # also keep a JSON snapshot per scan for programmatic users
@@ -330,6 +332,7 @@ a{color:var(--pos)}
 </style>
 </head>
 <body>
+__NAV__
 <div class="wrap">
   <h1>Open Screener</h1>
   <div class="sub" id="head-sub"></div>

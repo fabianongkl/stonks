@@ -25,7 +25,7 @@ from datetime import datetime
 import numpy as np
 import pandas as pd
 
-from . import commentary, config, db
+from . import commentary, config, db, nav
 from .data import sp500
 
 log = logging.getLogger(__name__)
@@ -258,7 +258,9 @@ def build_payload(conn) -> dict:
 
 def generate(conn) -> str:
     payload = build_payload(conn)
-    html = _TEMPLATE.replace("__PAYLOAD__", json.dumps(payload))
+    html = (_TEMPLATE
+            .replace("__NAV__", nav.nav_html("sp500.html"))
+            .replace("__PAYLOAD__", json.dumps(payload)))
     out = config.DASHBOARD_DIR / "sp500.html"
     out.write_text(html, encoding="utf-8")
     return str(out)
@@ -313,6 +315,7 @@ a{color:var(--pos)}
 </style>
 </head>
 <body>
+__NAV__
 <div class="wrap">
   <h1>S&amp;P 500 Lens</h1>
   <div class="sub" id="sub"><a href="index.html">← screener dashboard</a></div>
