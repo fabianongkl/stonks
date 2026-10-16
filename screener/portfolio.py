@@ -278,6 +278,60 @@ def book_ranked(scores: pd.DataFrame, book: str) -> pd.DataFrame:
     return full
 
 
+def live_prices(symbols: list[str]) -> dict[str, float]:
+    """Last traded price for symbols that have fallen OUT of the scan
+    universe (below the price/liquidity floors, or delisted).
+
+    Without this, such a holding is frozen at its last scanned price and the
+    book silently overstates (or understates) its value — found 2026-10-17
+    with SABR carried at $2.12 while it actually traded at $1.70.  A stock
+    leaving our *screening* universe does not stop trading in the market.
+    """
+    if not symbols:
+        return {}
+    out: dict[str, float] = {}
+    try:
+        import yfinance as yf
+        raw = yf.download(tickers=symbols, period="5d", auto_adjust=True,
+                          progress=False, group_by="ticker", threads=True)
+        if raw is None or raw.empty:
+            return out
+        for sym in symbols:
+            try:
+                sub = raw[sym] if isinstance(raw.columns, pd.MultiIndex) else raw
+                s = sub["Close"].dropna()
+                if len(s):
+                    out[sym] = float(s.iloc[-1])
+            except Exception:
+                continue
+    except Exception as e:
+        log.warning("live price fetch failed: %s", e)
+    return out
+
+
+def _price_map(conn, book: str, scores: pd.DataFrame) -> dict[str, float]:
+    """symbol -> best available price for this book's holdings: the latest
+    scan first, then a live quote for anything that dropped out."""
+    px = scores.set_index("symbol")["close"].to_dict()
+    held = holdings(conn, book)["symbol"].tolist()
+    missing = [s for s in held if s not in px or pd.isna(px.get(s))]
+    if missing:
+        live = live_prices(missing)
+        for s in missing:
+            if s in live:
+                px[s] = live[s]
+                log.info("[%s] %s is outside the scan universe — marked at "
+                         "live price $%.2f", book, s, live[s])
+            else:
+                last = conn.execute(
+                    "SELECT price FROM pf_txns WHERE book=? AND symbol=? "
+                    "ORDER BY txn_id DESC LIMIT 1", (book, s)).fetchone()
+                px[s] = float(last[0]) if last else 0.0
+                log.warning("[%s] %s has no live price (delisted?) — carried "
+                            "at last known $%.2f", book, s, px[s])
+    return px
+
+
 def spy_close() -> float | None:
     try:
         import yfinance as yf
@@ -387,14 +441,9 @@ def _buy_equal(conn, book: str, day: str, picks: pd.DataFrame,
 def _sell_all(conn, book: str, day: str, scores: pd.DataFrame,
               reason: str) -> list[str]:
     actions = []
-    px = scores.set_index("symbol")["close"]
+    px = _price_map(conn, book, scores)
     for _, h in holdings(conn, book).iterrows():
         p = px.get(h["symbol"])
-        if p is None or pd.isna(p):
-            last = conn.execute(
-                "SELECT price FROM pf_txns WHERE book=? AND symbol=? "
-                "ORDER BY txn_id DESC LIMIT 1", (book, h["symbol"])).fetchone()
-            p = last[0] if last else 0.0
         if p and p > 0:
             _record(conn, book, day, h["symbol"], "SELL", h["shares"], float(p),
                     reason)
@@ -501,19 +550,22 @@ def review(conn, book: str = "core") -> list[str]:
     _, day, scores = latest_scan(conn)
     ranked = book_ranked(scores, book).set_index("symbol")
     held = holdings(conn, book)
+    pxmap = _price_map(conn, book, scores)
     actions = []
     for _, h in held.iterrows():
         sym = h["symbol"]
         rank = int(ranked.at[sym, "fc_rank"]) if sym in ranked.index else None
         if rank is None or rank > cfg["max_held_rank"]:
-            px_row = scores[scores["symbol"] == sym]
-            px = float(px_row["close"].iloc[0]) if not px_row.empty else None
-            if px is None:
-                actions.append(f"HOLD {sym}: no price in latest scan — manual review needed")
+            # A holding that has left the scan universe is sold at its live
+            # price, not stranded forever (2026-10 review finding).
+            px = pxmap.get(sym)
+            if not px or px <= 0:
+                actions.append(f"HOLD {sym}: no price anywhere — manual review needed")
                 continue
+            why = (f"rank decayed to {rank} (> {cfg['max_held_rank']})" if rank
+                   else "dropped out of the scan universe")
             _record(conn, book, day, sym, "SELL", h["shares"], px,
-                    f"review: rank decayed to {rank or 'unranked'} "
-                    f"(> {cfg['max_held_rank']})")
+                    f"review: {why}")
             still_held = set(holdings(conn, book)["symbol"])
             sector_counts: dict[str, int] = {}
             for hs in still_held:
@@ -538,19 +590,11 @@ def review(conn, book: str = "core") -> list[str]:
 def snapshot(conn, book: str = "core",
              spy: float | None = None) -> dict:
     _, day, scores = latest_scan(conn)
-    px = scores.set_index("symbol")["close"]
+    px = _price_map(conn, book, scores)
     held = holdings(conn, book)
     pos_val = 0.0
     for _, h in held.iterrows():
-        p = px.get(h["symbol"])
-        if p is None or pd.isna(p):
-            last = conn.execute(
-                "SELECT price FROM pf_txns WHERE book=? AND symbol=? "
-                "ORDER BY txn_id DESC LIMIT 1", (book, h["symbol"])).fetchone()
-            p = last[0] if last else 0.0
-            log.warning("[%s] %s missing from latest scan — using last known price",
-                        book, h["symbol"])
-        pos_val += h["shares"] * float(p)
+        pos_val += h["shares"] * float(px.get(h["symbol"], 0.0))
     c = cash(conn, book)
     if spy is None:
         spy = spy_close()
@@ -564,7 +608,7 @@ def snapshot(conn, book: str = "core",
 def position_table(conn, book: str = "core") -> pd.DataFrame:
     _, _, scores = latest_scan(conn)
     ranked = book_ranked(scores, book).set_index("symbol")
-    px = scores.set_index("symbol")["close"]
+    px = _price_map(conn, book, scores)
     held = holdings(conn, book)
     rows = []
     for _, h in held.iterrows():

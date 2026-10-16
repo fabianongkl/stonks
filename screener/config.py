@@ -60,6 +60,11 @@ DEFAULT_WEIGHTS = {
 SECTOR_NEUTRAL = True
 MIN_SECTOR_GROUP = 30
 
+# Insider metric plausibility ceiling (fraction of market cap).  Above this,
+# "open-market insider buying" is a filing artifact or a control deal, not
+# the Seyhun/Lakonishok-Lee signal.  See journal/review-2026-10.md.
+INSIDER_MAX_PLAUSIBLE = 0.10
+
 # ---------------------------------------------------------------------------
 # Learning / evaluation settings.
 # ---------------------------------------------------------------------------

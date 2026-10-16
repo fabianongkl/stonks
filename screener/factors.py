@@ -90,6 +90,11 @@ def price_metrics(prices: pd.DataFrame) -> pd.DataFrame:
         rows.append({
             "symbol": sym,
             "last_close": last,
+            # median close over the last quarter — a price that does not
+            # collapse with the stock, used to build a STABLE market cap
+            # for ratios that would otherwise self-reinforce (see
+            # insider_net_mcap in fundamental_metrics)
+            "median_close_63d": float(np.nanmedian(c[-DOLLAR_VOL_LOOKBACK:])),
             "mom_12_1": total_ret(MOM_LOOKBACK, MOM_SKIP),
             "mom_6": total_ret(MOM6_LOOKBACK, MOM_SKIP),
             "volatility": vol,
@@ -116,8 +121,7 @@ def fundamental_metrics(df: pd.DataFrame) -> pd.DataFrame:
     mcap = out["market_cap"]
     bad = ((out["revenue"] > 30 * mcap) | (out["equity"] > 15 * mcap)).fillna(False)
     if bad.any():
-        import logging
-        logging.getLogger(__name__).info(
+        log.info(
             "Market-cap sanity guard: %d stocks' share counts look wrong "
             "(single-class tag on multi-class filer) — value metrics dropped: %s",
             int(bad.sum()), ", ".join(out.loc[bad, "symbol"].head(8)))
@@ -141,11 +145,39 @@ def fundamental_metrics(df: pd.DataFrame) -> pd.DataFrame:
         # Asset growth (Cooper, Gulen & Schill 2008): balance-sheet expansion
         # rate; aggressive growers underperform disciplined ones.
         out["asset_growth"] = out["assets"] / out["assets_prior"] - 1.0
-        # Insider net open-market dollars scaled by size (Seyhun; Lakonishok & Lee)
+        # Insider net open-market dollars scaled by size (Seyhun; Lakonishok
+        # & Lee).  The denominator is a STABLE market cap — shares out times
+        # the median close of the last quarter — not today's price.
+        #
+        # Why: the 2026-10 review found this metric was self-reinforcing on
+        # losers.  Insider data is published quarterly and barely changes,
+        # so dividing by a *collapsing* market cap made the ratio rise as a
+        # stock fell: SGP went 22.8% -> 26.0% of market cap on no new
+        # buying at all, guaranteeing the insider book re-bought its own
+        # worst positions every rotation.  A stable denominator breaks that
+        # loop and keeps the metric meaning what it claims to mean.
         if "insider_net" in out.columns:
-            out["insider_net_mcap"] = out["insider_net"] / mcap
+            stable_mcap = out["median_close_63d"] * out["shares_out"]
+            stable_mcap = stable_mcap.where(stable_mcap > 0, mcap)
+            out["insider_net_mcap"] = out["insider_net"] / stable_mcap
         else:
             out["insider_net_mcap"] = np.nan
+
+    # Plausibility guard on insider ratios: genuine OPEN-MARKET insider
+    # purchases worth more than INSIDER_MAX_PLAUSIBLE of a company are
+    # vanishingly rare — at that size it is a block deal, a control
+    # transaction or a miscoded filing, not the signal the research
+    # describes.  Null them rather than let the tail of a noisy
+    # distribution drive a factor (the insider book selects exactly this
+    # tail, which is how the 2026-10 review found it).
+    implausible = out["insider_net_mcap"].abs() > config.INSIDER_MAX_PLAUSIBLE
+    if implausible.any():
+        log.info(
+            "Insider plausibility guard: %d stocks with |net buying| > %.0f%% "
+            "of market cap treated as data artifacts: %s",
+            int(implausible.sum()), config.INSIDER_MAX_PLAUSIBLE * 100,
+            ", ".join(out.loc[implausible, "symbol"].head(8)))
+    out.loc[implausible, "insider_net_mcap"] = np.nan
 
     # Ratios on non-positive denominators are meaningless — null them.
     for col in ["earnings_yield", "fcf_yield", "book_to_market", "insider_net_mcap"]:

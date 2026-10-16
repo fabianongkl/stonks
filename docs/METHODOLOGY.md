@@ -254,6 +254,20 @@ no results were harmed in the making of these changes):
   treated as missing instead of producing an absurd value score.
 - Bootstrap p-values on every matured-scan evaluation.
 
+**v0.2.2 — 2026-10-17** (October review — see
+`journal/review-2026-10.md` for the evidence behind each):
+- Insider metric denominator is now a *stable* market cap (shares × median
+  close of the last 63 trading days). The old current-price denominator was
+  self-reinforcing on losers: as a stock crashed, its insider-buying ratio
+  rose mechanically, so the insider book re-bought its own worst positions
+  every rotation.
+- Insider plausibility guard: |net buying| above 10% of market cap is
+  treated as a filing artifact and nulled (44 stocks in the first scan after
+  the change, including large caps where such buying is not credible).
+- Portfolio positions that fall out of the scan universe are now marked to
+  live market prices and can be sold, instead of being frozen at their last
+  scanned price forever. This had been overstating the core book by ~$200.
+
 **v0.2.1 — 2026-09-01**: learning-trigger independence fix. The weight
 adaptation threshold now counts only non-overlapping 63-day evaluation
 windows instead of raw matured-scan count — raised in an external-critique
