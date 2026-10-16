@@ -27,7 +27,7 @@ from datetime import date
 import numpy as np
 import pandas as pd
 
-from . import db
+from . import config, db, factors
 from .factors import FACTOR_NAMES
 
 log = logging.getLogger(__name__)
@@ -133,6 +133,16 @@ CREATE TABLE IF NOT EXISTS pf_snapshots (
     cash            REAL,
     total           REAL,
     spy_close       REAL
+);
+-- Turnover hysteresis (2026-10 review, §6D): a holding must be beyond its
+-- rank tolerance at REVIEW_STRIKES consecutive reviews before it is sold,
+-- so month-to-month rank noise stops churning the book.
+CREATE TABLE IF NOT EXISTS pf_strikes (
+    book    TEXT NOT NULL,
+    symbol  TEXT NOT NULL,
+    strikes INTEGER NOT NULL,
+    updated TEXT,
+    PRIMARY KEY (book, symbol)
 );
 """
 
@@ -262,7 +272,7 @@ def book_ranked(scores: pd.DataFrame, book: str) -> pd.DataFrame:
         return sub
     # monkey ranks informationally by the screener composite — showing what
     # the model thinks of the random draw is half the fun
-    full = scores[scores["n_factors"] == 4].copy()
+    full = scores[factors.eligible_mask(scores)].copy()
     w = BOOKS[book]["weights"]
     if w is None:
         full["book_score"] = full["composite"]
@@ -404,7 +414,7 @@ def _ritual_top3(scores: pd.DataFrame, calendar_year: int | None = None,
 def _monkey_picks(scores: pd.DataFrame, year: int, n: int) -> pd.DataFrame:
     """n stocks drawn uniformly at random from the full-coverage pool.
     Seeded by the draw year so the pick is reproducible by anyone."""
-    pool = sorted(scores[scores["n_factors"] == 4]["symbol"].tolist())
+    pool = sorted(scores[factors.eligible_mask(scores)]["symbol"].tolist())
     rng = np.random.default_rng(year * 7919 + 101)
     chosen = list(rng.choice(pool, size=min(n, len(pool)), replace=False))
     px = scores.set_index("symbol")["close"]
@@ -436,6 +446,23 @@ def _buy_equal(conn, book: str, day: str, picks: pd.DataFrame,
             _record(conn, book, day, p["symbol"], "BUY", shares, p["close"],
                     note_of(p))
     conn.commit()
+
+
+def _get_strikes(conn, book: str, symbol: str) -> int:
+    row = conn.execute(
+        "SELECT strikes FROM pf_strikes WHERE book=? AND symbol=?",
+        (book, symbol)).fetchone()
+    return int(row[0]) if row else 0
+
+
+def _set_strikes(conn, book: str, symbol: str, n: int) -> None:
+    if n <= 0:
+        conn.execute("DELETE FROM pf_strikes WHERE book=? AND symbol=?",
+                     (book, symbol))
+    else:
+        conn.execute(
+            "INSERT OR REPLACE INTO pf_strikes (book, symbol, strikes, updated)"
+            " VALUES (?,?,?,date('now'))", (book, symbol, n))
 
 
 def _sell_all(conn, book: str, day: str, scores: pd.DataFrame,
@@ -555,34 +582,62 @@ def review(conn, book: str = "core") -> list[str]:
     for _, h in held.iterrows():
         sym = h["symbol"]
         rank = int(ranked.at[sym, "fc_rank"]) if sym in ranked.index else None
-        if rank is None or rank > cfg["max_held_rank"]:
-            # A holding that has left the scan universe is sold at its live
-            # price, not stranded forever (2026-10 review finding).
-            px = pxmap.get(sym)
-            if not px or px <= 0:
-                actions.append(f"HOLD {sym}: no price anywhere — manual review needed")
+        in_scan = (scores["symbol"] == sym).any()
+
+        if rank is not None and rank <= cfg["max_held_rank"]:
+            _set_strikes(conn, book, sym, 0)       # back in favour, forgiven
+            continue
+
+        # Three ways to fail, treated differently:
+        #   gone from the scan entirely (delisted, or below the price and
+        #     liquidity floors) — a real state change, sold at once;
+        #   still scanned but no longer scoreable (the completeness gate
+        #     rejects it, e.g. a foreign filer whose metrics thinned out);
+        #   scanned, scoreable, but rank has decayed past tolerance.
+        # The last two are noisy month to month, so both get hysteresis.
+        if not in_scan:
+            reason, noisy = "dropped out of the scan universe", False
+        elif rank is None:
+            reason, noisy = "no longer passes the metric-completeness gate", True
+        else:
+            reason, noisy = (f"rank {rank} > {cfg['max_held_rank']}", True)
+
+        if noisy:
+            strikes = _get_strikes(conn, book, sym) + 1
+            _set_strikes(conn, book, sym, strikes)
+            if strikes < config.REVIEW_STRIKES:
+                actions.append(
+                    f"WATCH {sym}: {reason} "
+                    f"(strike {strikes}/{config.REVIEW_STRIKES}) — held")
                 continue
-            why = (f"rank decayed to {rank} (> {cfg['max_held_rank']})" if rank
-                   else "dropped out of the scan universe")
-            _record(conn, book, day, sym, "SELL", h["shares"], px,
-                    f"review: {why}")
-            still_held = set(holdings(conn, book)["symbol"])
-            sector_counts: dict[str, int] = {}
-            for hs in still_held:
-                sec = (ranked.at[hs, "sector"] if hs in ranked.index else "Other") or "Other"
-                sector_counts[sec] = sector_counts.get(sec, 0) + 1
-            candidates = ranked[~ranked.index.isin(still_held)].reset_index()
-            repl = _select_diversified(candidates, 1, sector_counts)
-            if not repl.empty:
-                r = repl.iloc[0]
-                budget = min(cash(conn, book),
-                             cfg["start_cash"] / cfg["n_positions"] * 1.2)
-                shares = int(budget // r["close"])
-                if shares > 0:
-                    _record(conn, book, day, r["symbol"], "BUY", shares, r["close"],
-                            f"review: replacement, {cfg['label']} rank "
-                            f"#{int(r['fc_rank'])}")
-                    actions.append(f"SWAP {sym} -> {r['symbol']}")
+            reason += f", {config.REVIEW_STRIKES} consecutive reviews"
+
+        # A holding that has left the scan universe is sold at its live
+        # price, not stranded forever (2026-10 review finding).
+        px = pxmap.get(sym)
+        if not px or px <= 0:
+            actions.append(f"HOLD {sym}: no price anywhere — manual review needed")
+            continue
+        _record(conn, book, day, sym, "SELL", h["shares"], px, f"review: {reason}")
+        _set_strikes(conn, book, sym, 0)
+
+        still_held = set(holdings(conn, book)["symbol"])
+        sector_counts: dict[str, int] = {}
+        for hs in still_held:
+            sec = (ranked.at[hs, "sector"] if hs in ranked.index else "Other") or "Other"
+            sector_counts[sec] = sector_counts.get(sec, 0) + 1
+        candidates = ranked[~ranked.index.isin(still_held)].reset_index()
+        repl = _select_diversified(candidates, 1, sector_counts)
+        if not repl.empty:
+            r = repl.iloc[0]
+            budget = min(cash(conn, book),
+                         cfg["start_cash"] / cfg["n_positions"] * 1.2)
+            shares = int(budget // r["close"])
+            if shares > 0:
+                _record(conn, book, day, r["symbol"], "BUY", shares, r["close"],
+                        f"review: replacement, {cfg['label']} rank "
+                        f"#{int(r['fc_rank'])}")
+                actions.append(f"SWAP {sym} -> {r['symbol']}")
     conn.commit()
     return actions
 

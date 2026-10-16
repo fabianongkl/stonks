@@ -40,6 +40,14 @@ DOLLAR_VOL_LOOKBACK = 63
 
 FACTOR_NAMES = ["value", "quality", "momentum", "low_vol"]
 
+# Minimum metrics that must actually be present for a factor to count as
+# genuinely measured (half of its metrics, rounded up).  Added 2026-10-17:
+# a factor score used to be computed from ANY one of its metrics, so a stock
+# could carry "full four-factor coverage" on a fraction of the evidence —
+# AKTS scored quality +1.49 from 2 of 6 quality metrics and then fell 25%.
+# See journal/review-2026-10.md §3 and §6C.
+MIN_METRICS_PER_FACTOR = {"value": 2, "quality": 3, "momentum": 1, "low_vol": 1}
+
 # metric -> (factor family, direction: +1 higher-is-better / -1 lower-is-better)
 METRIC_MAP = {
     "earnings_yield":      ("value", +1),
@@ -263,5 +271,26 @@ def score(df: pd.DataFrame, weights: dict[str, float]) -> pd.DataFrame:
     out["composite"] = comp
     out["n_factors"] = avail.sum(axis=1)
 
+    # How much evidence each factor score actually rests on, and whether the
+    # stock clears the per-factor minimums (see MIN_METRICS_PER_FACTOR).
+    out["n_metrics"] = sum(out[m].notna().astype(int) for m in METRIC_MAP)
+    deep = pd.Series(True, index=out.index)
+    for factor, floor in MIN_METRICS_PER_FACTOR.items():
+        have = sum(out[m].notna().astype(int)
+                   for m, (f, _) in METRIC_MAP.items() if f == factor)
+        deep &= have >= floor
+    out["eligible"] = ((out["n_factors"] == len(FACTOR_NAMES)) & deep).astype(int)
+
     out["rank"] = out["composite"].rank(ascending=False, method="min")
     return out.sort_values("rank")
+
+
+def eligible_mask(df: pd.DataFrame) -> pd.Series:
+    """Rows that may enter headline picks and the books.
+
+    Falls back to the old `n_factors == 4` rule for scans recorded before
+    the completeness gate existed, so historical rows stay readable.
+    """
+    if "eligible" in df.columns and df["eligible"].notna().any():
+        return df["eligible"].fillna(0).astype(int) == 1
+    return df["n_factors"] == len(FACTOR_NAMES)

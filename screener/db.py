@@ -13,11 +13,11 @@ from datetime import datetime
 
 import pandas as pd
 
-from . import config
+from . import config, factors
 
 SCORE_COLS = [
     "symbol", "name", "exchange", "sector", "close", "market_cap", "dollar_volume",
-    "composite", "rank", "n_factors",
+    "composite", "rank", "n_factors", "n_metrics", "eligible",
     "value_score", "quality_score", "momentum_score", "low_vol_score",
     "earnings_yield", "fcf_yield", "book_to_market", "issuance",
     "gross_profitability", "roa", "leverage", "accruals",
@@ -130,7 +130,7 @@ def save_scan(conn: sqlite3.Connection, scan_date: str, universe_size: int,
         for table in ("scores", "outcomes", "scan_eval", "factor_ic", "scans"):
             conn.execute(f"DELETE FROM {table} WHERE scan_id=?", (old[0],))
 
-    full_cov = int((scored["n_factors"] == 4).sum())
+    full_cov = int(factors.eligible_mask(scored).sum())
     cur = conn.execute(
         "INSERT INTO scans (scan_date, universe_size, scored_size, full_coverage,"
         " weights_json, notes, created_at) VALUES (?,?,?,?,?,?,?)",

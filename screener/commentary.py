@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import pandas as pd
 
+from . import factors
 from .factors import FACTOR_NAMES
 
 FACTOR_LABEL = {
@@ -23,7 +24,8 @@ FACTOR_SHORT = {"value": "value", "quality": "quality",
 
 
 def full_coverage(scores: pd.DataFrame) -> pd.DataFrame:
-    full = scores[scores["n_factors"] == 4].copy()
+    """Eligible stocks, ranked — the pool headline picks are drawn from."""
+    full = scores[factors.eligible_mask(scores)].copy()
     full = full.sort_values("composite", ascending=False).reset_index(drop=True)
     full["fc_rank"] = full.index + 1
     return full

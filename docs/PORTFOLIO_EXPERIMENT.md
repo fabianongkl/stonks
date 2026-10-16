@@ -24,9 +24,13 @@ priced into the expectations below.
    minimum $1, maximum 1% of trade value. (Regulatory pass-through fees on
    sells, fractions of a cent per share, are ignored as immaterial.)
 3. **Holding rule:** positions are reviewed **monthly** (`--review`). A
-   holding is sold only if its composite rank has decayed past **#50** among
-   full-coverage stocks; the proceeds buy the best-ranked stock not already
-   held. No stops, no daily trading, no market timing.
+   holding is sold if its composite rank has decayed past **#50** among
+   eligible stocks **at two consecutive reviews** (turnover hysteresis,
+   added 2026-10-17 — see `journal/review-2026-10.md` §6D; a single bad
+   month is forgiven, because month-to-month rank moves are mostly noise).
+   A holding that leaves the scan universe altogether is sold at once. The
+   proceeds buy the best-ranked stock not already held. No stops, no daily
+   trading, no market timing.
 4. **Sector cap (amendment, 2026-09-01, same day as inception):** any *new*
    selection skips stocks whose sector already holds 2 positions, so the book
    stays a set of stock picks rather than one sector bet. The methodology

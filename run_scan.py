@@ -127,8 +127,9 @@ def main() -> int:
         return 1
     scan_id = db.save_scan(conn, today, universe_size, scored, weights,
                            notes="sample run" if args.sample else "")
-    log.info("Scan %d saved: %s, %d scored, %d with full factor coverage",
-             scan_id, today, len(scored), int((scored['n_factors'] == 4).sum()))
+    log.info("Scan %d saved: %s, %d scored, %d eligible (full factors and "
+             "enough metrics behind each)",
+             scan_id, today, len(scored), int(factors.eligible_mask(scored).sum()))
 
     # 9. Evaluate matured past scans & maybe learn --------------------------
     # Latest close from the FULL price panel (not just scored stocks), so

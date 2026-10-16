@@ -31,7 +31,7 @@ from datetime import date
 import numpy as np
 import pandas as pd
 
-from . import config, db
+from . import config, db, factors
 from .factors import FACTOR_NAMES
 
 log = logging.getLogger(__name__)
@@ -102,8 +102,8 @@ def _evaluate(conn, scan_id: int, horizon: int, elapsed: int,
         "INSERT OR REPLACE INTO outcomes (scan_id, symbol, horizon_days, elapsed_days,"
         " fwd_return) VALUES (?,?,?,?,?)", out_rows)
 
-    # Top decile (full factor coverage only) vs whole scored universe
-    full = scores[scores["n_factors"] == 4]
+    # Top decile (eligible stocks only) vs whole scored universe
+    full = scores[factors.eligible_mask(scores)]
     n_top = max(10, int(len(full) * config.TOP_DECILE))
     top_syms = full.nsmallest(n_top, "rank").index
     top_ret = fwd.reindex(top_syms).mean()

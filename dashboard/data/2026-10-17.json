@@ -1,9 +1,9 @@
 {
- "generated": "2026-10-17T00:55:57",
+ "generated": "2026-10-17T01:10:34",
  "scan_date": "2026-10-17",
  "universe_size": 5288,
  "scored_size": 3390,
- "full_coverage": 3175,
+ "full_coverage": 2944,
  "weights": {
   "value": 0.25,
   "quality": 0.3,
@@ -49,25 +49,6 @@
   },
   {
    "rank": 3,
-   "symbol": "EQNR",
-   "name": "Equinor ASA",
-   "sector": "Energy",
-   "close": 46.19,
-   "mcap": "$115.5B",
-   "composite": 1.02,
-   "factors": {
-    "value": 2.56,
-    "quality": 0.42,
-    "momentum": 0.74,
-    "low_vol": 0.21
-   },
-   "reasons": [
-    "conservatively financed (low debt)"
-   ],
-   "flags": []
-  },
-  {
-   "rank": 4,
    "symbol": "PAGP",
    "name": "Plains GP Holdings, L.P. - Class A Shares representing limit",
    "sector": "Industrials",
@@ -86,26 +67,7 @@
    "flags": []
   },
   {
-   "rank": 5,
-   "symbol": "TTE",
-   "name": "TotalEnergies SE Ordinary Shares",
-   "sector": "Energy",
-   "close": 90.83,
-   "mcap": "$200.4B",
-   "composite": 0.96,
-   "factors": {
-    "value": 1.94,
-    "quality": 0.42,
-    "momentum": 0.18,
-    "low_vol": 1.98
-   },
-   "reasons": [
-    "priced low versus its book value"
-   ],
-   "flags": []
-  },
-  {
-   "rank": 6,
+   "rank": 4,
    "symbol": "BFH",
    "name": "Bread Financial Holdings, Inc. Common Stock",
    "sector": "Financials",
@@ -119,54 +81,12 @@
     "low_vol": -0.65
    },
    "reasons": [
-    "in a strong 12-month uptrend"
-   ],
-   "flags": [
-    "very volatile"
-   ]
-  },
-  {
-   "rank": 7,
-   "symbol": "TD",
-   "name": "Toronto Dominion Bank (The) Common Stock",
-   "sector": "Financials",
-   "close": 120.17,
-   "mcap": "$203.0B",
-   "composite": 0.93,
-   "factors": {
-    "value": 0.79,
-    "quality": 0.39,
-    "momentum": 1.09,
-    "low_vol": 1.9
-   },
-   "reasons": [
-    "in a strong 12-month uptrend"
-   ],
-   "flags": [
-    "thinly traded"
-   ]
-  },
-  {
-   "rank": 8,
-   "symbol": "CGAU",
-   "name": "Centerra Gold Inc. Common Shares",
-   "sector": "Materials",
-   "close": 21.94,
-   "mcap": "$4.4B",
-   "composite": 0.92,
-   "factors": {
-    "value": 1.64,
-    "quality": 0.27,
-    "momentum": 1.46,
-    "low_vol": -0.05
-   },
-   "reasons": [
-    "trades steadily (low volatility)"
+    "conservatively financed (low debt)"
    ],
    "flags": []
   },
   {
-   "rank": 9,
+   "rank": 5,
    "symbol": "EPD",
    "name": "Enterprise Products Partners L.P. Common Stock",
    "sector": "Utilities",
@@ -180,97 +100,12 @@
     "low_vol": 0.89
    },
    "reasons": [
-    "trades steadily (low volatility)"
+    "priced low versus its book value"
    ],
    "flags": []
   },
   {
-   "rank": 10,
-   "symbol": "ING",
-   "name": "ING Group, N.V. Common Stock",
-   "sector": "Financials",
-   "close": 33.44,
-   "mcap": "$97.1B",
-   "composite": 0.9,
-   "factors": {
-    "value": 1.44,
-    "quality": 0.39,
-    "momentum": 1.39,
-    "low_vol": -0.0
-   },
-   "reasons": [
-    "conservatively financed (low debt)",
-    "trades steadily (low volatility)"
-   ],
-   "flags": [
-    "thinly traded"
-   ]
-  },
-  {
-   "rank": 11,
-   "symbol": "NVRI",
-   "name": "Enviri Corporation Common Stock",
-   "sector": "Utilities",
-   "close": 19.53,
-   "mcap": "$548.9M",
-   "composite": 0.89,
-   "factors": {
-    "value": 1.77,
-    "quality": 0.5,
-    "momentum": 1.44,
-    "low_vol": -0.89
-   },
-   "reasons": [
-    "priced low versus its book value",
-    "trades steadily (low volatility)"
-   ],
-   "flags": [
-    "thinly traded"
-   ]
-  },
-  {
-   "rank": 12,
-   "symbol": "PSO",
-   "name": "Pearson, Plc Common Stock",
-   "sector": "Materials",
-   "close": 18.17,
-   "mcap": "$11.6B",
-   "composite": 0.89,
-   "factors": {
-    "value": 1.6,
-    "quality": 0.27,
-    "momentum": 0.46,
-    "low_vol": 1.79
-   },
-   "reasons": [
-    "cheap versus its earnings",
-    "generates a lot of free cash for its price",
-    "priced low versus its book value",
-    "strong return on assets"
-   ],
-   "flags": []
-  },
-  {
-   "rank": 13,
-   "symbol": "OBE",
-   "name": "Obsidian Energy Ltd. Common Shares",
-   "sector": "Energy",
-   "close": 11.9,
-   "mcap": "$800.6M",
-   "composite": 0.87,
-   "factors": {
-    "value": 2.15,
-    "quality": 0.42,
-    "momentum": 1.09,
-    "low_vol": -0.85
-   },
-   "reasons": [
-    "in a strong 12-month uptrend"
-   ],
-   "flags": []
-  },
-  {
-   "rank": 14,
+   "rank": 6,
    "symbol": "MAAS",
    "name": "Maase Inc. - Class A Ordinary Shares",
    "sector": "Financials",
@@ -284,35 +119,14 @@
     "low_vol": -1.88
    },
    "reasons": [
-    "cheap versus its earnings",
-    "strong return on assets",
-    "in a strong 12-month uptrend",
-    "buying back its own shares"
+    "in a strong 12-month uptrend"
    ],
-   "flags": []
+   "flags": [
+    "very volatile"
+   ]
   },
   {
-   "rank": 15,
-   "symbol": "NEXN",
-   "name": "Nexxen International Ltd. - Ordinary Shares",
-   "sector": "Technology",
-   "close": 8.9,
-   "mcap": "$501.2M",
-   "composite": 0.85,
-   "factors": {
-    "value": 1.76,
-    "quality": 0.87,
-    "momentum": 0.09,
-    "low_vol": 0.78
-   },
-   "reasons": [
-    "in a strong 12-month uptrend",
-    "buying back its own shares"
-   ],
-   "flags": []
-  },
-  {
-   "rank": 16,
+   "rank": 7,
    "symbol": "TEN",
    "name": "Tsakos Energy Navigation Ltd Common Shares",
    "sector": "Industrials",
@@ -326,34 +140,14 @@
     "low_vol": 0.55
    },
    "reasons": [
-    "cheap versus its earnings",
-    "generates a lot of free cash for its price",
-    "in a strong 12-month uptrend",
-    "trades steadily (low volatility)"
+    "in a strong 12-month uptrend"
    ],
-   "flags": []
+   "flags": [
+    "thinly traded"
+   ]
   },
   {
-   "rank": 17,
-   "symbol": "UMC",
-   "name": "United Microelectronics Corporation (NEW) Common Stock",
-   "sector": "Technology",
-   "close": 20.2,
-   "mcap": "$254.3B",
-   "composite": 0.84,
-   "factors": {
-    "value": 0.09,
-    "quality": 0.87,
-    "momentum": 1.87,
-    "low_vol": -0.08
-   },
-   "reasons": [
-    "trades steadily (low volatility)"
-   ],
-   "flags": []
-  },
-  {
-   "rank": 18,
+   "rank": 8,
    "symbol": "PBI",
    "name": "Pitney Bowes Inc. Common Stock",
    "sector": "Technology",
@@ -367,13 +161,12 @@
     "low_vol": 1.45
    },
    "reasons": [
-    "priced low versus its book value",
-    "conservatively financed (low debt)"
+    "trades steadily (low volatility)"
    ],
    "flags": []
   },
   {
-   "rank": 19,
+   "rank": 9,
    "symbol": "SENEA",
    "name": "Seneca Foods Corp. - Class A Common Stock",
    "sector": "Consumer Staples",
@@ -387,14 +180,12 @@
     "low_vol": -0.45
    },
    "reasons": [
-    "in a strong 12-month uptrend",
-    "trades steadily (low volatility)",
-    "buying back its own shares"
+    "trades steadily (low volatility)"
    ],
    "flags": []
   },
   {
-   "rank": 20,
+   "rank": 10,
    "symbol": "SHO",
    "name": "Sunstone Hotel Investors, Inc. Sunstone Hotel Investors, Inc",
    "sector": "Consumer Discretionary",
@@ -408,15 +199,15 @@
     "low_vol": 2.09
    },
    "reasons": [
-    "cheap versus its earnings",
-    "generates a lot of free cash for its price",
-    "in a strong 12-month uptrend",
-    "buying back its own shares"
+    "conservatively financed (low debt)",
+    "trades steadily (low volatility)"
    ],
-   "flags": []
+   "flags": [
+    "thinly traded"
+   ]
   },
   {
-   "rank": 21,
+   "rank": 11,
    "symbol": "NVGS",
    "name": "Navigator Holdings Ltd. Ordinary Shares (Marshall Islands)",
    "sector": "Industrials",
@@ -430,12 +221,15 @@
     "low_vol": 1.14
    },
    "reasons": [
-    "in a strong 12-month uptrend"
+    "priced low versus its book value",
+    "trades steadily (low volatility)"
    ],
-   "flags": []
+   "flags": [
+    "thinly traded"
+   ]
   },
   {
-   "rank": 22,
+   "rank": 12,
    "symbol": "GSL",
    "name": "Global Ship Lease Inc New Class A Common Shares",
    "sector": "Industrials",
@@ -449,14 +243,15 @@
     "low_vol": 1.33
    },
    "reasons": [
-    "in a strong 12-month uptrend",
-    "trades steadily (low volatility)",
-    "buying back its own shares"
+    "cheap versus its earnings",
+    "generates a lot of free cash for its price",
+    "priced low versus its book value",
+    "strong return on assets"
    ],
    "flags": []
   },
   {
-   "rank": 23,
+   "rank": 13,
    "symbol": "GASS",
    "name": "StealthGas, Inc. - common stock",
    "sector": "Industrials",
@@ -470,13 +265,12 @@
     "low_vol": 0.92
    },
    "reasons": [
-    "in a strong 12-month uptrend",
-    "buying back its own shares"
+    "in a strong 12-month uptrend"
    ],
    "flags": []
   },
   {
-   "rank": 24,
+   "rank": 14,
    "symbol": "EBF",
    "name": "Ennis, Inc. Common Stock",
    "sector": "Materials",
@@ -491,72 +285,14 @@
    },
    "reasons": [
     "cheap versus its earnings",
-    "trades steadily (low volatility)"
-   ],
-   "flags": []
-  },
-  {
-   "rank": 25,
-   "symbol": "AKTS",
-   "name": "Aktis Oncology, Inc. - Common stock",
-   "sector": "Healthcare",
-   "close": 14.89,
-   "mcap": "$795.5M",
-   "composite": 0.81,
-   "factors": {
-    "value": 0.8,
-    "quality": 1.86,
-    "momentum": 0.23,
-    "low_vol": -0.13
-   },
-   "reasons": [
-    "trades steadily (low volatility)",
+    "strong return on assets",
+    "in a strong 12-month uptrend",
     "buying back its own shares"
    ],
    "flags": []
   },
   {
-   "rank": 26,
-   "symbol": "SU",
-   "name": "Suncor Energy  Inc. Common Stock",
-   "sector": "Energy",
-   "close": 77.22,
-   "mcap": "$92.2B",
-   "composite": 0.8,
-   "factors": {
-    "value": 1.23,
-    "quality": 0.42,
-    "momentum": 0.5,
-    "low_vol": 1.46
-   },
-   "reasons": [
-    "priced low versus its book value",
-    "in a strong 12-month uptrend"
-   ],
-   "flags": []
-  },
-  {
-   "rank": 27,
-   "symbol": "TSM",
-   "name": "Taiwan Semiconductor Manufacturing Company Ltd.",
-   "sector": "Technology",
-   "close": 415.06,
-   "mcap": "$10.8T",
-   "composite": 0.8,
-   "factors": {
-    "value": 0.21,
-    "quality": 1.34,
-    "momentum": 0.56,
-    "low_vol": 1.18
-   },
-   "reasons": [
-    "trades steadily (low volatility)",
-    "buying back its own shares"
-   ],
-   "flags": []
-  },
-  {
-   "rank": 28,
+   "rank": 15,
    "symbol": "APLE",
    "name": "Apple Hospitality REIT, Inc. Common Shares",
    "sector": "Real Estate",
@@ -570,34 +306,13 @@
     "low_vol": 0.37
    },
    "reasons": [
-    "conservatively financed (low debt)"
-   ],
-   "flags": [
-    "very volatile"
-   ]
-  },
-  {
-   "rank": 29,
-   "symbol": "FTS",
-   "name": "Fortis Inc. Common Shares",
-   "sector": "Utilities",
-   "close": 55.53,
-   "mcap": "$28.2B",
-   "composite": 0.79,
-   "factors": {
-    "value": 0.14,
-    "quality": 1.28,
-    "momentum": 0.15,
-    "low_vol": 2.21
-   },
-   "reasons": [
     "in a strong 12-month uptrend",
     "buying back its own shares"
    ],
    "flags": []
   },
   {
-   "rank": 30,
+   "rank": 16,
    "symbol": "RAMP",
    "name": "LiveRamp Holdings, Inc. Common Stock",
    "sector": "Technology",
@@ -611,12 +326,15 @@
     "low_vol": 1.27
    },
    "reasons": [
-    "in a strong 12-month uptrend"
+    "cheap versus its earnings",
+    "generates a lot of free cash for its price",
+    "in a strong 12-month uptrend",
+    "trades steadily (low volatility)"
    ],
    "flags": []
   },
   {
-   "rank": 31,
+   "rank": 17,
    "symbol": "EDRY",
    "name": "EuroDry Ltd. - Common Shares",
    "sector": "Industrials",
@@ -630,35 +348,12 @@
     "low_vol": -1.02
    },
    "reasons": [
-    "priced low versus its book value",
-    "in a strong 12-month uptrend",
-    "buying back its own shares"
-   ],
-   "flags": [
-    "very volatile"
-   ]
-  },
-  {
-   "rank": 32,
-   "symbol": "CNI",
-   "name": "Canadian National Railway Company Common Stock",
-   "sector": "Industrials",
-   "close": 120.96,
-   "mcap": "$74.3B",
-   "composite": 0.78,
-   "factors": {
-    "value": 0.67,
-    "quality": 0.53,
-    "momentum": 0.44,
-    "low_vol": 2.16
-   },
-   "reasons": [
-    "buying back its own shares"
+    "trades steadily (low volatility)"
    ],
    "flags": []
   },
   {
-   "rank": 33,
+   "rank": 18,
    "symbol": "MSBI",
    "name": "Midland States Bancorp, Inc. - Common Stock",
    "sector": "Financials",
@@ -672,56 +367,13 @@
     "low_vol": -0.25
    },
    "reasons": [
-    "conservatively financed (low debt)",
-    "trades steadily (low volatility)"
-   ],
-   "flags": [
-    "thinly traded"
-   ]
-  },
-  {
-   "rank": 34,
-   "symbol": "HSBC",
-   "name": "HSBC Holdings, plc. Common Stock",
-   "sector": "Financials",
-   "close": 94.85,
-   "mcap": "$1.6T",
-   "composite": 0.77,
-   "factors": {
-    "value": 0.96,
-    "quality": 0.72,
-    "momentum": 1.02,
-    "low_vol": 0.05
-   },
-   "reasons": [
-    "cheap versus its earnings",
-    "generates a lot of free cash for its price",
     "priced low versus its book value",
-    "in a strong 12-month uptrend"
+    "conservatively financed (low debt)"
    ],
    "flags": []
   },
   {
-   "rank": 35,
-   "symbol": "CP",
-   "name": "Canadian Pacific Kansas City Limited Common Shares",
-   "sector": "Industrials",
-   "close": 86.75,
-   "mcap": "$76.3B",
-   "composite": 0.76,
-   "factors": {
-    "value": 1.03,
-    "quality": 0.53,
-    "momentum": 0.17,
-    "low_vol": 1.97
-   },
-   "reasons": [
-    "in a strong 12-month uptrend"
-   ],
-   "flags": []
-  },
-  {
-   "rank": 36,
+   "rank": 19,
    "symbol": "VISN",
    "name": "Vistance Networks, Inc.  - Common Stock",
    "sector": "Industrials",
@@ -735,58 +387,14 @@
     "low_vol": -0.15
    },
    "reasons": [
-    "cheap versus its earnings",
-    "generates a lot of free cash for its price",
     "in a strong 12-month uptrend",
+    "trades steadily (low volatility)",
     "buying back its own shares"
    ],
-   "flags": [
-    "heavily indebted"
-   ]
-  },
-  {
-   "rank": 37,
-   "symbol": "E",
-   "name": "ENI S.p.A. Common Stock",
-   "sector": "Energy",
-   "close": 58.73,
-   "mcap": "$184.8B",
-   "composite": 0.76,
-   "factors": {
-    "value": 1.29,
-    "quality": 0.42,
-    "momentum": 0.27,
-    "low_vol": 1.53
-   },
-   "reasons": [
-    "cheap versus its earnings",
-    "generates a lot of free cash for its price",
-    "strong return on assets",
-    "earnings backed by real cash flow"
-   ],
    "flags": []
   },
   {
-   "rank": 38,
-   "symbol": "BNS",
-   "name": "Bank Nova Scotia Halifax Pfd 3 Ordinary Shares",
-   "sector": "Financials",
-   "close": 91.19,
-   "mcap": "$112.7B",
-   "composite": 0.76,
-   "factors": {
-    "value": 0.19,
-    "quality": 0.39,
-    "momentum": 1.07,
-    "low_vol": 1.8
-   },
-   "reasons": [
-    "trades steadily (low volatility)"
-   ],
-   "flags": []
-  },
-  {
-   "rank": 39,
+   "rank": 20,
    "symbol": "RPRX",
    "name": "Royalty Pharma plc - Class A Ordinary Shares",
    "sector": "Healthcare",
@@ -801,14 +409,14 @@
    },
    "reasons": [
     "cheap versus its earnings",
-    "priced low versus its book value",
+    "generates a lot of free cash for its price",
     "in a strong 12-month uptrend",
     "buying back its own shares"
    ],
    "flags": []
   },
   {
-   "rank": 40,
+   "rank": 21,
    "symbol": "EE",
    "name": "Excelerate Energy, Inc. Class A Common Stock",
    "sector": "Utilities",
@@ -822,12 +430,12 @@
     "low_vol": -0.67
    },
    "reasons": [
-    "trades steadily (low volatility)"
+    "in a strong 12-month uptrend"
    ],
    "flags": []
   },
   {
-   "rank": 41,
+   "rank": 22,
    "symbol": "COKE",
    "name": "Coca-Cola Consolidated, Inc. - Common Stock",
    "sector": "Consumer Staples",
@@ -841,15 +449,14 @@
     "low_vol": -0.31
    },
    "reasons": [
-    "cheap versus its earnings",
-    "generates a lot of free cash for its price",
-    "priced low versus its book value",
-    "strong return on assets"
+    "in a strong 12-month uptrend",
+    "trades steadily (low volatility)",
+    "buying back its own shares"
    ],
    "flags": []
   },
   {
-   "rank": 42,
+   "rank": 23,
    "symbol": "VSH",
    "name": "Vishay Intertechnology, Inc. Common Stock",
    "sector": "Technology",
@@ -863,17 +470,13 @@
     "low_vol": -0.3
    },
    "reasons": [
-    "cheap versus its earnings",
-    "generates a lot of free cash for its price",
-    "priced low versus its book value",
-    "strong return on assets"
+    "in a strong 12-month uptrend",
+    "buying back its own shares"
    ],
-   "flags": [
-    "thinly traded"
-   ]
+   "flags": []
   },
   {
-   "rank": 43,
+   "rank": 24,
    "symbol": "LXP",
    "name": "LXP Industrial Trust Common Stock (Maryland REIT)",
    "sector": "Real Estate",
@@ -888,14 +491,12 @@
    },
    "reasons": [
     "cheap versus its earnings",
-    "strong return on assets",
-    "conservatively financed (low debt)",
     "trades steadily (low volatility)"
    ],
    "flags": []
   },
   {
-   "rank": 44,
+   "rank": 25,
    "symbol": "GNE",
    "name": "Genie Energy Ltd. Class B Common Stock Stock",
    "sector": "Utilities",
@@ -909,13 +510,13 @@
     "low_vol": -0.15
    },
    "reasons": [
-    "conservatively financed (low debt)",
-    "insiders are buying with their own money"
+    "trades steadily (low volatility)",
+    "buying back its own shares"
    ],
    "flags": []
   },
   {
-   "rank": 45,
+   "rank": 26,
    "symbol": "NUTX",
    "name": "Nutex Health Inc. - Common Stock",
    "sector": "Industrials",
@@ -929,32 +530,13 @@
     "low_vol": -1.34
    },
    "reasons": [
-    "conservatively financed (low debt)"
+    "priced low versus its book value",
+    "in a strong 12-month uptrend"
    ],
    "flags": []
   },
   {
-   "rank": 46,
-   "symbol": "CCEP",
-   "name": "Coca-Cola Europacific Partners plc - Ordinary Shares",
-   "sector": "Consumer Staples",
-   "close": 112.06,
-   "mcap": "$50.3B",
-   "composite": 0.74,
-   "factors": {
-    "value": 0.96,
-    "quality": 0.58,
-    "momentum": 0.44,
-    "low_vol": 1.28
-   },
-   "reasons": [
-    "in a strong 12-month uptrend",
-    "buying back its own shares"
-   ],
-   "flags": []
-  },
-  {
-   "rank": 47,
+   "rank": 27,
    "symbol": "KRT",
    "name": "Karat Packaging Inc. - Common Stock",
    "sector": "Industrials",
@@ -968,12 +550,13 @@
     "low_vol": 0.57
    },
    "reasons": [
-    "in a strong 12-month uptrend"
+    "trades steadily (low volatility)",
+    "buying back its own shares"
    ],
    "flags": []
   },
   {
-   "rank": 48,
+   "rank": 28,
    "symbol": "TK",
    "name": "Teekay Corporation Ltd. Common Stock",
    "sector": "Industrials",
@@ -987,12 +570,14 @@
     "low_vol": 0.41
    },
    "reasons": [
-    "trades steadily (low volatility)"
+    "conservatively financed (low debt)"
    ],
-   "flags": []
+   "flags": [
+    "very volatile"
+   ]
   },
   {
-   "rank": 49,
+   "rank": 29,
    "symbol": "HOG",
    "name": "Harley-Davidson, Inc. Common Stock",
    "sector": "Industrials",
@@ -1006,12 +591,13 @@
     "low_vol": 0.48
    },
    "reasons": [
-    "trades steadily (low volatility)"
+    "in a strong 12-month uptrend",
+    "buying back its own shares"
    ],
    "flags": []
   },
   {
-   "rank": 50,
+   "rank": 30,
    "symbol": "SB",
    "name": "Safe Bulkers, Inc Common Stock ($0.001 par value)",
    "sector": "Industrials",
@@ -1025,13 +611,12 @@
     "low_vol": 0.59
    },
    "reasons": [
-    "strong return on assets",
-    "buying back its own shares"
+    "in a strong 12-month uptrend"
    ],
    "flags": []
   },
   {
-   "rank": 51,
+   "rank": 31,
    "symbol": "VNCE",
    "name": "Vince Holding Corp. - Common Stock",
    "sector": "Consumer Discretionary",
@@ -1045,35 +630,16 @@
     "low_vol": -2.02
    },
    "reasons": [
-    "conservatively financed (low debt)"
-   ],
-   "flags": []
-  },
-  {
-   "rank": 52,
-   "symbol": "TIGO",
-   "name": "Millicom International Cellular S.A. - Common Stock",
-   "sector": "Communication",
-   "close": 81.96,
-   "mcap": "$13.9B",
-   "composite": 0.71,
-   "factors": {
-    "value": 0.77,
-    "quality": 0.55,
-    "momentum": 1.07,
-    "low_vol": 0.2
-   },
-   "reasons": [
-    "cheap versus its earnings",
-    "strong return on assets",
-    "in a strong 12-month uptrend"
+    "priced low versus its book value",
+    "in a strong 12-month uptrend",
+    "buying back its own shares"
    ],
    "flags": [
-    "earnings not backed by cash flow"
+    "very volatile"
    ]
   },
   {
-   "rank": 53,
+   "rank": 32,
    "symbol": "SAIC",
    "name": "Science Applications International Corporation - Common Stoc",
    "sector": "Technology",
@@ -1087,12 +653,12 @@
     "low_vol": 1.1
    },
    "reasons": [
-    "trades steadily (low volatility)"
+    "buying back its own shares"
    ],
    "flags": []
   },
   {
-   "rank": 54,
+   "rank": 33,
    "symbol": "IMPP",
    "name": "Imperial Petroleum Inc. - Common Shares",
    "sector": "Industrials",
@@ -1106,17 +672,15 @@
     "low_vol": -0.59
    },
    "reasons": [
-    "generates a lot of free cash for its price",
-    "in a strong 12-month uptrend",
-    "buying back its own shares",
-    "growing with discipline, not empire-building"
+    "conservatively financed (low debt)",
+    "trades steadily (low volatility)"
    ],
    "flags": [
-    "heavily indebted"
+    "thinly traded"
    ]
   },
   {
-   "rank": 55,
+   "rank": 34,
    "symbol": "DINO",
    "name": "HF Sinclair Corporation Common Stock",
    "sector": "Industrials",
@@ -1130,14 +694,15 @@
     "low_vol": 0.39
    },
    "reasons": [
-    "in a strong 12-month uptrend",
-    "trades steadily (low volatility)",
-    "buying back its own shares"
+    "cheap versus its earnings",
+    "generates a lot of free cash for its price",
+    "priced low versus its book value",
+    "in a strong 12-month uptrend"
    ],
    "flags": []
   },
   {
-   "rank": 56,
+   "rank": 35,
    "symbol": "SPB",
    "name": "Spectrum Brands Holdings, Inc. Common Stock",
    "sector": "Technology",
@@ -1151,13 +716,12 @@
     "low_vol": 1.52
    },
    "reasons": [
-    "trades steadily (low volatility)",
-    "buying back its own shares"
+    "in a strong 12-month uptrend"
    ],
    "flags": []
   },
   {
-   "rank": 57,
+   "rank": 36,
    "symbol": "SBLK",
    "name": "Star Bulk Carriers Corp. - Common Shares",
    "sector": "Industrials",
@@ -1173,74 +737,15 @@
    "reasons": [
     "cheap versus its earnings",
     "generates a lot of free cash for its price",
-    "priced low versus its book value",
-    "strong return on assets"
+    "in a strong 12-month uptrend",
+    "buying back its own shares"
    ],
    "flags": [
-    "earnings not backed by cash flow"
+    "heavily indebted"
    ]
   },
   {
-   "rank": 58,
-   "symbol": "HAFN",
-   "name": "Hafnia Limited Common Shares",
-   "sector": "Industrials",
-   "close": 10.08,
-   "mcap": "$5.0B",
-   "composite": 0.7,
-   "factors": {
-    "value": 0.33,
-    "quality": 0.53,
-    "momentum": 1.21,
-    "low_vol": 0.62
-   },
-   "reasons": [
-    "in a strong 12-month uptrend",
-    "trades steadily (low volatility)",
-    "buying back its own shares"
-   ],
-   "flags": []
-  },
-  {
-   "rank": 59,
-   "symbol": "MTCH",
-   "name": "Match Group, Inc. - Common Stock",
-   "sector": "Technology",
-   "close": 43.45,
-   "mcap": "$10.0B",
-   "composite": 0.7,
-   "factors": {
-    "value": 1.08,
-    "quality": 0.16,
-    "momentum": 0.43,
-    "low_vol": 1.67
-   },
-   "reasons": [
-    "insiders are buying with their own money"
-   ],
-   "flags": []
-  },
-  {
-   "rank": 60,
-   "symbol": "RY",
-   "name": "Royal Bank Of Canada Common Stock",
-   "sector": "Financials",
-   "close": 197.48,
-   "mcap": "$276.6B",
-   "composite": 0.7,
-   "factors": {
-    "value": 0.28,
-    "quality": 0.39,
-    "momentum": 0.63,
-    "low_vol": 2.13
-   },
-   "reasons": [
-    "trades steadily (low volatility)"
-   ],
-   "flags": []
-  },
-  {
-   "rank": 61,
+   "rank": 37,
    "symbol": "TRV",
    "name": "The Travelers Companies, Inc. Common Stock",
    "sector": "Financials",
@@ -1254,35 +759,15 @@
     "low_vol": 1.56
    },
    "reasons": [
-    "trades steadily (low volatility)"
-   ],
-   "flags": [
-    "thinly traded"
-   ]
-  },
-  {
-   "rank": 62,
-   "symbol": "CHT",
-   "name": "Chunghwa Telecom Co., Ltd.",
-   "sector": "Communication",
-   "close": 47.6,
-   "mcap": "$369.3B",
-   "composite": 0.69,
-   "factors": {
-    "value": 0.42,
-    "quality": 0.55,
-    "momentum": 0.18,
-    "low_vol": 2.44
-   },
-   "reasons": [
-    "in a strong 12-month uptrend",
-    "trades steadily (low volatility)",
-    "buying back its own shares"
+    "cheap versus its earnings",
+    "generates a lot of free cash for its price",
+    "strong return on assets",
+    "earnings backed by real cash flow"
    ],
    "flags": []
   },
   {
-   "rank": 63,
+   "rank": 38,
    "symbol": "DBX",
    "name": "Dropbox, Inc. - Class A Common Stock",
    "sector": "Technology",
@@ -1296,15 +781,12 @@
     "low_vol": 1.21
    },
    "reasons": [
-    "cheap versus its earnings",
-    "generates a lot of free cash for its price",
-    "priced low versus its book value",
-    "in a strong 12-month uptrend"
+    "trades steadily (low volatility)"
    ],
    "flags": []
   },
   {
-   "rank": 64,
+   "rank": 39,
    "symbol": "RNG",
    "name": "RingCentral, Inc. Class A Common Stock",
    "sector": "Technology",
@@ -1319,16 +801,14 @@
    },
    "reasons": [
     "cheap versus its earnings",
-    "generates a lot of free cash for its price",
-    "highly profitable on its assets",
-    "strong return on assets"
+    "priced low versus its book value",
+    "in a strong 12-month uptrend",
+    "buying back its own shares"
    ],
-   "flags": [
-    "heavily indebted"
-   ]
+   "flags": []
   },
   {
-   "rank": 65,
+   "rank": 40,
    "symbol": "MLR",
    "name": "Miller Industries, Inc. Common Stock",
    "sector": "Industrials",
@@ -1342,15 +822,12 @@
     "low_vol": 1.52
    },
    "reasons": [
-    "generates a lot of free cash for its price",
-    "priced low versus its book value",
-    "in a strong 12-month uptrend",
-    "buying back its own shares"
+    "trades steadily (low volatility)"
    ],
    "flags": []
   },
   {
-   "rank": 66,
+   "rank": 41,
    "symbol": "OSPN",
    "name": "OneSpan Inc. - Common Stock",
    "sector": "Technology",
@@ -1364,37 +841,15 @@
     "low_vol": 0.57
    },
    "reasons": [
-    "trades steadily (low volatility)",
-    "buying back its own shares",
-    "growing with discipline, not empire-building"
+    "cheap versus its earnings",
+    "generates a lot of free cash for its price",
+    "priced low versus its book value",
+    "strong return on assets"
    ],
    "flags": []
   },
   {
-   "rank": 67,
-   "symbol": "BMO",
-   "name": "Bank Of Montreal Common Stock",
-   "sector": "Financials",
-   "close": 166.4,
-   "mcap": "$118.0B",
-   "composite": 0.68,
-   "factors": {
-    "value": 0.66,
-    "quality": 0.39,
-    "momentum": 0.55,
-    "low_vol": 1.54
-   },
-   "reasons": [
-    "generates a lot of free cash for its price",
-    "trades steadily (low volatility)",
-    "growing with discipline, not empire-building"
-   ],
-   "flags": [
-    "thinly traded"
-   ]
-  },
-  {
-   "rank": 68,
+   "rank": 42,
    "symbol": "CROX",
    "name": "Crocs, Inc. - Common Stock",
    "sector": "Industrials",
@@ -1410,15 +865,15 @@
    "reasons": [
     "cheap versus its earnings",
     "generates a lot of free cash for its price",
-    "strong return on assets",
-    "in a strong 12-month uptrend"
+    "priced low versus its book value",
+    "strong return on assets"
    ],
    "flags": [
-    "very volatile"
+    "thinly traded"
    ]
   },
   {
-   "rank": 69,
+   "rank": 43,
    "symbol": "CTVA",
    "name": "Corteva, Inc. Common Stock ",
    "sector": "Materials",
@@ -1432,12 +887,15 @@
     "low_vol": 1.22
    },
    "reasons": [
+    "cheap versus its earnings",
+    "strong return on assets",
+    "conservatively financed (low debt)",
     "trades steadily (low volatility)"
    ],
    "flags": []
   },
   {
-   "rank": 70,
+   "rank": 44,
    "symbol": "MATX",
    "name": "Matson, Inc. Common Stock",
    "sector": "Industrials",
@@ -1451,60 +909,13 @@
     "low_vol": 0.8
    },
    "reasons": [
-    "highly profitable on its assets",
-    "strong return on assets",
-    "in a strong 12-month uptrend"
-   ],
-   "flags": [
-    "earnings not backed by cash flow"
-   ]
-  },
-  {
-   "rank": 71,
-   "symbol": "MT",
-   "name": "Arcelor Mittal NY Registry Shares NEW",
-   "sector": "Industrials",
-   "close": 63.17,
-   "mcap": "$48.1B",
-   "composite": 0.67,
-   "factors": {
-    "value": 0.33,
-    "quality": 0.53,
-    "momentum": 1.38,
-    "low_vol": 0.11
-   },
-   "reasons": [
-    "cheap versus its earnings",
-    "priced low versus its book value",
     "conservatively financed (low debt)",
-    "in a strong 12-month uptrend"
+    "insiders are buying with their own money"
    ],
    "flags": []
   },
   {
-   "rank": 72,
-   "symbol": "IMO",
-   "name": "Imperial Oil Limited Common Stock",
-   "sector": "Energy",
-   "close": 133.11,
-   "mcap": "$64.4B",
-   "composite": 0.67,
-   "factors": {
-    "value": 1.49,
-    "quality": 0.42,
-    "momentum": -0.06,
-    "low_vol": 1.22
-   },
-   "reasons": [
-    "generates a lot of free cash for its price",
-    "priced low versus its book value",
-    "buying back its own shares",
-    "growing with discipline, not empire-building"
-   ],
-   "flags": []
-  },
-  {
-   "rank": 73,
+   "rank": 45,
    "symbol": "BDX",
    "name": "Becton, Dickinson and Company Common Stock",
    "sector": "Healthcare",
@@ -1518,14 +929,12 @@
     "low_vol": 2.05
    },
    "reasons": [
-    "generates a lot of free cash for its price",
-    "priced low versus its book value",
-    "in a strong 12-month uptrend"
+    "conservatively financed (low debt)"
    ],
    "flags": []
   },
   {
-   "rank": 74,
+   "rank": 46,
    "symbol": "ASC",
    "name": "Ardmore Shipping Corporation Common Stock",
    "sector": "Industrials",
@@ -1539,19 +948,13 @@
     "low_vol": 0.41
    },
    "reasons": [
-    "cheap versus its earnings",
-    "highly profitable on its assets",
-    "strong return on assets",
-    "in a strong 12-month uptrend"
+    "in a strong 12-month uptrend",
+    "buying back its own shares"
    ],
-   "flags": [
-    "very volatile",
-    "earnings not backed by cash flow",
-    "thinly traded"
-   ]
+   "flags": []
   },
   {
-   "rank": 75,
+   "rank": 47,
    "symbol": "V",
    "name": "Visa Inc.",
    "sector": "Industrials",
@@ -1570,51 +973,7 @@
    "flags": []
   },
   {
-   "rank": 76,
-   "symbol": "KARO",
-   "name": "Karooooo Ltd. - Ordinary shares",
-   "sector": "Technology",
-   "close": 60.88,
-   "mcap": "$1.9B",
-   "composite": 0.66,
-   "factors": {
-    "value": 0.17,
-    "quality": 0.87,
-    "momentum": 0.53,
-    "low_vol": 1.3
-   },
-   "reasons": [
-    "generates a lot of free cash for its price",
-    "buying back its own shares"
-   ],
-   "flags": []
-  },
-  {
-   "rank": 77,
-   "symbol": "BWLP",
-   "name": "BW LPG Limited Common Shares",
-   "sector": "Industrials",
-   "close": 24.7,
-   "mcap": "$3.7B",
-   "composite": 0.66,
-   "factors": {
-    "value": 0.08,
-    "quality": 0.53,
-    "momentum": 1.39,
-    "low_vol": 0.43
-   },
-   "reasons": [
-    "cheap versus its earnings",
-    "generates a lot of free cash for its price",
-    "priced low versus its book value",
-    "strong return on assets"
-   ],
-   "flags": [
-    "heavily diluting shareholders"
-   ]
-  },
-  {
-   "rank": 78,
+   "rank": 48,
    "symbol": "HAE",
    "name": "Haemonetics Corporation Common Stock",
    "sector": "Healthcare",
@@ -1628,17 +987,12 @@
     "low_vol": 0.56
    },
    "reasons": [
-    "cheap versus its earnings",
-    "strong return on assets",
-    "in a strong 12-month uptrend",
-    "buying back its own shares"
+    "trades steadily (low volatility)"
    ],
-   "flags": [
-    "earnings not backed by cash flow"
-   ]
+   "flags": []
   },
   {
-   "rank": 79,
+   "rank": 49,
    "symbol": "TIPT",
    "name": "Tiptree Inc. - Common Stock",
    "sector": "Financials",
@@ -1652,14 +1006,12 @@
     "low_vol": 0.97
    },
    "reasons": [
-    "priced low versus its book value",
-    "in a strong 12-month uptrend",
-    "buying back its own shares"
+    "trades steadily (low volatility)"
    ],
    "flags": []
   },
   {
-   "rank": 80,
+   "rank": 50,
    "symbol": "KRG",
    "name": "Kite Realty Group Trust Common Stock",
    "sector": "Real Estate",
@@ -1673,13 +1025,13 @@
     "low_vol": 1.58
    },
    "reasons": [
-    "in a strong 12-month uptrend",
+    "strong return on assets",
     "buying back its own shares"
    ],
    "flags": []
   },
   {
-   "rank": 81,
+   "rank": 51,
    "symbol": "CMRE",
    "name": "Costamare Inc. Common Stock $0.0001 par value",
    "sector": "Industrials",
@@ -1693,32 +1045,12 @@
     "low_vol": 1.07
    },
    "reasons": [
-    "in a strong 12-month uptrend"
+    "conservatively financed (low debt)"
    ],
    "flags": []
   },
   {
-   "rank": 82,
-   "symbol": "NVS",
-   "name": "Novartis AG Common Stock",
-   "sector": "Healthcare",
-   "close": 151.15,
-   "mcap": "$288.4B",
-   "composite": 0.65,
-   "factors": {
-    "value": 1.32,
-    "quality": 0.48,
-    "momentum": -0.38,
-    "low_vol": 1.91
-   },
-   "reasons": [
-    "generates a lot of free cash for its price",
-    "buying back its own shares"
-   ],
-   "flags": []
-  },
-  {
-   "rank": 83,
+   "rank": 52,
    "symbol": "UVE",
    "name": "UNIVERSAL INSURANCE HOLDINGS INC Common Stock",
    "sector": "Financials",
@@ -1732,12 +1064,16 @@
     "low_vol": -0.56
    },
    "reasons": [
-    "trades steadily (low volatility)"
+    "cheap versus its earnings",
+    "strong return on assets",
+    "in a strong 12-month uptrend"
    ],
-   "flags": []
+   "flags": [
+    "earnings not backed by cash flow"
+   ]
   },
   {
-   "rank": 84,
+   "rank": 53,
    "symbol": "ABBV",
    "name": "AbbVie Inc. Common Stock",
    "sector": "Healthcare",
@@ -1751,15 +1087,12 @@
     "low_vol": 2.09
    },
    "reasons": [
-    "cheap versus its earnings",
-    "generates a lot of free cash for its price",
-    "trades steadily (low volatility)",
-    "buying back its own shares"
+    "trades steadily (low volatility)"
    ],
    "flags": []
   },
   {
-   "rank": 85,
+   "rank": 54,
    "symbol": "CBL",
    "name": "CBL & Associates Properties, Inc. Common Stock",
    "sector": "Real Estate",
@@ -1773,16 +1106,17 @@
     "low_vol": -0.44
    },
    "reasons": [
-    "strong return on assets",
-    "trades steadily (low volatility)",
+    "generates a lot of free cash for its price",
+    "in a strong 12-month uptrend",
+    "buying back its own shares",
     "growing with discipline, not empire-building"
    ],
    "flags": [
-    "earnings not backed by cash flow"
+    "heavily indebted"
    ]
   },
   {
-   "rank": 86,
+   "rank": 55,
    "symbol": "AMCX",
    "name": "AMC Global Media Inc. - Class A Common Stock",
    "sector": "Communication",
@@ -1796,12 +1130,14 @@
     "low_vol": -0.02
    },
    "reasons": [
-    "trades steadily (low volatility)"
+    "in a strong 12-month uptrend",
+    "trades steadily (low volatility)",
+    "buying back its own shares"
    ],
    "flags": []
   },
   {
-   "rank": 87,
+   "rank": 56,
    "symbol": "DGX",
    "name": "Quest Diagnostics Incorporated Common Stock",
    "sector": "Healthcare",
@@ -1815,17 +1151,13 @@
     "low_vol": 2.47
    },
    "reasons": [
-    "highly profitable on its assets",
-    "strong return on assets",
-    "earnings backed by real cash flow",
+    "trades steadily (low volatility)",
     "buying back its own shares"
    ],
-   "flags": [
-    "heavily indebted"
-   ]
+   "flags": []
   },
   {
-   "rank": 88,
+   "rank": 57,
    "symbol": "RNR",
    "name": "RenaissanceRe Holdings Ltd. Common Stock",
    "sector": "Financials",
@@ -1839,17 +1171,17 @@
     "low_vol": 0.62
    },
    "reasons": [
-    "highly profitable on its assets",
-    "strong return on assets",
-    "earnings backed by real cash flow",
-    "in a strong 12-month uptrend"
+    "cheap versus its earnings",
+    "generates a lot of free cash for its price",
+    "priced low versus its book value",
+    "strong return on assets"
    ],
    "flags": [
-    "heavily indebted"
+    "earnings not backed by cash flow"
    ]
   },
   {
-   "rank": 89,
+   "rank": 58,
    "symbol": "PURR",
    "name": "Hyperliquid Strategies Inc - Common Stock",
    "sector": "Financials",
@@ -1863,14 +1195,14 @@
     "low_vol": -1.68
    },
    "reasons": [
-    "generates a lot of free cash for its price",
-    "earnings backed by real cash flow",
-    "trades steadily (low volatility)"
+    "in a strong 12-month uptrend",
+    "trades steadily (low volatility)",
+    "buying back its own shares"
    ],
    "flags": []
   },
   {
-   "rank": 90,
+   "rank": 59,
    "symbol": "IOSP",
    "name": "Innospec Inc. - Common Stock",
    "sector": "Materials",
@@ -1884,15 +1216,12 @@
     "low_vol": 1.98
    },
    "reasons": [
-    "cheap versus its earnings",
-    "strong return on assets",
-    "buying back its own shares",
     "insiders are buying with their own money"
    ],
    "flags": []
   },
   {
-   "rank": 91,
+   "rank": 60,
    "symbol": "ANIK",
    "name": "Anika Therapeutics Inc. - Common Stock",
    "sector": "Healthcare",
@@ -1906,13 +1235,12 @@
     "low_vol": 0.53
    },
    "reasons": [
-    "trades steadily (low volatility)",
-    "buying back its own shares"
+    "trades steadily (low volatility)"
    ],
    "flags": []
   },
   {
-   "rank": 92,
+   "rank": 61,
    "symbol": "CDNA",
    "name": "CareDx, Inc. - Common Stock",
    "sector": "Healthcare",
@@ -1926,15 +1254,14 @@
     "low_vol": -0.15
    },
    "reasons": [
-    "cheap versus its earnings",
-    "generates a lot of free cash for its price",
-    "highly profitable on its assets",
-    "strong return on assets"
+    "trades steadily (low volatility)"
    ],
-   "flags": []
+   "flags": [
+    "thinly traded"
+   ]
   },
   {
-   "rank": 93,
+   "rank": 62,
    "symbol": "INSW",
    "name": "International Seaways, Inc. Common Stock ",
    "sector": "Industrials",
@@ -1948,34 +1275,14 @@
     "low_vol": 0.4
    },
    "reasons": [
-    "priced low versus its book value",
-    "conservatively financed (low debt)"
+    "in a strong 12-month uptrend",
+    "trades steadily (low volatility)",
+    "buying back its own shares"
    ],
    "flags": []
   },
   {
-   "rank": 94,
-   "symbol": "HELP",
-   "name": "Helus Pharma Inc.  - Common Stock",
-   "sector": "Healthcare",
-   "close": 10.52,
-   "mcap": "$227.2M",
-   "composite": 0.64,
-   "factors": {
-    "value": 0.78,
-    "quality": 0.48,
-    "momentum": 1.42,
-    "low_vol": -0.86
-   },
-   "reasons": [
-    "cheap versus its earnings",
-    "generates a lot of free cash for its price",
-    "priced low versus its book value"
-   ],
-   "flags": []
-  },
-  {
-   "rank": 95,
+   "rank": 63,
    "symbol": "EG",
    "name": "Everest Group, Ltd. Common Stock",
    "sector": "Financials",
@@ -1989,14 +1296,15 @@
     "low_vol": 0.58
    },
    "reasons": [
-    "strong return on assets",
-    "in a strong 12-month uptrend",
-    "buying back its own shares"
+    "cheap versus its earnings",
+    "generates a lot of free cash for its price",
+    "priced low versus its book value",
+    "in a strong 12-month uptrend"
    ],
    "flags": []
   },
   {
-   "rank": 96,
+   "rank": 64,
    "symbol": "DD",
    "name": "DuPont de Nemours, Inc. Common Stock",
    "sector": "Materials",
@@ -2010,12 +1318,17 @@
     "low_vol": 1.32
    },
    "reasons": [
-    "in a strong 12-month uptrend"
+    "cheap versus its earnings",
+    "generates a lot of free cash for its price",
+    "highly profitable on its assets",
+    "strong return on assets"
    ],
-   "flags": []
+   "flags": [
+    "heavily indebted"
+   ]
   },
   {
-   "rank": 97,
+   "rank": 65,
    "symbol": "THG",
    "name": "Hanover Insurance Group Inc",
    "sector": "Financials",
@@ -2029,12 +1342,15 @@
     "low_vol": 1.5
    },
    "reasons": [
+    "generates a lot of free cash for its price",
+    "priced low versus its book value",
+    "in a strong 12-month uptrend",
     "buying back its own shares"
    ],
    "flags": []
   },
   {
-   "rank": 98,
+   "rank": 66,
    "symbol": "TNK",
    "name": "Teekay Tankers Ltd.",
    "sector": "Industrials",
@@ -2055,31 +1371,7 @@
    "flags": []
   },
   {
-   "rank": 99,
-   "symbol": "EGO",
-   "name": "Eldorado Gold Corporation Ordinary Shares",
-   "sector": "Materials",
-   "close": 36.11,
-   "mcap": "$7.2B",
-   "composite": 0.63,
-   "factors": {
-    "value": 1.32,
-    "quality": 0.27,
-    "momentum": 0.86,
-    "low_vol": -0.28
-   },
-   "reasons": [
-    "cheap versus its earnings",
-    "generates a lot of free cash for its price",
-    "priced low versus its book value",
-    "strong return on assets"
-   ],
-   "flags": [
-    "earnings not backed by cash flow"
-   ]
-  },
-  {
-   "rank": 100,
+   "rank": 67,
    "symbol": "SLDE",
    "name": "Slide Insurance Holdings, Inc. - Common Stock",
    "sector": "Financials",
@@ -2093,6 +1385,714 @@
     "low_vol": -0.64
    },
    "reasons": [
+    "generates a lot of free cash for its price",
+    "trades steadily (low volatility)",
+    "growing with discipline, not empire-building"
+   ],
+   "flags": [
+    "thinly traded"
+   ]
+  },
+  {
+   "rank": 68,
+   "symbol": "IFF",
+   "name": "International Flavors & Fragrances, Inc. Common Stock",
+   "sector": "Materials",
+   "close": 90.47,
+   "mcap": "$23.1B",
+   "composite": 0.62,
+   "factors": {
+    "value": 0.08,
+    "quality": 0.88,
+    "momentum": 0.69,
+    "low_vol": 0.88
+   },
+   "reasons": [
+    "cheap versus its earnings",
+    "generates a lot of free cash for its price",
+    "strong return on assets",
+    "in a strong 12-month uptrend"
+   ],
+   "flags": [
+    "very volatile"
+   ]
+  },
+  {
+   "rank": 69,
+   "symbol": "LPG",
+   "name": "Dorian LPG Ltd. Common Stock",
+   "sector": "Industrials",
+   "close": 53.6,
+   "mcap": "$2.3B",
+   "composite": 0.62,
+   "factors": {
+    "value": 0.62,
+    "quality": -0.02,
+    "momentum": 1.48,
+    "low_vol": 0.18
+   },
+   "reasons": [
+    "trades steadily (low volatility)"
+   ],
+   "flags": []
+  },
+  {
+   "rank": 70,
+   "symbol": "KELYA",
+   "name": "Kelly Services, Inc. - Class A Common Stock",
+   "sector": "Industrials",
+   "close": 15.22,
+   "mcap": "$534.2M",
+   "composite": 0.62,
+   "factors": {
+    "value": 0.69,
+    "quality": 0.4,
+    "momentum": 1.02,
+    "low_vol": 0.17
+   },
+   "reasons": [
+    "highly profitable on its assets",
+    "strong return on assets",
+    "in a strong 12-month uptrend"
+   ],
+   "flags": [
+    "earnings not backed by cash flow"
+   ]
+  },
+  {
+   "rank": 71,
+   "symbol": "PGNY",
+   "name": "Progyny, Inc. - Common Stock",
+   "sector": "Healthcare",
+   "close": 27.04,
+   "mcap": "$2.1B",
+   "composite": 0.62,
+   "factors": {
+    "value": 1.0,
+    "quality": 0.71,
+    "momentum": 0.34,
+    "low_vol": 0.37
+   },
+   "reasons": [
+    "cheap versus its earnings",
+    "priced low versus its book value",
+    "conservatively financed (low debt)",
+    "in a strong 12-month uptrend"
+   ],
+   "flags": []
+  },
+  {
+   "rank": 72,
+   "symbol": "DRH",
+   "name": "Diamondrock Hospitality Company - Common Stock",
+   "sector": "Real Estate",
+   "close": 13.45,
+   "mcap": "$2.8B",
+   "composite": 0.62,
+   "factors": {
+    "value": 0.28,
+    "quality": 0.31,
+    "momentum": 1.57,
+    "low_vol": -0.1
+   },
+   "reasons": [
+    "generates a lot of free cash for its price",
+    "priced low versus its book value",
+    "buying back its own shares",
+    "growing with discipline, not empire-building"
+   ],
+   "flags": []
+  },
+  {
+   "rank": 73,
+   "symbol": "HPQ",
+   "name": "HP Inc. Common Stock",
+   "sector": "Technology",
+   "close": 29.95,
+   "mcap": "$27.4B",
+   "composite": 0.62,
+   "factors": {
+    "value": 1.26,
+    "quality": -0.15,
+    "momentum": 0.79,
+    "low_vol": 0.75
+   },
+   "reasons": [
+    "generates a lot of free cash for its price",
+    "priced low versus its book value",
+    "in a strong 12-month uptrend"
+   ],
+   "flags": []
+  },
+  {
+   "rank": 74,
+   "symbol": "SND",
+   "name": "Smart Sand, Inc. - Common Stock",
+   "sector": "Materials",
+   "close": 5.05,
+   "mcap": "$214.3M",
+   "composite": 0.62,
+   "factors": {
+    "value": 1.05,
+    "quality": -0.05,
+    "momentum": 1.53,
+    "low_vol": -0.61
+   },
+   "reasons": [
+    "cheap versus its earnings",
+    "highly profitable on its assets",
+    "strong return on assets",
+    "in a strong 12-month uptrend"
+   ],
+   "flags": [
+    "very volatile",
+    "earnings not backed by cash flow",
+    "thinly traded"
+   ]
+  },
+  {
+   "rank": 75,
+   "symbol": "HBB",
+   "name": "Hamilton Beach Brands Holding Company Class A Common Stock ",
+   "sector": "Industrials",
+   "close": 34.21,
+   "mcap": "$463.6M",
+   "composite": 0.62,
+   "factors": {
+    "value": 0.52,
+    "quality": 0.14,
+    "momentum": 1.66,
+    "low_vol": -0.33
+   },
+   "reasons": [
+    "in a strong 12-month uptrend"
+   ],
+   "flags": []
+  },
+  {
+   "rank": 76,
+   "symbol": "NTCT",
+   "name": "NetScout Systems, Inc. - Common Stock",
+   "sector": "Technology",
+   "close": 37.96,
+   "mcap": "$2.8B",
+   "composite": 0.62,
+   "factors": {
+    "value": 0.69,
+    "quality": 0.17,
+    "momentum": 0.51,
+    "low_vol": 1.61
+   },
+   "reasons": [
+    "generates a lot of free cash for its price",
+    "buying back its own shares"
+   ],
+   "flags": []
+  },
+  {
+   "rank": 77,
+   "symbol": "FBLA",
+   "name": "FB Bancorp, Inc. - Common Stock",
+   "sector": "Financials",
+   "close": 16.55,
+   "mcap": "$263.9M",
+   "composite": 0.62,
+   "factors": {
+    "value": 0.27,
+    "quality": 0.3,
+    "momentum": 0.32,
+    "low_vol": 2.42
+   },
+   "reasons": [
+    "cheap versus its earnings",
+    "generates a lot of free cash for its price",
+    "priced low versus its book value",
+    "strong return on assets"
+   ],
+   "flags": [
+    "heavily diluting shareholders"
+   ]
+  },
+  {
+   "rank": 78,
+   "symbol": "UFCS",
+   "name": "United Fire Group, Inc - Common Stock",
+   "sector": "Financials",
+   "close": 55.85,
+   "mcap": "$1.4B",
+   "composite": 0.62,
+   "factors": {
+    "value": 0.37,
+    "quality": 0.21,
+    "momentum": 1.63,
+    "low_vol": -0.2
+   },
+   "reasons": [
+    "cheap versus its earnings",
+    "strong return on assets",
+    "in a strong 12-month uptrend",
+    "buying back its own shares"
+   ],
+   "flags": [
+    "earnings not backed by cash flow"
+   ]
+  },
+  {
+   "rank": 79,
+   "symbol": "VCTR",
+   "name": "Victory Capital Holdings, Inc. - Common Stock",
+   "sector": "Financials",
+   "close": 108.76,
+   "mcap": "$6.7B",
+   "composite": 0.61,
+   "factors": {
+    "value": -0.01,
+    "quality": 0.66,
+    "momentum": 1.52,
+    "low_vol": -0.24
+   },
+   "reasons": [
+    "priced low versus its book value",
+    "in a strong 12-month uptrend",
+    "buying back its own shares"
+   ],
+   "flags": []
+  },
+  {
+   "rank": 80,
+   "symbol": "INMD",
+   "name": "InMode Ltd.  - Ordinary Shares",
+   "sector": "Healthcare",
+   "close": 14.22,
+   "mcap": "$901.0M",
+   "composite": 0.61,
+   "factors": {
+    "value": 1.6,
+    "quality": 0.41,
+    "momentum": -0.42,
+    "low_vol": 1.44
+   },
+   "reasons": [
+    "in a strong 12-month uptrend",
+    "buying back its own shares"
+   ],
+   "flags": []
+  },
+  {
+   "rank": 81,
+   "symbol": "UTMD",
+   "name": "Utah Medical Products, Inc. - Common Stock",
+   "sector": "Healthcare",
+   "close": 74.87,
+   "mcap": "$238.4M",
+   "composite": 0.61,
+   "factors": {
+    "value": 0.89,
+    "quality": 0.52,
+    "momentum": -0.09,
+    "low_vol": 1.71
+   },
+   "reasons": [
+    "in a strong 12-month uptrend"
+   ],
+   "flags": []
+  },
+  {
+   "rank": 82,
+   "symbol": "OBK",
+   "name": "Origin Bancorp, Inc. Common Stock",
+   "sector": "Financials",
+   "close": 51.88,
+   "mcap": "$1.6B",
+   "composite": 0.61,
+   "factors": {
+    "value": 0.16,
+    "quality": 0.26,
+    "momentum": 1.18,
+    "low_vol": 0.92
+   },
+   "reasons": [
+    "generates a lot of free cash for its price",
+    "buying back its own shares"
+   ],
+   "flags": []
+  },
+  {
+   "rank": 83,
+   "symbol": "OKE",
+   "name": "ONEOK, Inc. Common Stock",
+   "sector": "Utilities",
+   "close": 92.75,
+   "mcap": "$58.5B",
+   "composite": 0.61,
+   "factors": {
+    "value": 0.37,
+    "quality": 0.58,
+    "momentum": 1.23,
+    "low_vol": -0.17
+   },
+   "reasons": [
+    "trades steadily (low volatility)"
+   ],
+   "flags": []
+  },
+  {
+   "rank": 84,
+   "symbol": "LNTH",
+   "name": "Lantheus Holdings, Inc. - Common Stock",
+   "sector": "Healthcare",
+   "close": 99.89,
+   "mcap": "$6.5B",
+   "composite": 0.61,
+   "factors": {
+    "value": 0.79,
+    "quality": 0.22,
+    "momentum": 0.47,
+    "low_vol": 1.34
+   },
+   "reasons": [
+    "cheap versus its earnings",
+    "generates a lot of free cash for its price",
+    "trades steadily (low volatility)",
+    "buying back its own shares"
+   ],
+   "flags": []
+  },
+  {
+   "rank": 85,
+   "symbol": "PKBK",
+   "name": "Parke Bancorp, Inc. - Common Stock",
+   "sector": "Financials",
+   "close": 32.33,
+   "mcap": "$380.2M",
+   "composite": 0.6,
+   "factors": {
+    "value": 0.65,
+    "quality": -0.3,
+    "momentum": 0.99,
+    "low_vol": 1.57
+   },
+   "reasons": [
+    "strong return on assets",
+    "trades steadily (low volatility)",
+    "growing with discipline, not empire-building"
+   ],
+   "flags": [
+    "earnings not backed by cash flow"
+   ]
+  },
+  {
+   "rank": 86,
+   "symbol": "FTV",
+   "name": "Fortive Corporation Common Stock ",
+   "sector": "Technology",
+   "close": 57.53,
+   "mcap": "$17.4B",
+   "composite": 0.6,
+   "factors": {
+    "value": 0.76,
+    "quality": 0.38,
+    "momentum": -0.14,
+    "low_vol": 2.27
+   },
+   "reasons": [
+    "trades steadily (low volatility)"
+   ],
+   "flags": []
+  },
+  {
+   "rank": 87,
+   "symbol": "JNJ",
+   "name": "Johnson & Johnson Common Stock",
+   "sector": "Healthcare",
+   "close": 254.97,
+   "mcap": "$614.5B",
+   "composite": 0.6,
+   "factors": {
+    "value": 0.38,
+    "quality": 0.02,
+    "momentum": 0.11,
+    "low_vol": 3.1
+   },
+   "reasons": [
+    "highly profitable on its assets",
+    "strong return on assets",
+    "earnings backed by real cash flow",
+    "buying back its own shares"
+   ],
+   "flags": [
+    "heavily indebted"
+   ]
+  },
+  {
+   "rank": 88,
+   "symbol": "AER",
+   "name": "AerCap Holdings N.V. Ordinary Shares",
+   "sector": "Industrials",
+   "close": 146.09,
+   "mcap": "$24.4B",
+   "composite": 0.6,
+   "factors": {
+    "value": 1.26,
+    "quality": 0.07,
+    "momentum": 0.1,
+    "low_vol": 1.56
+   },
+   "reasons": [
+    "highly profitable on its assets",
+    "strong return on assets",
+    "earnings backed by real cash flow",
+    "in a strong 12-month uptrend"
+   ],
+   "flags": [
+    "heavily indebted"
+   ]
+  },
+  {
+   "rank": 89,
+   "symbol": "MSM",
+   "name": "MSC Industrial Direct Company, Inc. Common Stock",
+   "sector": "Consumer Discretionary",
+   "close": 128.99,
+   "mcap": "$7.2B",
+   "composite": 0.6,
+   "factors": {
+    "value": -0.44,
+    "quality": 0.77,
+    "momentum": 0.94,
+    "low_vol": 1.31
+   },
+   "reasons": [
+    "generates a lot of free cash for its price",
+    "earnings backed by real cash flow",
+    "trades steadily (low volatility)"
+   ],
+   "flags": []
+  },
+  {
+   "rank": 90,
+   "symbol": "HRMY",
+   "name": "Harmony Biosciences Holdings, Inc. - Common Stock",
+   "sector": "Healthcare",
+   "close": 38.14,
+   "mcap": "$2.2B",
+   "composite": 0.6,
+   "factors": {
+    "value": 1.08,
+    "quality": 0.25,
+    "momentum": 0.4,
+    "low_vol": 0.88
+   },
+   "reasons": [
+    "cheap versus its earnings",
+    "strong return on assets",
+    "buying back its own shares",
+    "insiders are buying with their own money"
+   ],
+   "flags": []
+  },
+  {
+   "rank": 91,
+   "symbol": "CARG",
+   "name": "CarGurus, Inc. - Class A Common Stock",
+   "sector": "Technology",
+   "close": 30.03,
+   "mcap": "$3.0B",
+   "composite": 0.6,
+   "factors": {
+    "value": 0.61,
+    "quality": 1.28,
+    "momentum": -0.37,
+    "low_vol": 1.14
+   },
+   "reasons": [
+    "trades steadily (low volatility)",
+    "buying back its own shares"
+   ],
+   "flags": []
+  },
+  {
+   "rank": 92,
+   "symbol": "BJRI",
+   "name": "BJ's Restaurants, Inc. - Common Stock",
+   "sector": "Consumer Discretionary",
+   "close": 59.33,
+   "mcap": "$1.3B",
+   "composite": 0.6,
+   "factors": {
+    "value": -0.03,
+    "quality": 0.31,
+    "momentum": 1.76,
+    "low_vol": -0.12
+   },
+   "reasons": [
+    "cheap versus its earnings",
+    "generates a lot of free cash for its price",
+    "highly profitable on its assets",
+    "strong return on assets"
+   ],
+   "flags": []
+  },
+  {
+   "rank": 93,
+   "symbol": "SCHL",
+   "name": "Scholastic Corporation - Common Stock",
+   "sector": "Materials",
+   "close": 38.05,
+   "mcap": "$681.1M",
+   "composite": 0.59,
+   "factors": {
+    "value": 1.52,
+    "quality": 0.01,
+    "momentum": 0.28,
+    "low_vol": 0.87
+   },
+   "reasons": [
+    "priced low versus its book value",
+    "conservatively financed (low debt)"
+   ],
+   "flags": []
+  },
+  {
+   "rank": 94,
+   "symbol": "WABC",
+   "name": "Westamerica Bancorporation - Common Stock",
+   "sector": "Financials",
+   "close": 61.09,
+   "mcap": "$1.4B",
+   "composite": 0.59,
+   "factors": {
+    "value": 0.45,
+    "quality": 0.41,
+    "momentum": 0.28,
+    "low_vol": 1.83
+   },
+   "reasons": [
+    "cheap versus its earnings",
+    "generates a lot of free cash for its price",
+    "priced low versus its book value"
+   ],
+   "flags": []
+  },
+  {
+   "rank": 95,
+   "symbol": "INDV",
+   "name": "Indivior Pharmaceuticals, Inc.  - Common Stock",
+   "sector": "Healthcare",
+   "close": 32.53,
+   "mcap": "$3.8B",
+   "composite": 0.59,
+   "factors": {
+    "value": 1.08,
+    "quality": 0.36,
+    "momentum": 0.15,
+    "low_vol": 1.13
+   },
+   "reasons": [
+    "strong return on assets",
+    "in a strong 12-month uptrend",
+    "buying back its own shares"
+   ],
+   "flags": []
+  },
+  {
+   "rank": 96,
+   "symbol": "NHC",
+   "name": "National HealthCare Corporation Common Stock",
+   "sector": "Healthcare",
+   "close": 240.43,
+   "mcap": "$3.8B",
+   "composite": 0.59,
+   "factors": {
+    "value": 0.55,
+    "quality": 0.2,
+    "momentum": 0.67,
+    "low_vol": 1.3
+   },
+   "reasons": [
+    "in a strong 12-month uptrend"
+   ],
+   "flags": []
+  },
+  {
+   "rank": 97,
+   "symbol": "CARE",
+   "name": "Carter Bankshares, Inc. - Common Stock",
+   "sector": "Financials",
+   "close": 30.25,
+   "mcap": "$670.3M",
+   "composite": 0.59,
+   "factors": {
+    "value": 0.55,
+    "quality": -0.01,
+    "momentum": 1.5,
+    "low_vol": 0.04
+   },
+   "reasons": [
+    "buying back its own shares"
+   ],
+   "flags": []
+  },
+  {
+   "rank": 98,
+   "symbol": "TXG",
+   "name": "10x Genomics, Inc. - Common Stock",
+   "sector": "Technology",
+   "close": 70.31,
+   "mcap": "$9.0B",
+   "composite": 0.59,
+   "factors": {
+    "value": -0.66,
+    "quality": 0.36,
+    "momentum": 2.38,
+    "low_vol": -0.46
+   },
+   "reasons": [
+    "trades steadily (low volatility)",
+    "buying back its own shares",
+    "growing with discipline, not empire-building"
+   ],
+   "flags": []
+  },
+  {
+   "rank": 99,
+   "symbol": "BOX",
+   "name": "Box, Inc. Class A Common Stock",
+   "sector": "Technology",
+   "close": 39.01,
+   "mcap": "$5.4B",
+   "composite": 0.59,
+   "factors": {
+    "value": 0.71,
+    "quality": 0.49,
+    "momentum": 0.28,
+    "low_vol": 1.22
+   },
+   "reasons": [
+    "cheap versus its earnings",
+    "generates a lot of free cash for its price",
+    "priced low versus its book value",
+    "strong return on assets"
+   ],
+   "flags": [
+    "earnings not backed by cash flow"
+   ]
+  },
+  {
+   "rank": 100,
+   "symbol": "ACCO",
+   "name": "Acco Brands Corporation Common Stock",
+   "sector": "Materials",
+   "close": 4.55,
+   "mcap": "$420.5M",
+   "composite": 0.59,
+   "factors": {
+    "value": 1.1,
+    "quality": -0.1,
+    "momentum": 0.82,
+    "low_vol": 0.66
+   },
+   "reasons": [
     "cheap versus its earnings",
     "generates a lot of free cash for its price",
     "strong return on assets",
@@ -2101,10 +2101,10 @@
    "flags": []
   }
  ],
- "overall_commentary": "Scan of 2026-10-17: 3,390 stocks scored, 3,175 with complete data on all four factors. Leadership is broad \u2014 the top 30 spans 10 sectors, led by Industrials and Technology. Today's leaders score strongest on value (cheapness vs fundamentals) and momentum (12-month price trend). The single highest composite belongs to DAC (Industrials), scoring +1.03. New to the top 25 since the previous scan: AKTS.",
+ "overall_commentary": "Scan of 2026-10-17: 3,390 stocks scored, 2,944 with complete data on all four factors. Leadership is broad \u2014 the top 30 spans 9 sectors, led by Industrials and Financials. Today's leaders score strongest on momentum (12-month price trend) and value (cheapness vs fundamentals). The single highest composite belongs to DAC (Industrials), scoring +1.03. New to the top 25 since the previous scan: APLE, EDRY, MSBI, VISN and RPRX. Biggest climbers among the leaders: COKE (#139\u2192#22).",
  "sectors": {
   "Industrials": {
-   "commentary": "Industrials: 641 stocks with complete factor data. Sector leaders: DAC (#1 overall), PAGP (#4 overall) and TEN (#16 overall). The sector's strongest names lean on low-volatility and value. Its leaders are in strong uptrends (median 12-month return +54%).",
+   "commentary": "Industrials: 598 stocks with complete factor data. Sector leaders: DAC (#1 overall), PAGP (#3 overall) and TEN (#7 overall). The sector's strongest names lean on momentum and value. Its leaders are in strong uptrends (median 12-month return +68%). New in the sector's top ten: NUTX and KRT.",
    "picks": [
     {
      "rank": 1,
@@ -2126,7 +2126,7 @@
      ]
     },
     {
-     "rank": 4,
+     "rank": 3,
      "symbol": "PAGP",
      "name": "Plains GP Holdings, L.P. - Class A Shares representing limit",
      "sector": "Industrials",
@@ -2145,7 +2145,7 @@
      "flags": []
     },
     {
-     "rank": 16,
+     "rank": 7,
      "symbol": "TEN",
      "name": "Tsakos Energy Navigation Ltd Common Shares",
      "sector": "Industrials",
@@ -2159,15 +2159,14 @@
       "low_vol": 0.55
      },
      "reasons": [
-      "cheap versus its earnings",
-      "generates a lot of free cash for its price",
-      "in a strong 12-month uptrend",
-      "trades steadily (low volatility)"
+      "in a strong 12-month uptrend"
      ],
-     "flags": []
+     "flags": [
+      "thinly traded"
+     ]
     },
     {
-     "rank": 21,
+     "rank": 11,
      "symbol": "NVGS",
      "name": "Navigator Holdings Ltd. Ordinary Shares (Marshall Islands)",
      "sector": "Industrials",
@@ -2181,12 +2180,15 @@
       "low_vol": 1.14
      },
      "reasons": [
-      "in a strong 12-month uptrend"
+      "priced low versus its book value",
+      "trades steadily (low volatility)"
      ],
-     "flags": []
+     "flags": [
+      "thinly traded"
+     ]
     },
     {
-     "rank": 22,
+     "rank": 12,
      "symbol": "GSL",
      "name": "Global Ship Lease Inc New Class A Common Shares",
      "sector": "Industrials",
@@ -2200,14 +2202,15 @@
       "low_vol": 1.33
      },
      "reasons": [
-      "in a strong 12-month uptrend",
-      "trades steadily (low volatility)",
-      "buying back its own shares"
+      "cheap versus its earnings",
+      "generates a lot of free cash for its price",
+      "priced low versus its book value",
+      "strong return on assets"
      ],
      "flags": []
     },
     {
-     "rank": 23,
+     "rank": 13,
      "symbol": "GASS",
      "name": "StealthGas, Inc. - common stock",
      "sector": "Industrials",
@@ -2221,13 +2224,12 @@
       "low_vol": 0.92
      },
      "reasons": [
-      "in a strong 12-month uptrend",
-      "buying back its own shares"
+      "in a strong 12-month uptrend"
      ],
      "flags": []
     },
     {
-     "rank": 31,
+     "rank": 17,
      "symbol": "EDRY",
      "name": "EuroDry Ltd. - Common Shares",
      "sector": "Industrials",
@@ -2241,54 +2243,12 @@
       "low_vol": -1.02
      },
      "reasons": [
-      "priced low versus its book value",
-      "in a strong 12-month uptrend",
-      "buying back its own shares"
-     ],
-     "flags": [
-      "very volatile"
-     ]
-    },
-    {
-     "rank": 32,
-     "symbol": "CNI",
-     "name": "Canadian National Railway Company Common Stock",
-     "sector": "Industrials",
-     "close": 120.96,
-     "mcap": "$74.3B",
-     "composite": 0.78,
-     "factors": {
-      "value": 0.67,
-      "quality": 0.53,
-      "momentum": 0.44,
-      "low_vol": 2.16
-     },
-     "reasons": [
-      "buying back its own shares"
+      "trades steadily (low volatility)"
      ],
      "flags": []
     },
     {
-     "rank": 35,
-     "symbol": "CP",
-     "name": "Canadian Pacific Kansas City Limited Common Shares",
-     "sector": "Industrials",
-     "close": 86.75,
-     "mcap": "$76.3B",
-     "composite": 0.76,
-     "factors": {
-      "value": 1.03,
-      "quality": 0.53,
-      "momentum": 0.17,
-      "low_vol": 1.97
-     },
-     "reasons": [
-      "in a strong 12-month uptrend"
-     ],
-     "flags": []
-    },
-    {
-     "rank": 36,
+     "rank": 19,
      "symbol": "VISN",
      "name": "Vistance Networks, Inc.  - Common Stock",
      "sector": "Industrials",
@@ -2302,22 +2262,59 @@
       "low_vol": -0.15
      },
      "reasons": [
-      "cheap versus its earnings",
-      "generates a lot of free cash for its price",
       "in a strong 12-month uptrend",
+      "trades steadily (low volatility)",
       "buying back its own shares"
      ],
-     "flags": [
-      "heavily indebted"
-     ]
+     "flags": []
+    },
+    {
+     "rank": 26,
+     "symbol": "NUTX",
+     "name": "Nutex Health Inc. - Common Stock",
+     "sector": "Industrials",
+     "close": 189.42,
+     "mcap": "$1.3B",
+     "composite": 0.74,
+     "factors": {
+      "value": 0.45,
+      "quality": 0.75,
+      "momentum": 2.0,
+      "low_vol": -1.34
+     },
+     "reasons": [
+      "priced low versus its book value",
+      "in a strong 12-month uptrend"
+     ],
+     "flags": []
+    },
+    {
+     "rank": 27,
+     "symbol": "KRT",
+     "name": "Karat Packaging Inc. - Common Stock",
+     "sector": "Industrials",
+     "close": 53.71,
+     "mcap": "$1.1B",
+     "composite": 0.73,
+     "factors": {
+      "value": -0.17,
+      "quality": 0.65,
+      "momentum": 1.64,
+      "low_vol": 0.57
+     },
+     "reasons": [
+      "trades steadily (low volatility)",
+      "buying back its own shares"
+     ],
+     "flags": []
     }
    ]
   },
   "Financials": {
-   "commentary": "Financials: 539 stocks with complete factor data. Sector leaders: BFH (#6 overall), TD (#7 overall) and ING (#10 overall). The sector's strongest names lean on momentum and value. Its leaders are in strong uptrends (median 12-month return +54%). Caution: leverage runs high among these names (median liabilities at 81% of assets). New in the sector's top ten: TRV.",
+   "commentary": "Financials: 510 stocks with complete factor data. Sector leaders: BFH (#4 overall), MAAS (#6 overall) and MSBI (#18 overall). The sector's strongest names lean on momentum and value. Its leaders are in strong uptrends (median 12-month return +42%). Caution: leverage runs high among these names (median liabilities at 76% of assets). New in the sector's top ten: TRV, TIPT, UVE and RNR.",
    "picks": [
     {
-     "rank": 6,
+     "rank": 4,
      "symbol": "BFH",
      "name": "Bread Financial Holdings, Inc. Common Stock",
      "sector": "Financials",
@@ -2331,57 +2328,12 @@
       "low_vol": -0.65
      },
      "reasons": [
-      "in a strong 12-month uptrend"
+      "conservatively financed (low debt)"
      ],
-     "flags": [
-      "very volatile"
-     ]
+     "flags": []
     },
     {
-     "rank": 7,
-     "symbol": "TD",
-     "name": "Toronto Dominion Bank (The) Common Stock",
-     "sector": "Financials",
-     "close": 120.17,
-     "mcap": "$203.0B",
-     "composite": 0.93,
-     "factors": {
-      "value": 0.79,
-      "quality": 0.39,
-      "momentum": 1.09,
-      "low_vol": 1.9
-     },
-     "reasons": [
-      "in a strong 12-month uptrend"
-     ],
-     "flags": [
-      "thinly traded"
-     ]
-    },
-    {
-     "rank": 10,
-     "symbol": "ING",
-     "name": "ING Group, N.V. Common Stock",
-     "sector": "Financials",
-     "close": 33.44,
-     "mcap": "$97.1B",
-     "composite": 0.9,
-     "factors": {
-      "value": 1.44,
-      "quality": 0.39,
-      "momentum": 1.39,
-      "low_vol": -0.0
-     },
-     "reasons": [
-      "conservatively financed (low debt)",
-      "trades steadily (low volatility)"
-     ],
-     "flags": [
-      "thinly traded"
-     ]
-    },
-    {
-     "rank": 14,
+     "rank": 6,
      "symbol": "MAAS",
      "name": "Maase Inc. - Class A Ordinary Shares",
      "sector": "Financials",
@@ -2395,15 +2347,14 @@
       "low_vol": -1.88
      },
      "reasons": [
-      "cheap versus its earnings",
-      "strong return on assets",
-      "in a strong 12-month uptrend",
-      "buying back its own shares"
+      "in a strong 12-month uptrend"
      ],
-     "flags": []
+     "flags": [
+      "very volatile"
+     ]
     },
     {
-     "rank": 33,
+     "rank": 18,
      "symbol": "MSBI",
      "name": "Midland States Bancorp, Inc. - Common Stock",
      "sector": "Financials",
@@ -2417,75 +2368,13 @@
       "low_vol": -0.25
      },
      "reasons": [
-      "conservatively financed (low debt)",
-      "trades steadily (low volatility)"
-     ],
-     "flags": [
-      "thinly traded"
-     ]
-    },
-    {
-     "rank": 34,
-     "symbol": "HSBC",
-     "name": "HSBC Holdings, plc. Common Stock",
-     "sector": "Financials",
-     "close": 94.85,
-     "mcap": "$1.6T",
-     "composite": 0.77,
-     "factors": {
-      "value": 0.96,
-      "quality": 0.72,
-      "momentum": 1.02,
-      "low_vol": 0.05
-     },
-     "reasons": [
-      "cheap versus its earnings",
-      "generates a lot of free cash for its price",
       "priced low versus its book value",
-      "in a strong 12-month uptrend"
+      "conservatively financed (low debt)"
      ],
      "flags": []
     },
     {
-     "rank": 38,
-     "symbol": "BNS",
-     "name": "Bank Nova Scotia Halifax Pfd 3 Ordinary Shares",
-     "sector": "Financials",
-     "close": 91.19,
-     "mcap": "$112.7B",
-     "composite": 0.76,
-     "factors": {
-      "value": 0.19,
-      "quality": 0.39,
-      "momentum": 1.07,
-      "low_vol": 1.8
-     },
-     "reasons": [
-      "trades steadily (low volatility)"
-     ],
-     "flags": []
-    },
-    {
-     "rank": 60,
-     "symbol": "RY",
-     "name": "Royal Bank Of Canada Common Stock",
-     "sector": "Financials",
-     "close": 197.48,
-     "mcap": "$276.6B",
-     "composite": 0.7,
-     "factors": {
-      "value": 0.28,
-      "quality": 0.39,
-      "momentum": 0.63,
-      "low_vol": 2.13
-     },
-     "reasons": [
-      "trades steadily (low volatility)"
-     ],
-     "flags": []
-    },
-    {
-     "rank": 61,
+     "rank": 37,
      "symbol": "TRV",
      "name": "The Travelers Companies, Inc. Common Stock",
      "sector": "Financials",
@@ -2499,62 +2388,151 @@
       "low_vol": 1.56
      },
      "reasons": [
+      "cheap versus its earnings",
+      "generates a lot of free cash for its price",
+      "strong return on assets",
+      "earnings backed by real cash flow"
+     ],
+     "flags": []
+    },
+    {
+     "rank": 49,
+     "symbol": "TIPT",
+     "name": "Tiptree Inc. - Common Stock",
+     "sector": "Financials",
+     "close": 16.37,
+     "mcap": "$609.6M",
+     "composite": 0.66,
+     "factors": {
+      "value": 1.55,
+      "quality": 1.21,
+      "momentum": -0.79,
+      "low_vol": 0.97
+     },
+     "reasons": [
       "trades steadily (low volatility)"
      ],
+     "flags": []
+    },
+    {
+     "rank": 52,
+     "symbol": "UVE",
+     "name": "UNIVERSAL INSURANCE HOLDINGS INC Common Stock",
+     "sector": "Financials",
+     "close": 47.08,
+     "mcap": "$1.3B",
+     "composite": 0.65,
+     "factors": {
+      "value": 0.77,
+      "quality": 0.36,
+      "momentum": 1.44,
+      "low_vol": -0.56
+     },
+     "reasons": [
+      "cheap versus its earnings",
+      "strong return on assets",
+      "in a strong 12-month uptrend"
+     ],
      "flags": [
-      "thinly traded"
+      "earnings not backed by cash flow"
      ]
     },
     {
-     "rank": 67,
-     "symbol": "BMO",
-     "name": "Bank Of Montreal Common Stock",
+     "rank": 57,
+     "symbol": "RNR",
+     "name": "RenaissanceRe Holdings Ltd. Common Stock",
      "sector": "Financials",
-     "close": 166.4,
-     "mcap": "$118.0B",
-     "composite": 0.68,
+     "close": 347.17,
+     "mcap": "$14.4B",
+     "composite": 0.64,
      "factors": {
-      "value": 0.66,
-      "quality": 0.39,
-      "momentum": 0.55,
-      "low_vol": 1.54
+      "value": 1.4,
+      "quality": 0.53,
+      "momentum": 0.13,
+      "low_vol": 0.62
      },
      "reasons": [
+      "cheap versus its earnings",
       "generates a lot of free cash for its price",
-      "trades steadily (low volatility)",
-      "growing with discipline, not empire-building"
+      "priced low versus its book value",
+      "strong return on assets"
      ],
      "flags": [
-      "thinly traded"
+      "earnings not backed by cash flow"
      ]
-    }
-   ]
-  },
-  "Healthcare": {
-   "commentary": "Healthcare: 501 stocks with complete factor data. Sector leaders: AKTS (#25 overall), RPRX (#39 overall) and BDX (#73 overall). The sector's strongest names lean on low-volatility and value. Its leaders are in strong uptrends (median 12-month return +70%). New in the sector's top ten: NVS and ABBV.",
-   "picks": [
+    },
     {
-     "rank": 25,
-     "symbol": "AKTS",
-     "name": "Aktis Oncology, Inc. - Common stock",
-     "sector": "Healthcare",
-     "close": 14.89,
-     "mcap": "$795.5M",
-     "composite": 0.81,
+     "rank": 58,
+     "symbol": "PURR",
+     "name": "Hyperliquid Strategies Inc - Common Stock",
+     "sector": "Financials",
+     "close": 9.23,
+     "mcap": "$1.9B",
+     "composite": 0.64,
      "factors": {
-      "value": 0.8,
-      "quality": 1.86,
-      "momentum": 0.23,
-      "low_vol": -0.13
+      "value": 0.48,
+      "quality": 0.45,
+      "momentum": 2.13,
+      "low_vol": -1.68
      },
      "reasons": [
+      "in a strong 12-month uptrend",
       "trades steadily (low volatility)",
       "buying back its own shares"
      ],
      "flags": []
     },
     {
-     "rank": 39,
+     "rank": 63,
+     "symbol": "EG",
+     "name": "Everest Group, Ltd. Common Stock",
+     "sector": "Financials",
+     "close": 385.12,
+     "mcap": "$14.8B",
+     "composite": 0.64,
+     "factors": {
+      "value": 1.33,
+      "quality": 0.75,
+      "momentum": -0.02,
+      "low_vol": 0.58
+     },
+     "reasons": [
+      "cheap versus its earnings",
+      "generates a lot of free cash for its price",
+      "priced low versus its book value",
+      "in a strong 12-month uptrend"
+     ],
+     "flags": []
+    },
+    {
+     "rank": 65,
+     "symbol": "THG",
+     "name": "Hanover Insurance Group Inc",
+     "sector": "Financials",
+     "close": 230.87,
+     "mcap": "$8.0B",
+     "composite": 0.63,
+     "factors": {
+      "value": 0.39,
+      "quality": 0.27,
+      "momentum": 0.74,
+      "low_vol": 1.5
+     },
+     "reasons": [
+      "generates a lot of free cash for its price",
+      "priced low versus its book value",
+      "in a strong 12-month uptrend",
+      "buying back its own shares"
+     ],
+     "flags": []
+    }
+   ]
+  },
+  "Healthcare": {
+   "commentary": "Healthcare: 478 stocks with complete factor data. Sector leaders: RPRX (#20 overall), BDX (#45 overall) and HAE (#48 overall). The sector's strongest names lean on low-volatility and value. Its leaders are in strong uptrends (median 12-month return +33%). New in the sector's top ten: ABBV and INMD.",
+   "picks": [
+    {
+     "rank": 20,
      "symbol": "RPRX",
      "name": "Royalty Pharma plc - Class A Ordinary Shares",
      "sector": "Healthcare",
@@ -2569,14 +2547,14 @@
      },
      "reasons": [
       "cheap versus its earnings",
-      "priced low versus its book value",
+      "generates a lot of free cash for its price",
       "in a strong 12-month uptrend",
       "buying back its own shares"
      ],
      "flags": []
     },
     {
-     "rank": 73,
+     "rank": 45,
      "symbol": "BDX",
      "name": "Becton, Dickinson and Company Common Stock",
      "sector": "Healthcare",
@@ -2590,14 +2568,12 @@
       "low_vol": 2.05
      },
      "reasons": [
-      "generates a lot of free cash for its price",
-      "priced low versus its book value",
-      "in a strong 12-month uptrend"
+      "conservatively financed (low debt)"
      ],
      "flags": []
     },
     {
-     "rank": 78,
+     "rank": 48,
      "symbol": "HAE",
      "name": "Haemonetics Corporation Common Stock",
      "sector": "Healthcare",
@@ -2611,37 +2587,12 @@
       "low_vol": 0.56
      },
      "reasons": [
-      "cheap versus its earnings",
-      "strong return on assets",
-      "in a strong 12-month uptrend",
-      "buying back its own shares"
-     ],
-     "flags": [
-      "earnings not backed by cash flow"
-     ]
-    },
-    {
-     "rank": 82,
-     "symbol": "NVS",
-     "name": "Novartis AG Common Stock",
-     "sector": "Healthcare",
-     "close": 151.15,
-     "mcap": "$288.4B",
-     "composite": 0.65,
-     "factors": {
-      "value": 1.32,
-      "quality": 0.48,
-      "momentum": -0.38,
-      "low_vol": 1.91
-     },
-     "reasons": [
-      "generates a lot of free cash for its price",
-      "buying back its own shares"
+      "trades steadily (low volatility)"
      ],
      "flags": []
     },
     {
-     "rank": 84,
+     "rank": 53,
      "symbol": "ABBV",
      "name": "AbbVie Inc. Common Stock",
      "sector": "Healthcare",
@@ -2655,15 +2606,12 @@
       "low_vol": 2.09
      },
      "reasons": [
-      "cheap versus its earnings",
-      "generates a lot of free cash for its price",
-      "trades steadily (low volatility)",
-      "buying back its own shares"
+      "trades steadily (low volatility)"
      ],
      "flags": []
     },
     {
-     "rank": 87,
+     "rank": 56,
      "symbol": "DGX",
      "name": "Quest Diagnostics Incorporated Common Stock",
      "sector": "Healthcare",
@@ -2677,17 +2625,13 @@
       "low_vol": 2.47
      },
      "reasons": [
-      "highly profitable on its assets",
-      "strong return on assets",
-      "earnings backed by real cash flow",
+      "trades steadily (low volatility)",
       "buying back its own shares"
      ],
-     "flags": [
-      "heavily indebted"
-     ]
+     "flags": []
     },
     {
-     "rank": 91,
+     "rank": 60,
      "symbol": "ANIK",
      "name": "Anika Therapeutics Inc. - Common Stock",
      "sector": "Healthcare",
@@ -2701,13 +2645,12 @@
       "low_vol": 0.53
      },
      "reasons": [
-      "trades steadily (low volatility)",
-      "buying back its own shares"
+      "trades steadily (low volatility)"
      ],
      "flags": []
     },
     {
-     "rank": 92,
+     "rank": 61,
      "symbol": "CDNA",
      "name": "CareDx, Inc. - Common Stock",
      "sector": "Healthcare",
@@ -2721,52 +2664,47 @@
       "low_vol": -0.15
      },
      "reasons": [
+      "trades steadily (low volatility)"
+     ],
+     "flags": [
+      "thinly traded"
+     ]
+    },
+    {
+     "rank": 71,
+     "symbol": "PGNY",
+     "name": "Progyny, Inc. - Common Stock",
+     "sector": "Healthcare",
+     "close": 27.04,
+     "mcap": "$2.1B",
+     "composite": 0.62,
+     "factors": {
+      "value": 1.0,
+      "quality": 0.71,
+      "momentum": 0.34,
+      "low_vol": 0.37
+     },
+     "reasons": [
       "cheap versus its earnings",
-      "generates a lot of free cash for its price",
-      "highly profitable on its assets",
-      "strong return on assets"
+      "priced low versus its book value",
+      "conservatively financed (low debt)",
+      "in a strong 12-month uptrend"
      ],
      "flags": []
     },
     {
-     "rank": 94,
-     "symbol": "HELP",
-     "name": "Helus Pharma Inc.  - Common Stock",
+     "rank": 80,
+     "symbol": "INMD",
+     "name": "InMode Ltd.  - Ordinary Shares",
      "sector": "Healthcare",
-     "close": 10.52,
-     "mcap": "$227.2M",
-     "composite": 0.64,
+     "close": 14.22,
+     "mcap": "$901.0M",
+     "composite": 0.61,
      "factors": {
-      "value": 0.78,
-      "quality": 0.48,
-      "momentum": 1.42,
-      "low_vol": -0.86
-     },
-     "reasons": [
-      "cheap versus its earnings",
-      "generates a lot of free cash for its price",
-      "priced low versus its book value"
-     ],
-     "flags": []
-    }
-   ]
-  },
-  "Technology": {
-   "commentary": "Technology: 454 stocks with complete factor data. Sector leaders: NEXN (#15 overall), UMC (#17 overall) and PBI (#18 overall). The sector's strongest names lean on value and low-volatility. Its leaders are in strong uptrends (median 12-month return +50%). Caution: leverage runs high among these names (median liabilities at 88% of assets). New in the sector's top ten: SPB.",
-   "picks": [
-    {
-     "rank": 15,
-     "symbol": "NEXN",
-     "name": "Nexxen International Ltd. - Ordinary Shares",
-     "sector": "Technology",
-     "close": 8.9,
-     "mcap": "$501.2M",
-     "composite": 0.85,
-     "factors": {
-      "value": 1.76,
-      "quality": 0.87,
-      "momentum": 0.09,
-      "low_vol": 0.78
+      "value": 1.6,
+      "quality": 0.41,
+      "momentum": -0.42,
+      "low_vol": 1.44
      },
      "reasons": [
       "in a strong 12-month uptrend",
@@ -2775,26 +2713,31 @@
      "flags": []
     },
     {
-     "rank": 17,
-     "symbol": "UMC",
-     "name": "United Microelectronics Corporation (NEW) Common Stock",
-     "sector": "Technology",
-     "close": 20.2,
-     "mcap": "$254.3B",
-     "composite": 0.84,
+     "rank": 81,
+     "symbol": "UTMD",
+     "name": "Utah Medical Products, Inc. - Common Stock",
+     "sector": "Healthcare",
+     "close": 74.87,
+     "mcap": "$238.4M",
+     "composite": 0.61,
      "factors": {
-      "value": 0.09,
-      "quality": 0.87,
-      "momentum": 1.87,
-      "low_vol": -0.08
+      "value": 0.89,
+      "quality": 0.52,
+      "momentum": -0.09,
+      "low_vol": 1.71
      },
      "reasons": [
-      "trades steadily (low volatility)"
+      "in a strong 12-month uptrend"
      ],
      "flags": []
-    },
+    }
+   ]
+  },
+  "Technology": {
+   "commentary": "Technology: 436 stocks with complete factor data. Sector leaders: PBI (#8 overall), RAMP (#16 overall) and VSH (#23 overall). The sector's strongest names lean on value and low-volatility. Its leaders are in strong uptrends (median 12-month return +49%). New in the sector's top ten: SPB, OSPN, HPQ and NTCT.",
+   "picks": [
     {
-     "rank": 18,
+     "rank": 8,
      "symbol": "PBI",
      "name": "Pitney Bowes Inc. Common Stock",
      "sector": "Technology",
@@ -2808,33 +2751,12 @@
       "low_vol": 1.45
      },
      "reasons": [
-      "priced low versus its book value",
-      "conservatively financed (low debt)"
+      "trades steadily (low volatility)"
      ],
      "flags": []
     },
     {
-     "rank": 27,
-     "symbol": "TSM",
-     "name": "Taiwan Semiconductor Manufacturing Company Ltd.",
-     "sector": "Technology",
-     "close": 415.06,
-     "mcap": "$10.8T",
-     "composite": 0.8,
-     "factors": {
-      "value": 0.21,
-      "quality": 1.34,
-      "momentum": 0.56,
-      "low_vol": 1.18
-     },
-     "reasons": [
-      "trades steadily (low volatility)",
-      "buying back its own shares"
-     ],
-     "flags": []
-    },
-    {
-     "rank": 30,
+     "rank": 16,
      "symbol": "RAMP",
      "name": "LiveRamp Holdings, Inc. Common Stock",
      "sector": "Technology",
@@ -2848,12 +2770,15 @@
       "low_vol": 1.27
      },
      "reasons": [
-      "in a strong 12-month uptrend"
+      "cheap versus its earnings",
+      "generates a lot of free cash for its price",
+      "in a strong 12-month uptrend",
+      "trades steadily (low volatility)"
      ],
      "flags": []
     },
     {
-     "rank": 42,
+     "rank": 23,
      "symbol": "VSH",
      "name": "Vishay Intertechnology, Inc. Common Stock",
      "sector": "Technology",
@@ -2867,17 +2792,13 @@
       "low_vol": -0.3
      },
      "reasons": [
-      "cheap versus its earnings",
-      "generates a lot of free cash for its price",
-      "priced low versus its book value",
-      "strong return on assets"
+      "in a strong 12-month uptrend",
+      "buying back its own shares"
      ],
-     "flags": [
-      "thinly traded"
-     ]
+     "flags": []
     },
     {
-     "rank": 53,
+     "rank": 32,
      "symbol": "SAIC",
      "name": "Science Applications International Corporation - Common Stoc",
      "sector": "Technology",
@@ -2891,12 +2812,12 @@
       "low_vol": 1.1
      },
      "reasons": [
-      "trades steadily (low volatility)"
+      "buying back its own shares"
      ],
      "flags": []
     },
     {
-     "rank": 56,
+     "rank": 35,
      "symbol": "SPB",
      "name": "Spectrum Brands Holdings, Inc. Common Stock",
      "sector": "Technology",
@@ -2910,32 +2831,12 @@
       "low_vol": 1.52
      },
      "reasons": [
-      "trades steadily (low volatility)",
-      "buying back its own shares"
+      "in a strong 12-month uptrend"
      ],
      "flags": []
     },
     {
-     "rank": 59,
-     "symbol": "MTCH",
-     "name": "Match Group, Inc. - Common Stock",
-     "sector": "Technology",
-     "close": 43.45,
-     "mcap": "$10.0B",
-     "composite": 0.7,
-     "factors": {
-      "value": 1.08,
-      "quality": 0.16,
-      "momentum": 0.43,
-      "low_vol": 1.67
-     },
-     "reasons": [
-      "insiders are buying with their own money"
-     ],
-     "flags": []
-    },
-    {
-     "rank": 63,
+     "rank": 38,
      "symbol": "DBX",
      "name": "Dropbox, Inc. - Class A Common Stock",
      "sector": "Technology",
@@ -2949,20 +2850,102 @@
       "low_vol": 1.21
      },
      "reasons": [
+      "trades steadily (low volatility)"
+     ],
+     "flags": []
+    },
+    {
+     "rank": 39,
+     "symbol": "RNG",
+     "name": "RingCentral, Inc. Class A Common Stock",
+     "sector": "Technology",
+     "close": 75.93,
+     "mcap": "$6.8B",
+     "composite": 0.69,
+     "factors": {
+      "value": 0.59,
+      "quality": 0.61,
+      "momentum": 1.3,
+      "low_vol": -0.22
+     },
+     "reasons": [
+      "cheap versus its earnings",
+      "priced low versus its book value",
+      "in a strong 12-month uptrend",
+      "buying back its own shares"
+     ],
+     "flags": []
+    },
+    {
+     "rank": 41,
+     "symbol": "OSPN",
+     "name": "OneSpan Inc. - Common Stock",
+     "sector": "Technology",
+     "close": 17.33,
+     "mcap": "$638.5M",
+     "composite": 0.68,
+     "factors": {
+      "value": 1.03,
+      "quality": 0.49,
+      "momentum": 0.63,
+      "low_vol": 0.57
+     },
+     "reasons": [
       "cheap versus its earnings",
       "generates a lot of free cash for its price",
       "priced low versus its book value",
+      "strong return on assets"
+     ],
+     "flags": []
+    },
+    {
+     "rank": 73,
+     "symbol": "HPQ",
+     "name": "HP Inc. Common Stock",
+     "sector": "Technology",
+     "close": 29.95,
+     "mcap": "$27.4B",
+     "composite": 0.62,
+     "factors": {
+      "value": 1.26,
+      "quality": -0.15,
+      "momentum": 0.79,
+      "low_vol": 0.75
+     },
+     "reasons": [
+      "generates a lot of free cash for its price",
+      "priced low versus its book value",
       "in a strong 12-month uptrend"
+     ],
+     "flags": []
+    },
+    {
+     "rank": 76,
+     "symbol": "NTCT",
+     "name": "NetScout Systems, Inc. - Common Stock",
+     "sector": "Technology",
+     "close": 37.96,
+     "mcap": "$2.8B",
+     "composite": 0.62,
+     "factors": {
+      "value": 0.69,
+      "quality": 0.17,
+      "momentum": 0.51,
+      "low_vol": 1.61
+     },
+     "reasons": [
+      "generates a lot of free cash for its price",
+      "buying back its own shares"
      ],
      "flags": []
     }
    ]
   },
   "Consumer Discretionary": {
-   "commentary": "Consumer Discretionary: 294 stocks with complete factor data. Sector leaders: SHO (#20 overall), VNCE (#51 overall) and MSM (#124 overall). The sector's strongest names lean on momentum and low-volatility. Its leaders are in strong uptrends (median 12-month return +44%). New in the sector's top ten: TGT.",
+   "commentary": "Consumer Discretionary: 285 stocks with complete factor data. Sector leaders: SHO (#10 overall), VNCE (#31 overall) and MSM (#89 overall). The sector's strongest names lean on momentum and quality. Its leaders are in strong uptrends (median 12-month return +53%). New in the sector's top ten: TGT.",
    "picks": [
     {
-     "rank": 20,
+     "rank": 10,
      "symbol": "SHO",
      "name": "Sunstone Hotel Investors, Inc. Sunstone Hotel Investors, Inc",
      "sector": "Consumer Discretionary",
@@ -2976,15 +2959,15 @@
       "low_vol": 2.09
      },
      "reasons": [
-      "cheap versus its earnings",
-      "generates a lot of free cash for its price",
-      "in a strong 12-month uptrend",
-      "buying back its own shares"
+      "conservatively financed (low debt)",
+      "trades steadily (low volatility)"
      ],
-     "flags": []
+     "flags": [
+      "thinly traded"
+     ]
     },
     {
-     "rank": 51,
+     "rank": 31,
      "symbol": "VNCE",
      "name": "Vince Holding Corp. - Common Stock",
      "sector": "Consumer Discretionary",
@@ -2998,12 +2981,16 @@
       "low_vol": -2.02
      },
      "reasons": [
-      "conservatively financed (low debt)"
+      "priced low versus its book value",
+      "in a strong 12-month uptrend",
+      "buying back its own shares"
      ],
-     "flags": []
+     "flags": [
+      "very volatile"
+     ]
     },
     {
-     "rank": 124,
+     "rank": 89,
      "symbol": "MSM",
      "name": "MSC Industrial Direct Company, Inc. Common Stock",
      "sector": "Consumer Discretionary",
@@ -3017,15 +3004,14 @@
       "low_vol": 1.31
      },
      "reasons": [
-      "cheap versus its earnings",
       "generates a lot of free cash for its price",
-      "priced low versus its book value",
+      "earnings backed by real cash flow",
       "trades steadily (low volatility)"
      ],
      "flags": []
     },
     {
-     "rank": 128,
+     "rank": 92,
      "symbol": "BJRI",
      "name": "BJ's Restaurants, Inc. - Common Stock",
      "sector": "Consumer Discretionary",
@@ -3039,14 +3025,15 @@
       "low_vol": -0.12
      },
      "reasons": [
+      "cheap versus its earnings",
+      "generates a lot of free cash for its price",
       "highly profitable on its assets",
-      "strong return on assets",
-      "in a strong 12-month uptrend"
+      "strong return on assets"
      ],
      "flags": []
     },
     {
-     "rank": 138,
+     "rank": 102,
      "symbol": "WEYS",
      "name": "Weyco Group, Inc. - Common Stock",
      "sector": "Consumer Discretionary",
@@ -3060,36 +3047,12 @@
       "low_vol": 0.34
      },
      "reasons": [
-      "cheap versus its earnings",
-      "highly profitable on its assets",
-      "strong return on assets",
       "in a strong 12-month uptrend"
-     ],
-     "flags": [
-      "earnings not backed by cash flow"
-     ]
-    },
-    {
-     "rank": 140,
-     "symbol": "APC",
-     "name": "ARKO Petroleum Corp. - Class A Common Stock",
-     "sector": "Consumer Discretionary",
-     "close": 16.0,
-     "mcap": "$201.1M",
-     "composite": 0.58,
-     "factors": {
-      "value": 1.43,
-      "quality": 0.48,
-      "momentum": 0.0,
-      "low_vol": 0.54
-     },
-     "reasons": [
-      "trades steadily (low volatility)"
      ],
      "flags": []
     },
     {
-     "rank": 151,
+     "rank": 110,
      "symbol": "MCRI",
      "name": "Monarch Casino & Resort, Inc. - Common Stock",
      "sector": "Consumer Discretionary",
@@ -3103,17 +3066,13 @@
       "low_vol": 1.51
      },
      "reasons": [
-      "cheap versus its earnings",
-      "priced low versus its book value",
-      "in a strong 12-month uptrend",
-      "trades steadily (low volatility)"
+      "trades steadily (low volatility)",
+      "buying back its own shares"
      ],
-     "flags": [
-      "thinly traded"
-     ]
+     "flags": []
     },
     {
-     "rank": 154,
+     "rank": 112,
      "symbol": "RUSHA",
      "name": "Rush Enterprises, Inc. - Class A Common Stock",
      "sector": "Consumer Discretionary",
@@ -3127,14 +3086,12 @@
       "low_vol": 0.97
      },
      "reasons": [
-      "strong return on assets",
-      "in a strong 12-month uptrend",
       "trades steadily (low volatility)"
      ],
      "flags": []
     },
     {
-     "rank": 179,
+     "rank": 130,
      "symbol": "TGT",
      "name": "Target Corporation Common Stock",
      "sector": "Consumer Discretionary",
@@ -3150,13 +3107,13 @@
      "reasons": [
       "cheap versus its earnings",
       "generates a lot of free cash for its price",
-      "priced low versus its book value",
-      "trades steadily (low volatility)"
+      "strong return on assets",
+      "in a strong 12-month uptrend"
      ],
      "flags": []
     },
     {
-     "rank": 189,
+     "rank": 139,
      "symbol": "UFI",
      "name": "Unifi, Inc. New Common Stock",
      "sector": "Consumer Discretionary",
@@ -3170,16 +3127,255 @@
       "low_vol": -0.55
      },
      "reasons": [
-      "cheap versus its earnings",
       "generates a lot of free cash for its price",
-      "earnings backed by real cash flow"
+      "conservatively financed (low debt)",
+      "in a strong 12-month uptrend"
+     ],
+     "flags": []
+    },
+    {
+     "rank": 157,
+     "symbol": "VSTS",
+     "name": "Vestis Corporation Common Stock",
+     "sector": "Consumer Discretionary",
+     "close": 14.26,
+     "mcap": "$1.9B",
+     "composite": 0.53,
+     "factors": {
+      "value": -0.34,
+      "quality": 0.26,
+      "momentum": 2.1,
+      "low_vol": -0.63
+     },
+     "reasons": [
+      "highly profitable on its assets",
+      "strong return on assets",
+      "trades steadily (low volatility)",
+      "insiders are buying with their own money"
      ],
      "flags": []
     }
    ]
   },
+  "Real Estate": {
+   "commentary": "Real Estate: 162 stocks with complete factor data. Sector leaders: APLE (#15 overall), LXP (#24 overall) and KRG (#50 overall). The sector's strongest names lean on momentum and value. Its leaders are in strong uptrends (median 12-month return +27%).",
+   "picks": [
+    {
+     "rank": 15,
+     "symbol": "APLE",
+     "name": "Apple Hospitality REIT, Inc. Common Shares",
+     "sector": "Real Estate",
+     "close": 17.17,
+     "mcap": "$4.1B",
+     "composite": 0.8,
+     "factors": {
+      "value": 0.33,
+      "quality": 0.71,
+      "momentum": 1.48,
+      "low_vol": 0.37
+     },
+     "reasons": [
+      "in a strong 12-month uptrend",
+      "buying back its own shares"
+     ],
+     "flags": []
+    },
+    {
+     "rank": 24,
+     "symbol": "LXP",
+     "name": "LXP Industrial Trust Common Stock (Maryland REIT)",
+     "sector": "Real Estate",
+     "close": 61.03,
+     "mcap": "$3.6B",
+     "composite": 0.74,
+     "factors": {
+      "value": 0.23,
+      "quality": 0.53,
+      "momentum": 1.38,
+      "low_vol": 0.7
+     },
+     "reasons": [
+      "cheap versus its earnings",
+      "trades steadily (low volatility)"
+     ],
+     "flags": []
+    },
+    {
+     "rank": 50,
+     "symbol": "KRG",
+     "name": "Kite Realty Group Trust Common Stock",
+     "sector": "Real Estate",
+     "close": 24.68,
+     "mcap": "$4.9B",
+     "composite": 0.66,
+     "factors": {
+      "value": 0.7,
+      "quality": 0.39,
+      "momentum": 0.42,
+      "low_vol": 1.58
+     },
+     "reasons": [
+      "strong return on assets",
+      "buying back its own shares"
+     ],
+     "flags": []
+    },
+    {
+     "rank": 54,
+     "symbol": "CBL",
+     "name": "CBL & Associates Properties, Inc. Common Stock",
+     "sector": "Real Estate",
+     "close": 49.44,
+     "mcap": "$1.5B",
+     "composite": 0.64,
+     "factors": {
+      "value": 0.34,
+      "quality": -0.06,
+      "momentum": 2.14,
+      "low_vol": -0.44
+     },
+     "reasons": [
+      "generates a lot of free cash for its price",
+      "in a strong 12-month uptrend",
+      "buying back its own shares",
+      "growing with discipline, not empire-building"
+     ],
+     "flags": [
+      "heavily indebted"
+     ]
+    },
+    {
+     "rank": 72,
+     "symbol": "DRH",
+     "name": "Diamondrock Hospitality Company - Common Stock",
+     "sector": "Real Estate",
+     "close": 13.45,
+     "mcap": "$2.8B",
+     "composite": 0.62,
+     "factors": {
+      "value": 0.28,
+      "quality": 0.31,
+      "momentum": 1.57,
+      "low_vol": -0.1
+     },
+     "reasons": [
+      "generates a lot of free cash for its price",
+      "priced low versus its book value",
+      "buying back its own shares",
+      "growing with discipline, not empire-building"
+     ],
+     "flags": []
+    },
+    {
+     "rank": 106,
+     "symbol": "ARI",
+     "name": "Apollo Commercial Real Estate Finance, Inc",
+     "sector": "Real Estate",
+     "close": 6.4,
+     "mcap": "$820.6M",
+     "composite": 0.58,
+     "factors": {
+      "value": 1.31,
+      "quality": 0.61,
+      "momentum": -0.2,
+      "low_vol": 0.87
+     },
+     "reasons": [
+      "trades steadily (low volatility)"
+     ],
+     "flags": []
+    },
+    {
+     "rank": 177,
+     "symbol": "GNL",
+     "name": "Global Net Lease, Inc. Common Stock",
+     "sector": "Real Estate",
+     "close": 7.44,
+     "mcap": "$1.6B",
+     "composite": 0.51,
+     "factors": {
+      "value": 0.89,
+      "quality": 0.62,
+      "momentum": 0.1,
+      "low_vol": 0.51
+     },
+     "reasons": [
+      "cheap versus its earnings",
+      "generates a lot of free cash for its price",
+      "strong return on assets",
+      "in a strong 12-month uptrend"
+     ],
+     "flags": []
+    },
+    {
+     "rank": 185,
+     "symbol": "HST",
+     "name": "Host Hotels & Resorts, Inc. - Common Stock",
+     "sector": "Real Estate",
+     "close": 24.26,
+     "mcap": "$16.6B",
+     "composite": 0.5,
+     "factors": {
+      "value": 0.19,
+      "quality": 0.35,
+      "momentum": 1.15,
+      "low_vol": 0.04
+     },
+     "reasons": [
+      "in a strong 12-month uptrend"
+     ],
+     "flags": []
+    },
+    {
+     "rank": 221,
+     "symbol": "MRP",
+     "name": "Millrose Properties, Inc. Class A Common Stock",
+     "sector": "Real Estate",
+     "close": 22.41,
+     "mcap": "$3.7B",
+     "composite": 0.48,
+     "factors": {
+      "value": 1.61,
+      "quality": 0.79,
+      "momentum": -0.26,
+      "low_vol": -0.51
+     },
+     "reasons": [
+      "cheap versus its earnings",
+      "generates a lot of free cash for its price",
+      "priced low versus its book value",
+      "in a strong 12-month uptrend"
+     ],
+     "flags": [
+      "thinly traded"
+     ]
+    },
+    {
+     "rank": 248,
+     "symbol": "FRT",
+     "name": "Federal Realty Investment Trust Common Stock",
+     "sector": "Real Estate",
+     "close": 105.98,
+     "mcap": "$9.2B",
+     "composite": 0.47,
+     "factors": {
+      "value": -0.04,
+      "quality": 0.1,
+      "momentum": 0.54,
+      "low_vol": 1.93
+     },
+     "reasons": [
+      "conservatively financed (low debt)",
+      "insiders are buying with their own money"
+     ],
+     "flags": [
+      "very volatile"
+     ]
+    }
+   ]
+  },
   "Materials": {
-   "commentary": "Materials: 209 stocks with complete factor data. Sector leaders: FLXS (#2 overall), CGAU (#8 overall) and PSO (#12 overall). The sector's strongest names lean on value and low-volatility. Its leaders are in strong uptrends (median 12-month return +35%). New in the sector's top ten: EGO.",
+   "commentary": "Materials: 153 stocks with complete factor data. Sector leaders: FLXS (#2 overall), EBF (#14 overall) and CTVA (#43 overall). The sector's strongest names lean on low-volatility and value. Its leaders are in strong uptrends (median 12-month return +28%). New in the sector's top ten: ACCO and NEU.",
    "picks": [
     {
      "rank": 2,
@@ -3199,48 +3395,7 @@
      "flags": []
     },
     {
-     "rank": 8,
-     "symbol": "CGAU",
-     "name": "Centerra Gold Inc. Common Shares",
-     "sector": "Materials",
-     "close": 21.94,
-     "mcap": "$4.4B",
-     "composite": 0.92,
-     "factors": {
-      "value": 1.64,
-      "quality": 0.27,
-      "momentum": 1.46,
-      "low_vol": -0.05
-     },
-     "reasons": [
-      "trades steadily (low volatility)"
-     ],
-     "flags": []
-    },
-    {
-     "rank": 12,
-     "symbol": "PSO",
-     "name": "Pearson, Plc Common Stock",
-     "sector": "Materials",
-     "close": 18.17,
-     "mcap": "$11.6B",
-     "composite": 0.89,
-     "factors": {
-      "value": 1.6,
-      "quality": 0.27,
-      "momentum": 0.46,
-      "low_vol": 1.79
-     },
-     "reasons": [
-      "cheap versus its earnings",
-      "generates a lot of free cash for its price",
-      "priced low versus its book value",
-      "strong return on assets"
-     ],
-     "flags": []
-    },
-    {
-     "rank": 24,
+     "rank": 14,
      "symbol": "EBF",
      "name": "Ennis, Inc. Common Stock",
      "sector": "Materials",
@@ -3255,12 +3410,14 @@
      },
      "reasons": [
       "cheap versus its earnings",
-      "trades steadily (low volatility)"
+      "strong return on assets",
+      "in a strong 12-month uptrend",
+      "buying back its own shares"
      ],
      "flags": []
     },
     {
-     "rank": 69,
+     "rank": 43,
      "symbol": "CTVA",
      "name": "Corteva, Inc. Common Stock ",
      "sector": "Materials",
@@ -3274,12 +3431,15 @@
       "low_vol": 1.22
      },
      "reasons": [
+      "cheap versus its earnings",
+      "strong return on assets",
+      "conservatively financed (low debt)",
       "trades steadily (low volatility)"
      ],
      "flags": []
     },
     {
-     "rank": 90,
+     "rank": 59,
      "symbol": "IOSP",
      "name": "Innospec Inc. - Common Stock",
      "sector": "Materials",
@@ -3293,15 +3453,12 @@
       "low_vol": 1.98
      },
      "reasons": [
-      "cheap versus its earnings",
-      "strong return on assets",
-      "buying back its own shares",
       "insiders are buying with their own money"
      ],
      "flags": []
     },
     {
-     "rank": 96,
+     "rank": 64,
      "symbol": "DD",
      "name": "DuPont de Nemours, Inc. Common Stock",
      "sector": "Materials",
@@ -3315,36 +3472,17 @@
       "low_vol": 1.32
      },
      "reasons": [
-      "in a strong 12-month uptrend"
-     ],
-     "flags": []
-    },
-    {
-     "rank": 99,
-     "symbol": "EGO",
-     "name": "Eldorado Gold Corporation Ordinary Shares",
-     "sector": "Materials",
-     "close": 36.11,
-     "mcap": "$7.2B",
-     "composite": 0.63,
-     "factors": {
-      "value": 1.32,
-      "quality": 0.27,
-      "momentum": 0.86,
-      "low_vol": -0.28
-     },
-     "reasons": [
       "cheap versus its earnings",
       "generates a lot of free cash for its price",
-      "priced low versus its book value",
+      "highly profitable on its assets",
       "strong return on assets"
      ],
      "flags": [
-      "earnings not backed by cash flow"
+      "heavily indebted"
      ]
     },
     {
-     "rank": 101,
+     "rank": 68,
      "symbol": "IFF",
      "name": "International Flavors & Fragrances, Inc. Common Stock",
      "sector": "Materials",
@@ -3357,11 +3495,18 @@
       "momentum": 0.69,
       "low_vol": 0.88
      },
-     "reasons": [],
-     "flags": []
+     "reasons": [
+      "cheap versus its earnings",
+      "generates a lot of free cash for its price",
+      "strong return on assets",
+      "in a strong 12-month uptrend"
+     ],
+     "flags": [
+      "very volatile"
+     ]
     },
     {
-     "rank": 107,
+     "rank": 74,
      "symbol": "SND",
      "name": "Smart Sand, Inc. - Common Stock",
      "sector": "Materials",
@@ -3375,238 +3520,87 @@
       "low_vol": -0.61
      },
      "reasons": [
-      "priced low versus its book value"
-     ],
-     "flags": []
-    }
-   ]
-  },
-  "Real Estate": {
-   "commentary": "Real Estate: 163 stocks with complete factor data. Sector leaders: APLE (#28 overall), LXP (#43 overall) and KRG (#80 overall). The sector's strongest names lean on momentum and value. Its leaders are in strong uptrends (median 12-month return +27%).",
-   "picks": [
-    {
-     "rank": 28,
-     "symbol": "APLE",
-     "name": "Apple Hospitality REIT, Inc. Common Shares",
-     "sector": "Real Estate",
-     "close": 17.17,
-     "mcap": "$4.1B",
-     "composite": 0.8,
-     "factors": {
-      "value": 0.33,
-      "quality": 0.71,
-      "momentum": 1.48,
-      "low_vol": 0.37
-     },
-     "reasons": [
-      "conservatively financed (low debt)"
+      "cheap versus its earnings",
+      "highly profitable on its assets",
+      "strong return on assets",
+      "in a strong 12-month uptrend"
      ],
      "flags": [
-      "very volatile"
+      "very volatile",
+      "earnings not backed by cash flow",
+      "thinly traded"
      ]
     },
     {
-     "rank": 43,
-     "symbol": "LXP",
-     "name": "LXP Industrial Trust Common Stock (Maryland REIT)",
-     "sector": "Real Estate",
-     "close": 61.03,
-     "mcap": "$3.6B",
-     "composite": 0.74,
+     "rank": 93,
+     "symbol": "SCHL",
+     "name": "Scholastic Corporation - Common Stock",
+     "sector": "Materials",
+     "close": 38.05,
+     "mcap": "$681.1M",
+     "composite": 0.59,
      "factors": {
-      "value": 0.23,
-      "quality": 0.53,
-      "momentum": 1.38,
-      "low_vol": 0.7
+      "value": 1.52,
+      "quality": 0.01,
+      "momentum": 0.28,
+      "low_vol": 0.87
+     },
+     "reasons": [
+      "priced low versus its book value",
+      "conservatively financed (low debt)"
+     ],
+     "flags": []
+    },
+    {
+     "rank": 100,
+     "symbol": "ACCO",
+     "name": "Acco Brands Corporation Common Stock",
+     "sector": "Materials",
+     "close": 4.55,
+     "mcap": "$420.5M",
+     "composite": 0.59,
+     "factors": {
+      "value": 1.1,
+      "quality": -0.1,
+      "momentum": 0.82,
+      "low_vol": 0.66
      },
      "reasons": [
       "cheap versus its earnings",
+      "generates a lot of free cash for its price",
       "strong return on assets",
-      "conservatively financed (low debt)",
       "trades steadily (low volatility)"
      ],
      "flags": []
     },
     {
-     "rank": 80,
-     "symbol": "KRG",
-     "name": "Kite Realty Group Trust Common Stock",
-     "sector": "Real Estate",
-     "close": 24.68,
-     "mcap": "$4.9B",
-     "composite": 0.66,
-     "factors": {
-      "value": 0.7,
-      "quality": 0.39,
-      "momentum": 0.42,
-      "low_vol": 1.58
-     },
-     "reasons": [
-      "in a strong 12-month uptrend",
-      "buying back its own shares"
-     ],
-     "flags": []
-    },
-    {
-     "rank": 85,
-     "symbol": "CBL",
-     "name": "CBL & Associates Properties, Inc. Common Stock",
-     "sector": "Real Estate",
-     "close": 49.44,
-     "mcap": "$1.5B",
-     "composite": 0.64,
-     "factors": {
-      "value": 0.34,
-      "quality": -0.06,
-      "momentum": 2.14,
-      "low_vol": -0.44
-     },
-     "reasons": [
-      "strong return on assets",
-      "trades steadily (low volatility)",
-      "growing with discipline, not empire-building"
-     ],
-     "flags": [
-      "earnings not backed by cash flow"
-     ]
-    },
-    {
-     "rank": 105,
-     "symbol": "DRH",
-     "name": "Diamondrock Hospitality Company - Common Stock",
-     "sector": "Real Estate",
-     "close": 13.45,
-     "mcap": "$2.8B",
-     "composite": 0.62,
-     "factors": {
-      "value": 0.28,
-      "quality": 0.31,
-      "momentum": 1.57,
-      "low_vol": -0.1
-     },
-     "reasons": [
-      "trades steadily (low volatility)",
-      "buying back its own shares",
-      "growing with discipline, not empire-building"
-     ],
-     "flags": []
-    },
-    {
-     "rank": 144,
-     "symbol": "ARI",
-     "name": "Apollo Commercial Real Estate Finance, Inc",
-     "sector": "Real Estate",
-     "close": 6.4,
-     "mcap": "$820.6M",
+     "rank": 111,
+     "symbol": "NEU",
+     "name": "NewMarket Corp Common Stock",
+     "sector": "Materials",
+     "close": 870.62,
+     "mcap": "$8.0B",
      "composite": 0.58,
      "factors": {
-      "value": 1.31,
-      "quality": 0.61,
-      "momentum": -0.2,
-      "low_vol": 0.87
-     },
-     "reasons": [
-      "strong return on assets",
-      "in a strong 12-month uptrend",
-      "growing revenue quickly",
-      "buying back its own shares"
-     ],
-     "flags": []
-    },
-    {
-     "rank": 233,
-     "symbol": "GNL",
-     "name": "Global Net Lease, Inc. Common Stock",
-     "sector": "Real Estate",
-     "close": 7.44,
-     "mcap": "$1.6B",
-     "composite": 0.51,
-     "factors": {
-      "value": 0.89,
-      "quality": 0.62,
-      "momentum": 0.1,
-      "low_vol": 0.51
+      "value": 0.31,
+      "quality": 0.4,
+      "momentum": 0.68,
+      "low_vol": 1.16
      },
      "reasons": [
       "cheap versus its earnings",
-      "priced low versus its book value",
-      "strong return on assets",
-      "buying back its own shares"
-     ],
-     "flags": [
-      "earnings not backed by cash flow"
-     ]
-    },
-    {
-     "rank": 241,
-     "symbol": "HST",
-     "name": "Host Hotels & Resorts, Inc. - Common Stock",
-     "sector": "Real Estate",
-     "close": 24.26,
-     "mcap": "$16.6B",
-     "composite": 0.5,
-     "factors": {
-      "value": 0.19,
-      "quality": 0.35,
-      "momentum": 1.15,
-      "low_vol": 0.04
-     },
-     "reasons": [
-      "highly profitable on its assets",
-      "strong return on assets",
-      "buying back its own shares",
-      "insiders are buying with their own money"
-     ],
-     "flags": []
-    },
-    {
-     "rank": 287,
-     "symbol": "MRP",
-     "name": "Millrose Properties, Inc. Class A Common Stock",
-     "sector": "Real Estate",
-     "close": 22.41,
-     "mcap": "$3.7B",
-     "composite": 0.48,
-     "factors": {
-      "value": 1.61,
-      "quality": 0.79,
-      "momentum": -0.26,
-      "low_vol": -0.51
-     },
-     "reasons": [
-      "priced low versus its book value",
-      "growing with discipline, not empire-building"
-     ],
-     "flags": []
-    },
-    {
-     "rank": 318,
-     "symbol": "FRT",
-     "name": "Federal Realty Investment Trust Common Stock",
-     "sector": "Real Estate",
-     "close": 105.98,
-     "mcap": "$9.2B",
-     "composite": 0.47,
-     "factors": {
-      "value": -0.04,
-      "quality": 0.1,
-      "momentum": 0.54,
-      "low_vol": 1.93
-     },
-     "reasons": [
       "generates a lot of free cash for its price",
-      "priced low versus its book value",
-      "growing revenue quickly"
+      "in a strong 12-month uptrend"
      ],
      "flags": []
     }
    ]
   },
   "Utilities": {
-   "commentary": "Utilities: 105 stocks with complete factor data. Sector leaders: EPD (#9 overall), NVRI (#11 overall) and FTS (#29 overall). The sector's strongest names lean on value and momentum. Its leaders are in strong uptrends (median 12-month return +32%). New in the sector's top ten: SMC.",
+   "commentary": "Utilities: 90 stocks with complete factor data. Sector leaders: EPD (#5 overall), EE (#21 overall) and GNE (#25 overall). The sector's strongest names lean on momentum and value. Its leaders are in strong uptrends (median 12-month return +32%). New in the sector's top ten: SMC, OGE, TRGP and SWX.",
    "picks": [
     {
-     "rank": 9,
+     "rank": 5,
      "symbol": "EPD",
      "name": "Enterprise Products Partners L.P. Common Stock",
      "sector": "Utilities",
@@ -3620,54 +3614,12 @@
       "low_vol": 0.89
      },
      "reasons": [
-      "trades steadily (low volatility)"
+      "priced low versus its book value"
      ],
      "flags": []
     },
     {
-     "rank": 11,
-     "symbol": "NVRI",
-     "name": "Enviri Corporation Common Stock",
-     "sector": "Utilities",
-     "close": 19.53,
-     "mcap": "$548.9M",
-     "composite": 0.89,
-     "factors": {
-      "value": 1.77,
-      "quality": 0.5,
-      "momentum": 1.44,
-      "low_vol": -0.89
-     },
-     "reasons": [
-      "priced low versus its book value",
-      "trades steadily (low volatility)"
-     ],
-     "flags": [
-      "thinly traded"
-     ]
-    },
-    {
-     "rank": 29,
-     "symbol": "FTS",
-     "name": "Fortis Inc. Common Shares",
-     "sector": "Utilities",
-     "close": 55.53,
-     "mcap": "$28.2B",
-     "composite": 0.79,
-     "factors": {
-      "value": 0.14,
-      "quality": 1.28,
-      "momentum": 0.15,
-      "low_vol": 2.21
-     },
-     "reasons": [
-      "in a strong 12-month uptrend",
-      "buying back its own shares"
-     ],
-     "flags": []
-    },
-    {
-     "rank": 40,
+     "rank": 21,
      "symbol": "EE",
      "name": "Excelerate Energy, Inc. Class A Common Stock",
      "sector": "Utilities",
@@ -3681,12 +3633,12 @@
       "low_vol": -0.67
      },
      "reasons": [
-      "trades steadily (low volatility)"
+      "in a strong 12-month uptrend"
      ],
      "flags": []
     },
     {
-     "rank": 44,
+     "rank": 25,
      "symbol": "GNE",
      "name": "Genie Energy Ltd. Class B Common Stock Stock",
      "sector": "Utilities",
@@ -3700,13 +3652,13 @@
       "low_vol": -0.15
      },
      "reasons": [
-      "conservatively financed (low debt)",
-      "insiders are buying with their own money"
+      "trades steadily (low volatility)",
+      "buying back its own shares"
      ],
      "flags": []
     },
     {
-     "rank": 117,
+     "rank": 83,
      "symbol": "OKE",
      "name": "ONEOK, Inc. Common Stock",
      "sector": "Utilities",
@@ -3722,52 +3674,10 @@
      "reasons": [
       "trades steadily (low volatility)"
      ],
-     "flags": [
-      "thinly traded"
-     ]
-    },
-    {
-     "rank": 164,
-     "symbol": "KEN",
-     "name": "Kenon Holdings Ltd. Ordinary Shares",
-     "sector": "Utilities",
-     "close": 63.12,
-     "mcap": "$3.3B",
-     "composite": 0.56,
-     "factors": {
-      "value": 1.05,
-      "quality": 1.26,
-      "momentum": 0.15,
-      "low_vol": -0.83
-     },
-     "reasons": [
-      "cheap versus its earnings",
-      "trades steadily (low volatility)",
-      "buying back its own shares"
-     ],
      "flags": []
     },
     {
-     "rank": 217,
-     "symbol": "TRP",
-     "name": "TC Energy Corporation Common Stock",
-     "sector": "Utilities",
-     "close": 60.98,
-     "mcap": "$63.5B",
-     "composite": 0.52,
-     "factors": {
-      "value": 0.55,
-      "quality": 0.56,
-      "momentum": 0.41,
-      "low_vol": 0.62
-     },
-     "reasons": [
-      "trades steadily (low volatility)"
-     ],
-     "flags": []
-    },
-    {
-     "rank": 219,
+     "rank": 165,
      "symbol": "UGI",
      "name": "UGI Corporation Common Stock",
      "sector": "Utilities",
@@ -3782,14 +3692,17 @@
      },
      "reasons": [
       "cheap versus its earnings",
-      "generates a lot of free cash for its price",
+      "highly profitable on its assets",
       "strong return on assets",
-      "growing with discipline, not empire-building"
+      "in a strong 12-month uptrend"
      ],
-     "flags": []
+     "flags": [
+      "heavily indebted",
+      "earnings not backed by cash flow"
+     ]
     },
     {
-     "rank": 275,
+     "rank": 213,
      "symbol": "SMC",
      "name": "Summit Midstream Corporation Common Stock",
      "sector": "Utilities",
@@ -3803,163 +3716,101 @@
       "low_vol": -0.56
      },
      "reasons": [
-      "highly profitable on its assets",
-      "strong return on assets",
-      "trades steadily (low volatility)"
-     ],
-     "flags": [
-      "earnings not backed by cash flow"
-     ]
-    }
-   ]
-  },
-  "Energy": {
-   "commentary": "Energy: 99 stocks with complete factor data. Sector leaders: EQNR (#3 overall), TTE (#5 overall) and OBE (#13 overall). The sector's strongest names lean on value and low-volatility. Its leaders are in strong uptrends (median 12-month return +76%).",
-   "picks": [
-    {
-     "rank": 3,
-     "symbol": "EQNR",
-     "name": "Equinor ASA",
-     "sector": "Energy",
-     "close": 46.19,
-     "mcap": "$115.5B",
-     "composite": 1.02,
-     "factors": {
-      "value": 2.56,
-      "quality": 0.42,
-      "momentum": 0.74,
-      "low_vol": 0.21
-     },
-     "reasons": [
-      "conservatively financed (low debt)"
-     ],
-     "flags": []
-    },
-    {
-     "rank": 5,
-     "symbol": "TTE",
-     "name": "TotalEnergies SE Ordinary Shares",
-     "sector": "Energy",
-     "close": 90.83,
-     "mcap": "$200.4B",
-     "composite": 0.96,
-     "factors": {
-      "value": 1.94,
-      "quality": 0.42,
-      "momentum": 0.18,
-      "low_vol": 1.98
-     },
-     "reasons": [
-      "priced low versus its book value"
-     ],
-     "flags": []
-    },
-    {
-     "rank": 13,
-     "symbol": "OBE",
-     "name": "Obsidian Energy Ltd. Common Shares",
-     "sector": "Energy",
-     "close": 11.9,
-     "mcap": "$800.6M",
-     "composite": 0.87,
-     "factors": {
-      "value": 2.15,
-      "quality": 0.42,
-      "momentum": 1.09,
-      "low_vol": -0.85
-     },
-     "reasons": [
-      "in a strong 12-month uptrend"
-     ],
-     "flags": []
-    },
-    {
-     "rank": 26,
-     "symbol": "SU",
-     "name": "Suncor Energy  Inc. Common Stock",
-     "sector": "Energy",
-     "close": 77.22,
-     "mcap": "$92.2B",
-     "composite": 0.8,
-     "factors": {
-      "value": 1.23,
-      "quality": 0.42,
-      "momentum": 0.5,
-      "low_vol": 1.46
-     },
-     "reasons": [
-      "priced low versus its book value",
-      "in a strong 12-month uptrend"
-     ],
-     "flags": []
-    },
-    {
-     "rank": 37,
-     "symbol": "E",
-     "name": "ENI S.p.A. Common Stock",
-     "sector": "Energy",
-     "close": 58.73,
-     "mcap": "$184.8B",
-     "composite": 0.76,
-     "factors": {
-      "value": 1.29,
-      "quality": 0.42,
-      "momentum": 0.27,
-      "low_vol": 1.53
-     },
-     "reasons": [
-      "cheap versus its earnings",
       "generates a lot of free cash for its price",
-      "strong return on assets",
-      "earnings backed by real cash flow"
-     ],
-     "flags": []
-    },
-    {
-     "rank": 72,
-     "symbol": "IMO",
-     "name": "Imperial Oil Limited Common Stock",
-     "sector": "Energy",
-     "close": 133.11,
-     "mcap": "$64.4B",
-     "composite": 0.67,
-     "factors": {
-      "value": 1.49,
-      "quality": 0.42,
-      "momentum": -0.06,
-      "low_vol": 1.22
-     },
-     "reasons": [
-      "generates a lot of free cash for its price",
-      "priced low versus its book value",
-      "buying back its own shares",
+      "in a strong 12-month uptrend",
       "growing with discipline, not empire-building"
      ],
      "flags": []
     },
     {
-     "rank": 153,
-     "symbol": "PBA",
-     "name": "Pembina Pipeline Corp. Ordinary Shares (Canada)",
-     "sector": "Energy",
-     "close": 49.6,
-     "mcap": "$28.8B",
-     "composite": 0.58,
+     "rank": 261,
+     "symbol": "KNTK",
+     "name": "Kinetik Holdings Inc. Class A Common Stock",
+     "sector": "Utilities",
+     "close": 54.49,
+     "mcap": "$3.4B",
+     "composite": 0.46,
      "factors": {
-      "value": 0.25,
-      "quality": 0.42,
-      "momentum": -0.01,
-      "low_vol": 2.59
+      "value": 0.47,
+      "quality": -0.03,
+      "momentum": 1.44,
+      "low_vol": -0.51
      },
      "reasons": [
-      "trades steadily (low volatility)"
+      "in a strong 12-month uptrend",
+      "growing revenue quickly"
      ],
-     "flags": [
-      "thinly traded"
-     ]
+     "flags": []
     },
     {
-     "rank": 197,
+     "rank": 289,
+     "symbol": "OGE",
+     "name": "OGE Energy Corp Common Stock",
+     "sector": "Utilities",
+     "close": 47.56,
+     "mcap": "$9.8B",
+     "composite": 0.45,
+     "factors": {
+      "value": 0.35,
+      "quality": 0.42,
+      "momentum": 0.13,
+      "low_vol": 1.31
+     },
+     "reasons": [
+      "generates a lot of free cash for its price",
+      "in a strong 12-month uptrend"
+     ],
+     "flags": []
+    },
+    {
+     "rank": 291,
+     "symbol": "TRGP",
+     "name": "Targa Resources, Inc. Common Stock",
+     "sector": "Utilities",
+     "close": 290.73,
+     "mcap": "$62.3B",
+     "composite": 0.45,
+     "factors": {
+      "value": -0.28,
+      "quality": 0.13,
+      "momentum": 1.73,
+      "low_vol": -0.24
+     },
+     "reasons": [
+      "cheap versus its earnings",
+      "generates a lot of free cash for its price",
+      "strong return on assets",
+      "conservatively financed (low debt)"
+     ],
+     "flags": []
+    },
+    {
+     "rank": 321,
+     "symbol": "SWX",
+     "name": "Southwest Gas Holdings, Inc. Common Stock (DE)",
+     "sector": "Utilities",
+     "close": 87.31,
+     "mcap": "$6.3B",
+     "composite": 0.44,
+     "factors": {
+      "value": 0.44,
+      "quality": 0.31,
+      "momentum": 0.31,
+      "low_vol": 0.93
+     },
+     "reasons": [
+      "generates a lot of free cash for its price",
+      "buying back its own shares"
+     ],
+     "flags": []
+    }
+   ]
+  },
+  "Energy": {
+   "commentary": "Energy: 80 stocks with complete factor data. Sector leaders: APA (#147 overall), VLO (#162 overall) and GTE (#362 overall). The sector's strongest names lean on momentum and low-volatility. Its leaders are in strong uptrends (median 12-month return +123%). New in the sector's top ten: GTE, MPC, HESM and CHRD.",
+   "picks": [
+    {
+     "rank": 147,
      "symbol": "APA",
      "name": "APA Corporation - Common Stock",
      "sector": "Energy",
@@ -3973,13 +3824,12 @@
       "low_vol": -0.18
      },
      "reasons": [
-      "in a strong 12-month uptrend",
-      "buying back its own shares"
+      "conservatively financed (low debt)"
      ],
      "flags": []
     },
     {
-     "rank": 215,
+     "rank": 162,
      "symbol": "VLO",
      "name": "Valero Energy Corporation Common Stock",
      "sector": "Energy",
@@ -3993,37 +3843,189 @@
       "low_vol": 0.31
      },
      "reasons": [
+      "in a strong 12-month uptrend",
+      "buying back its own shares",
+      "growing with discipline, not empire-building"
+     ],
+     "flags": []
+    },
+    {
+     "rank": 362,
+     "symbol": "GTE",
+     "name": "Gran Tierra Energy Inc. Common Stock",
+     "sector": "Energy",
+     "close": 10.81,
+     "mcap": "$382.5M",
+     "composite": 0.42,
+     "factors": {
+      "value": -0.29,
+      "quality": 1.11,
+      "momentum": 1.21,
+      "low_vol": -1.39
+     },
+     "reasons": [
+      "cheap versus its earnings",
+      "generates a lot of free cash for its price",
+      "buying back its own shares"
+     ],
+     "flags": [
+      "heavily indebted",
+      "insiders selling heavily"
+     ]
+    },
+    {
+     "rank": 387,
+     "symbol": "MPC",
+     "name": "Marathon Petroleum Corporation Common Stock",
+     "sector": "Energy",
+     "close": 478.28,
+     "mcap": "$134.3B",
+     "composite": 0.4,
+     "factors": {
+      "value": -0.03,
+      "quality": -0.52,
+      "momentum": 1.67,
+      "low_vol": 0.44
+     },
+     "reasons": [
+      "conservatively financed (low debt)"
+     ],
+     "flags": []
+    },
+    {
+     "rank": 417,
+     "symbol": "HESM",
+     "name": "Hess Midstream LP Class A Representing Limited Partner Inter",
+     "sector": "Energy",
+     "close": 30.66,
+     "mcap": "$3.9B",
+     "composite": 0.39,
+     "factors": {
+      "value": 0.7,
+      "quality": 0.2,
+      "momentum": -0.35,
+      "low_vol": 1.71
+     },
+     "reasons": [
+      "strong return on assets"
+     ],
+     "flags": []
+    },
+    {
+     "rank": 441,
+     "symbol": "CHRD",
+     "name": "Chord Energy Corporation - Common Stock",
+     "sector": "Energy",
+     "close": 153.51,
+     "mcap": "$8.4B",
+     "composite": 0.38,
+     "factors": {
+      "value": 1.05,
+      "quality": 0.02,
+      "momentum": 0.29,
+      "low_vol": 0.16
+     },
+     "reasons": [
+      "trades steadily (low volatility)"
+     ],
+     "flags": []
+    },
+    {
+     "rank": 501,
+     "symbol": "PSX",
+     "name": "Phillips 66 Common Stock",
+     "sector": "Energy",
+     "close": 292.77,
+     "mcap": "$116.8B",
+     "composite": 0.36,
+     "factors": {
+      "value": -0.24,
+      "quality": -0.4,
+      "momentum": 1.32,
+      "low_vol": 0.96
+     },
+     "reasons": [
+      "highly profitable on its assets",
+      "strong return on assets",
+      "buying back its own shares"
+     ],
+     "flags": []
+    },
+    {
+     "rank": 626,
+     "symbol": "PR",
+     "name": "Permian Resources Corporation Class A Common Stock",
+     "sector": "Energy",
+     "close": 24.41,
+     "mcap": "$20.4B",
+     "composite": 0.31,
+     "factors": {
+      "value": -0.18,
+      "quality": 0.1,
+      "momentum": 0.73,
+      "low_vol": 0.72
+     },
+     "reasons": [
+      "generates a lot of free cash for its price",
+      "buying back its own shares",
+      "growing with discipline, not empire-building",
+      "insiders are buying with their own money"
+     ],
+     "flags": [
+      "heavily indebted"
+     ]
+    },
+    {
+     "rank": 646,
+     "symbol": "CLMT",
+     "name": "Calumet, Inc - Common Stock",
+     "sector": "Energy",
+     "close": 57.07,
+     "mcap": "$5.0B",
+     "composite": 0.31,
+     "factors": {
+      "value": -0.66,
+      "quality": -0.72,
+      "momentum": 2.27,
+      "low_vol": 0.04
+     },
+     "reasons": [
+      "strong return on assets",
+      "conservatively financed (low debt)",
+      "earnings backed by real cash flow",
       "in a strong 12-month uptrend"
      ],
      "flags": []
     },
     {
-     "rank": 279,
-     "symbol": "BTE",
-     "name": "Baytex Energy Corp Common Shares",
+     "rank": 684,
+     "symbol": "NESR",
+     "name": "National Energy Services Reunited Corp - Ordinary Shares",
      "sector": "Energy",
-     "close": 5.24,
-     "mcap": "$4.0B",
-     "composite": 0.49,
+     "close": 19.08,
+     "mcap": "$1.9B",
+     "composite": 0.3,
      "factors": {
-      "value": 0.56,
-      "quality": 0.42,
-      "momentum": 0.74,
-      "low_vol": -0.01
+      "value": -0.13,
+      "quality": -0.22,
+      "momentum": 1.81,
+      "low_vol": -1.0
      },
      "reasons": [
-      "strong return on assets",
-      "conservatively financed (low debt)"
+      "cheap versus its earnings",
+      "generates a lot of free cash for its price",
+      "trades steadily (low volatility)",
+      "buying back its own shares"
      ],
      "flags": []
     }
    ]
   },
   "Consumer Staples": {
-   "commentary": "Consumer Staples: 69 stocks with complete factor data. Sector leaders: SENEA (#19 overall), COKE (#41 overall) and CCEP (#46 overall). The sector's strongest names lean on momentum and value. Its leaders are in strong uptrends (median 12-month return +27%). New in the sector's top ten: ADM.",
+   "commentary": "Consumer Staples: 62 stocks with complete factor data. Sector leaders: SENEA (#9 overall), COKE (#22 overall) and DAR (#273 overall). The sector's strongest names lean on momentum and low-volatility. Its leaders are in strong uptrends (median 12-month return +34%). New in the sector's top ten: ADM, INGR, SJM and KO.",
    "picks": [
     {
-     "rank": 19,
+     "rank": 9,
      "symbol": "SENEA",
      "name": "Seneca Foods Corp. - Class A Common Stock",
      "sector": "Consumer Staples",
@@ -4037,14 +4039,12 @@
       "low_vol": -0.45
      },
      "reasons": [
-      "in a strong 12-month uptrend",
-      "trades steadily (low volatility)",
-      "buying back its own shares"
+      "trades steadily (low volatility)"
      ],
      "flags": []
     },
     {
-     "rank": 41,
+     "rank": 22,
      "symbol": "COKE",
      "name": "Coca-Cola Consolidated, Inc. - Common Stock",
      "sector": "Consumer Staples",
@@ -4058,101 +4058,14 @@
       "low_vol": -0.31
      },
      "reasons": [
-      "cheap versus its earnings",
-      "generates a lot of free cash for its price",
-      "priced low versus its book value",
-      "strong return on assets"
-     ],
-     "flags": []
-    },
-    {
-     "rank": 46,
-     "symbol": "CCEP",
-     "name": "Coca-Cola Europacific Partners plc - Ordinary Shares",
-     "sector": "Consumer Staples",
-     "close": 112.06,
-     "mcap": "$50.3B",
-     "composite": 0.74,
-     "factors": {
-      "value": 0.96,
-      "quality": 0.58,
-      "momentum": 0.44,
-      "low_vol": 1.28
-     },
-     "reasons": [
       "in a strong 12-month uptrend",
+      "trades steadily (low volatility)",
       "buying back its own shares"
      ],
      "flags": []
     },
     {
-     "rank": 112,
-     "symbol": "NOMD",
-     "name": "Nomad Foods Limited Ordinary Shares",
-     "sector": "Consumer Staples",
-     "close": 11.73,
-     "mcap": "$1.7B",
-     "composite": 0.61,
-     "factors": {
-      "value": 1.79,
-      "quality": 0.58,
-      "momentum": -0.01,
-      "low_vol": -0.03
-     },
-     "reasons": [
-      "trades steadily (low volatility)"
-     ],
-     "flags": []
-    },
-    {
-     "rank": 177,
-     "symbol": "BUD",
-     "name": "Anheuser-Busch Inbev SA Sponsored ADR (Belgium)",
-     "sector": "Consumer Staples",
-     "close": 82.62,
-     "mcap": "$148.5B",
-     "composite": 0.56,
-     "factors": {
-      "value": -0.2,
-      "quality": 0.58,
-      "momentum": 0.88,
-      "low_vol": 1.14
-     },
-     "reasons": [
-      "cheap versus its earnings",
-      "generates a lot of free cash for its price",
-      "strong return on assets",
-      "in a strong 12-month uptrend"
-     ],
-     "flags": []
-    },
-    {
-     "rank": 227,
-     "symbol": "BTI",
-     "name": "British American Tobacco  Industries, p.l.c. Common Stock AD",
-     "sector": "Consumer Staples",
-     "close": 59.61,
-     "mcap": "$137.8B",
-     "composite": 0.51,
-     "factors": {
-      "value": 0.7,
-      "quality": 0.58,
-      "momentum": 0.08,
-      "low_vol": 0.97
-     },
-     "reasons": [
-      "cheap versus its earnings",
-      "in a strong 12-month uptrend",
-      "trades steadily (low volatility)",
-      "insiders are buying with their own money"
-     ],
-     "flags": [
-      "heavily indebted",
-      "thinly traded"
-     ]
-    },
-    {
-     "rank": 344,
+     "rank": 273,
      "symbol": "DAR",
      "name": "Darling Ingredients Inc. Common Stock",
      "sector": "Consumer Staples",
@@ -4166,14 +4079,15 @@
       "low_vol": -0.17
      },
      "reasons": [
-      "conservatively financed (low debt)",
-      "in a strong 12-month uptrend",
-      "growing with discipline, not empire-building"
+      "generates a lot of free cash for its price",
+      "priced low versus its book value",
+      "trades steadily (low volatility)",
+      "buying back its own shares"
      ],
      "flags": []
     },
     {
-     "rank": 401,
+     "rank": 324,
      "symbol": "MO",
      "name": "Altria Group, Inc.",
      "sector": "Consumer Staples",
@@ -4187,13 +4101,12 @@
       "low_vol": 0.92
      },
      "reasons": [
-      "strong return on assets",
-      "growing with discipline, not empire-building"
+      "in a strong 12-month uptrend"
      ],
      "flags": []
     },
     {
-     "rank": 407,
+     "rank": 330,
      "symbol": "IPAR",
      "name": "Interparfums, Inc. - Common Stock",
      "sector": "Consumer Staples",
@@ -4207,13 +4120,15 @@
       "low_vol": 0.2
      },
      "reasons": [
+      "cheap versus its earnings",
       "generates a lot of free cash for its price",
-      "trades steadily (low volatility)"
+      "priced low versus its book value",
+      "earnings backed by real cash flow"
      ],
      "flags": []
     },
     {
-     "rank": 454,
+     "rank": 372,
      "symbol": "ADM",
      "name": "Archer-Daniels-Midland Company Common Stock",
      "sector": "Consumer Staples",
@@ -4227,64 +4142,105 @@
       "low_vol": 0.6
      },
      "reasons": [
-      "strong return on assets",
-      "in a strong 12-month uptrend"
+      "generates a lot of free cash for its price",
+      "conservatively financed (low debt)",
+      "trades steadily (low volatility)"
      ],
-     "flags": [
-      "earnings not backed by cash flow"
-     ]
-    }
-   ]
-  },
-  "Communication": {
-   "commentary": "Communication: 61 stocks with complete factor data. Sector leaders: TIGO (#52 overall), CHT (#62 overall) and AMCX (#86 overall). The sector's strongest names lean on low-volatility and value. Its leaders are in strong uptrends (median 12-month return +28%).",
-   "picks": [
-    {
-     "rank": 52,
-     "symbol": "TIGO",
-     "name": "Millicom International Cellular S.A. - Common Stock",
-     "sector": "Communication",
-     "close": 81.96,
-     "mcap": "$13.9B",
-     "composite": 0.71,
-     "factors": {
-      "value": 0.77,
-      "quality": 0.55,
-      "momentum": 1.07,
-      "low_vol": 0.2
-     },
-     "reasons": [
-      "cheap versus its earnings",
-      "strong return on assets",
-      "in a strong 12-month uptrend"
-     ],
-     "flags": [
-      "earnings not backed by cash flow"
-     ]
+     "flags": []
     },
     {
-     "rank": 62,
-     "symbol": "CHT",
-     "name": "Chunghwa Telecom Co., Ltd.",
-     "sector": "Communication",
-     "close": 47.6,
-     "mcap": "$369.3B",
-     "composite": 0.69,
+     "rank": 384,
+     "symbol": "EPC",
+     "name": "Edgewell Personal Care Company Common Stock",
+     "sector": "Consumer Staples",
+     "close": 27.88,
+     "mcap": "$1.3B",
+     "composite": 0.41,
      "factors": {
-      "value": 0.42,
-      "quality": 0.55,
-      "momentum": 0.18,
-      "low_vol": 2.44
+      "value": 0.34,
+      "quality": 0.02,
+      "momentum": 1.29,
+      "low_vol": -0.49
      },
      "reasons": [
-      "in a strong 12-month uptrend",
-      "trades steadily (low volatility)",
+      "priced low versus its book value",
+      "conservatively financed (low debt)",
+      "earnings backed by real cash flow",
       "buying back its own shares"
      ],
      "flags": []
     },
     {
-     "rank": 86,
+     "rank": 434,
+     "symbol": "INGR",
+     "name": "Ingredion Incorporated Common Stock",
+     "sector": "Consumer Staples",
+     "close": 98.25,
+     "mcap": "$6.2B",
+     "composite": 0.38,
+     "factors": {
+      "value": 0.81,
+      "quality": -0.11,
+      "momentum": -0.53,
+      "low_vol": 2.47
+     },
+     "reasons": [
+      "generates a lot of free cash for its price",
+      "earnings backed by real cash flow",
+      "in a strong 12-month uptrend"
+     ],
+     "flags": [
+      "heavily indebted",
+      "insiders selling heavily"
+     ]
+    },
+    {
+     "rank": 447,
+     "symbol": "SJM",
+     "name": "The J.M. Smucker Company Common Stock",
+     "sector": "Consumer Staples",
+     "close": 126.69,
+     "mcap": "$13.5B",
+     "composite": 0.38,
+     "factors": {
+      "value": -0.05,
+      "quality": 0.06,
+      "momentum": 0.96,
+      "low_vol": 0.56
+     },
+     "reasons": [
+      "strong return on assets",
+      "buying back its own shares",
+      "growing with discipline, not empire-building"
+     ],
+     "flags": []
+    },
+    {
+     "rank": 459,
+     "symbol": "KO",
+     "name": "Coca-Cola Company (The) Common Stock",
+     "sector": "Consumer Staples",
+     "close": 93.32,
+     "mcap": "$401.5B",
+     "composite": 0.37,
+     "factors": {
+      "value": -0.6,
+      "quality": -0.24,
+      "momentum": 0.96,
+      "low_vol": 2.05
+     },
+     "reasons": [
+      "in a strong 12-month uptrend"
+     ],
+     "flags": []
+    }
+   ]
+  },
+  "Communication": {
+   "commentary": "Communication: 50 stocks with complete factor data. Sector leaders: AMCX (#55 overall), ZD (#201 overall) and IRDM (#224 overall). The sector's strongest names lean on value and momentum. Its leaders are trending up (median 12-month return +21%). New in the sector's top ten: IDT, SIRI, T and VZ.",
+   "picks": [
+    {
+     "rank": 55,
      "symbol": "AMCX",
      "name": "AMC Global Media Inc. - Class A Common Stock",
      "sector": "Communication",
@@ -4298,33 +4254,14 @@
       "low_vol": -0.02
      },
      "reasons": [
-      "trades steadily (low volatility)"
+      "in a strong 12-month uptrend",
+      "trades steadily (low volatility)",
+      "buying back its own shares"
      ],
      "flags": []
     },
     {
-     "rank": 180,
-     "symbol": "KT",
-     "name": "KT Corporation Common Stock",
-     "sector": "Communication",
-     "close": 18.42,
-     "mcap": "$4.4B",
-     "composite": 0.55,
-     "factors": {
-      "value": 0.82,
-      "quality": 0.55,
-      "momentum": -0.3,
-      "low_vol": 1.79
-     },
-     "reasons": [
-      "cheap versus its earnings",
-      "generates a lot of free cash for its price",
-      "growing revenue quickly"
-     ],
-     "flags": []
-    },
-    {
-     "rank": 259,
+     "rank": 201,
      "symbol": "ZD",
      "name": "Ziff Davis, Inc. - Common Stock",
      "sector": "Communication",
@@ -4338,13 +4275,14 @@
       "low_vol": -0.28
      },
      "reasons": [
-      "cheap versus its earnings",
-      "trades steadily (low volatility)"
+      "highly profitable on its assets",
+      "strong return on assets",
+      "buying back its own shares"
      ],
      "flags": []
     },
     {
-     "rank": 290,
+     "rank": 224,
      "symbol": "IRDM",
      "name": "Iridium Communications Inc - Common Stock",
      "sector": "Communication",
@@ -4358,35 +4296,14 @@
       "low_vol": -0.48
      },
      "reasons": [
-      "generates a lot of free cash for its price",
-      "trades steadily (low volatility)"
-     ],
-     "flags": []
-    },
-    {
-     "rank": 295,
-     "symbol": "BCE",
-     "name": "BCE, Inc. Common Stock",
-     "sector": "Communication",
-     "close": 20.31,
-     "mcap": "$18.5B",
-     "composite": 0.48,
-     "factors": {
-      "value": 0.33,
-      "quality": 0.55,
-      "momentum": -0.24,
-      "low_vol": 2.01
-     },
-     "reasons": [
-      "strong return on assets",
+      "earnings backed by real cash flow",
       "in a strong 12-month uptrend",
-      "growing revenue quickly",
       "buying back its own shares"
      ],
      "flags": []
     },
     {
-     "rank": 316,
+     "rank": 247,
      "symbol": "MCS",
      "name": "Marcus Corporation (The) Common Stock",
      "sector": "Communication",
@@ -4401,35 +4318,12 @@
      },
      "reasons": [
       "in a strong 12-month uptrend",
-      "growing revenue quickly",
-      "growing with discipline, not empire-building",
       "insiders are buying with their own money"
-     ],
-     "flags": [
-      "very volatile"
-     ]
-    },
-    {
-     "rank": 359,
-     "symbol": "PHI",
-     "name": "PLDT Inc. Sponsored ADR",
-     "sector": "Communication",
-     "close": 19.83,
-     "mcap": "$4.3B",
-     "composite": 0.45,
-     "factors": {
-      "value": 0.42,
-      "quality": 0.55,
-      "momentum": -0.22,
-      "low_vol": 1.63
-     },
-     "reasons": [
-      "in a strong 12-month uptrend"
      ],
      "flags": []
     },
     {
-     "rank": 384,
+     "rank": 309,
      "symbol": "AD",
      "name": "Array Digital Infrastructure, Inc. Common Shares",
      "sector": "Communication",
@@ -4443,20 +4337,122 @@
       "low_vol": 0.9
      },
      "reasons": [
-      "priced low versus its book value",
-      "conservatively financed (low debt)",
-      "earnings backed by real cash flow",
+      "in a strong 12-month uptrend"
+     ],
+     "flags": []
+    },
+    {
+     "rank": 436,
+     "symbol": "IDT",
+     "name": "IDT Corporation Class B Common Stock",
+     "sector": "Communication",
+     "close": 81.03,
+     "mcap": "$2.0B",
+     "composite": 0.38,
+     "factors": {
+      "value": 0.01,
+      "quality": 0.13,
+      "momentum": 0.52,
+      "low_vol": 1.22
+     },
+     "reasons": [
+      "trades steadily (low volatility)"
+     ],
+     "flags": []
+    },
+    {
+     "rank": 470,
+     "symbol": "SIRI",
+     "name": "SiriusXM Holdings Inc. - Common Stock",
+     "sector": "Communication",
+     "close": 27.12,
+     "mcap": "$9.1B",
+     "composite": 0.37,
+     "factors": {
+      "value": 0.63,
+      "quality": -0.12,
+      "momentum": 0.47,
+      "low_vol": 0.7
+     },
+     "reasons": [
+      "highly profitable on its assets",
+      "strong return on assets",
       "buying back its own shares"
+     ],
+     "flags": []
+    },
+    {
+     "rank": 528,
+     "symbol": "T",
+     "name": "AT&T Inc.",
+     "sector": "Communication",
+     "close": 23.65,
+     "mcap": "$162.0B",
+     "composite": 0.35,
+     "factors": {
+      "value": 0.92,
+      "quality": 0.1,
+      "momentum": -0.23,
+      "low_vol": 1.08
+     },
+     "reasons": [
+      "generates a lot of free cash for its price",
+      "trades steadily (low volatility)",
+      "buying back its own shares"
+     ],
+     "flags": [
+      "heavily indebted"
+     ]
+    },
+    {
+     "rank": 614,
+     "symbol": "VZ",
+     "name": "Verizon Communications Inc. Common Stock",
+     "sector": "Communication",
+     "close": 44.85,
+     "mcap": "$186.3B",
+     "composite": 0.32,
+     "factors": {
+      "value": 0.65,
+      "quality": -0.15,
+      "momentum": 0.1,
+      "low_vol": 1.15
+     },
+     "reasons": [
+      "generates a lot of free cash for its price",
+      "buying back its own shares",
+      "growing with discipline, not empire-building"
+     ],
+     "flags": []
+    },
+    {
+     "rank": 634,
+     "symbol": "KVHI",
+     "name": "KVH Industries, Inc. - Common Stock",
+     "sector": "Communication",
+     "close": 5.99,
+     "mcap": "$108.8M",
+     "composite": 0.31,
+     "factors": {
+      "value": 0.56,
+      "quality": 0.86,
+      "momentum": -0.03,
+      "low_vol": -0.52
+     },
+     "reasons": [
+      "earnings backed by real cash flow",
+      "in a strong 12-month uptrend",
+      "growing with discipline, not empire-building"
      ],
      "flags": []
     }
    ]
   },
   "Other": {
-   "commentary": "Other: 40 stocks with complete factor data. Sector leaders: MOV (#174 overall), BBDC (#568 overall) and FOSL (#661 overall). The sector's strongest names lean on momentum and quality. Its leaders are trending up (median 12-month return +23%). New in the sector's top ten: ACRS.",
+   "commentary": "Other: 40 stocks with complete factor data. Sector leaders: MOV (#127 overall), BBDC (#477 overall) and FOSL (#562 overall). The sector's strongest names lean on momentum and quality. Its leaders are trending up (median 12-month return +23%). New in the sector's top ten: ACRS.",
    "picks": [
     {
-     "rank": 174,
+     "rank": 127,
      "symbol": "MOV",
      "name": "Movado Group Inc. Common Stock",
      "sector": "Other",
@@ -4470,16 +4466,13 @@
       "low_vol": -0.87
      },
      "reasons": [
-      "cheap versus its earnings",
-      "in a strong 12-month uptrend",
-      "buying back its own shares"
+      "conservatively financed (low debt)",
+      "in a strong 12-month uptrend"
      ],
-     "flags": [
-      "earnings not backed by cash flow"
-     ]
+     "flags": []
     },
     {
-     "rank": 568,
+     "rank": 477,
      "symbol": "BBDC",
      "name": "Barings BDC, Inc. Common Stock",
      "sector": "Other",
@@ -4492,18 +4485,11 @@
       "momentum": 0.43,
       "low_vol": 0.12
      },
-     "reasons": [
-      "strong return on assets",
-      "in a strong 12-month uptrend",
-      "growing revenue quickly",
-      "buying back its own shares"
-     ],
-     "flags": [
-      "earnings not backed by cash flow"
-     ]
+     "reasons": [],
+     "flags": []
     },
     {
-     "rank": 661,
+     "rank": 562,
      "symbol": "FOSL",
      "name": "Fossil Group, Inc. - Common Stock",
      "sector": "Other",
@@ -4517,17 +4503,12 @@
       "low_vol": -1.59
      },
      "reasons": [
-      "strong return on assets",
-      "conservatively financed (low debt)",
-      "buying back its own shares",
-      "growing with discipline, not empire-building"
+      "in a strong 12-month uptrend"
      ],
-     "flags": [
-      "insiders selling heavily"
-     ]
+     "flags": []
     },
     {
-     "rank": 713,
+     "rank": 608,
      "symbol": "ATNI",
      "name": "ATN International, Inc. - Common Stock",
      "sector": "Other",
@@ -4541,15 +4522,15 @@
       "low_vol": -1.19
      },
      "reasons": [
-      "cheap versus its earnings",
-      "priced low versus its book value",
-      "conservatively financed (low debt)",
+      "trades steadily (low volatility)",
       "buying back its own shares"
      ],
-     "flags": []
+     "flags": [
+      "heavily indebted"
+     ]
     },
     {
-     "rank": 906,
+     "rank": 789,
      "symbol": "GAIN",
      "name": "Gladstone Investment Corporation - Business Development Comp",
      "sector": "Other",
@@ -4563,13 +4544,12 @@
       "low_vol": 0.28
      },
      "reasons": [
-      "cheap versus its earnings",
-      "in a strong 12-month uptrend"
+      "buying back its own shares"
      ],
      "flags": []
     },
     {
-     "rank": 1034,
+     "rank": 908,
      "symbol": "CBC",
      "name": "Central Bancompany, Inc. - Class A Common Stock",
      "sector": "Other",
@@ -4583,12 +4563,15 @@
       "low_vol": 0.0
      },
      "reasons": [
-      "buying back its own shares"
+      "highly profitable on its assets",
+      "strong return on assets",
+      "conservatively financed (low debt)",
+      "in a strong 12-month uptrend"
      ],
      "flags": []
     },
     {
-     "rank": 1050,
+     "rank": 924,
      "symbol": "GSBD",
      "name": "Goldman Sachs BDC, Inc. Common Stock",
      "sector": "Other",
@@ -4602,13 +4585,14 @@
       "low_vol": -0.31
      },
      "reasons": [
+      "cheap versus its earnings",
       "priced low versus its book value",
-      "trades steadily (low volatility)"
+      "highly profitable on its assets"
      ],
      "flags": []
     },
     {
-     "rank": 1150,
+     "rank": 1016,
      "symbol": "HTGC",
      "name": "Hercules Capital, Inc. Common Stock",
      "sector": "Other",
@@ -4622,17 +4606,14 @@
       "low_vol": -0.22
      },
      "reasons": [
-      "cheap versus its earnings",
-      "generates a lot of free cash for its price",
       "highly profitable on its assets",
-      "strong return on assets"
+      "strong return on assets",
+      "conservatively financed (low debt)"
      ],
-     "flags": [
-      "in a long downtrend"
-     ]
+     "flags": []
     },
     {
-     "rank": 1175,
+     "rank": 1037,
      "symbol": "OBDC",
      "name": "Blue Owl Capital Corporation Common Stock",
      "sector": "Other",
@@ -4647,14 +4628,12 @@
      },
      "reasons": [
       "conservatively financed (low debt)",
-      "in a strong 12-month uptrend"
+      "trades steadily (low volatility)"
      ],
-     "flags": [
-      "heavily diluting shareholders"
-     ]
+     "flags": []
     },
     {
-     "rank": 1208,
+     "rank": 1068,
      "symbol": "ACRS",
      "name": "Aclaris Therapeutics, Inc. - Common Stock",
      "sector": "Other",
@@ -4667,7 +4646,11 @@
       "momentum": 2.17,
       "low_vol": -1.87
      },
-     "reasons": [],
+     "reasons": [
+      "cheap versus its earnings",
+      "generates a lot of free cash for its price",
+      "trades steadily (low volatility)"
+     ],
      "flags": []
     }
    ]
@@ -4948,7 +4931,7 @@
   {
    "scan_date": "2026-10-17",
    "scored_size": 3390,
-   "full_coverage": 3175
+   "full_coverage": 2944
   }
  ],
  "horizons": [

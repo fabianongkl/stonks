@@ -195,7 +195,7 @@ def run() -> pd.DataFrame:
         scored["fwd"] = scored["symbol"].map(fwd_all)
         scored = scored.dropna(subset=["fwd"])
 
-        full = scored[scored["n_factors"] == 4].copy()
+        full = scored[factors.eligible_mask(scored)].copy()
         full = full.sort_values("composite", ascending=False).reset_index(drop=True)
         full["fc_rank"] = full.index + 1
         n = len(full)

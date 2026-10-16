@@ -267,6 +267,17 @@ no results were harmed in the making of these changes):
 - Portfolio positions that fall out of the scan universe are now marked to
   live market prices and can be sold, instead of being frozen at their last
   scanned price forever. This had been overstating the core book by ~$200.
+- **Metric-completeness gate.** A factor now counts as measured only when at
+  least half its metrics are present (value ≥2/4, quality ≥3/6, momentum
+  ≥1/2, low-vol ≥1/1). Previously a factor score could be computed from a
+  single metric, so a stock could carry "full four-factor coverage" on a
+  fraction of the evidence. Removes 7.3% of the previously-eligible pool;
+  eligible stocks now average 12.1 of 13 metrics versus 5.2 for those
+  excluded. `factors.eligible_mask()` is the single definition used
+  everywhere, with a fallback so pre-gate scans remain readable.
+- **Turnover hysteresis.** A book holding must be beyond its rank tolerance
+  at two consecutive reviews before being sold (`config.REVIEW_STRIKES`);
+  a holding that leaves the scan universe entirely is still sold at once.
 
 **v0.2.1 — 2026-09-01**: learning-trigger independence fix. The weight
 adaptation threshold now counts only non-overlapping 63-day evaluation

@@ -60,6 +60,12 @@ DEFAULT_WEIGHTS = {
 SECTOR_NEUTRAL = True
 MIN_SECTOR_GROUP = 30
 
+# Portfolio turnover hysteresis: consecutive monthly reviews a holding must
+# spend beyond its rank tolerance before it is actually sold.  1 = the old
+# sell-on-sight rule.  Raised to 2 after the October 2026 review sold three
+# winners on rank drift alone, corroborating the backtest's 908-trade churn.
+REVIEW_STRIKES = 2
+
 # Insider metric plausibility ceiling (fraction of market cap).  Above this,
 # "open-market insider buying" is a filing artifact or a control deal, not
 # the Seyhun/Lakonishok-Lee signal.  See journal/review-2026-10.md.
