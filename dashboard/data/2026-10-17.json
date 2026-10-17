@@ -1,5 +1,5 @@
 {
- "generated": "2026-10-17T08:17:23",
+ "generated": "2026-10-17T08:22:49",
  "scan_date": "2026-10-17",
  "universe_size": 5288,
  "scored_size": 3393,
@@ -2099,7 +2099,7 @@
    "flags": []
   }
  ],
- "overall_commentary": "Scan of 2026-10-17: 3,393 stocks scored, 3,008 with complete data on all four factors. Leadership is broad \u2014 the top 30 spans 9 sectors, led by Industrials and Financials. Today's leaders score strongest on momentum (12-month price trend) and value (cheapness vs fundamentals). The single highest composite belongs to DAC (Industrials), scoring +1.03. New to the top 25 since the previous scan: EDRY, BWLP, APLE, TK and MSBI.",
+ "overall_commentary": "Scan of 2026-10-17: 3,393 stocks scored, 3,008 with complete data on all four factors. Leadership is broad \u2014 the top 30 spans 9 sectors, led by Industrials and Financials. Today's leaders score strongest on momentum (12-month price trend) and value (cheapness vs fundamentals). The single highest composite belongs to DAC (Industrials), scoring +1.03. New to the top 25 since the previous scan: BWLP, TK and LXP.",
  "sectors": {
   "Industrials": {
    "commentary": "Industrials: 613 stocks with complete factor data. Sector leaders: DAC (#1 overall), PAGP (#3 overall) and EDRY (#6 overall). The sector's strongest names lean on momentum and value. Its leaders are in strong uptrends (median 12-month return +68%). New in the sector's top ten: BWLP and TK.",
@@ -2312,7 +2312,7 @@
    ]
   },
   "Financials": {
-   "commentary": "Financials: 509 stocks with complete factor data. Sector leaders: BFH (#4 overall), MAAS (#7 overall) and MSBI (#20 overall). The sector's strongest names lean on momentum and value. Its leaders are in strong uptrends (median 12-month return +42%). Caution: leverage runs high among these names (median liabilities at 76% of assets). New in the sector's top ten: TRV, TIPT, RNR and PURR.",
+   "commentary": "Financials: 509 stocks with complete factor data. Sector leaders: BFH (#4 overall), MAAS (#7 overall) and MSBI (#20 overall). The sector's strongest names lean on momentum and value. Its leaders are in strong uptrends (median 12-month return +42%). Caution: leverage runs high among these names (median liabilities at 76% of assets).",
    "picks": [
     {
      "rank": 4,
@@ -2525,7 +2525,7 @@
    ]
   },
   "Healthcare": {
-   "commentary": "Healthcare: 484 stocks with complete factor data. Sector leaders: RPRX (#24 overall), BDX (#48 overall) and HAE (#54 overall). The sector's strongest names lean on low-volatility and value. Its leaders are in strong uptrends (median 12-month return +55%). New in the sector's top ten: ABBV and LNTH.",
+   "commentary": "Healthcare: 484 stocks with complete factor data. Sector leaders: RPRX (#24 overall), BDX (#48 overall) and HAE (#54 overall). The sector's strongest names lean on low-volatility and value. Its leaders are in strong uptrends (median 12-month return +55%). New in the sector's top ten: LNTH.",
    "picks": [
     {
      "rank": 24,
@@ -2743,7 +2743,7 @@
    ]
   },
   "Technology": {
-   "commentary": "Technology: 437 stocks with complete factor data. Sector leaders: PBI (#8 overall), RAMP (#18 overall) and VSH (#21 overall). The sector's strongest names lean on value and low-volatility. Its leaders are in strong uptrends (median 12-month return +37%). New in the sector's top ten: SPB, OSPN and HPQ.",
+   "commentary": "Technology: 437 stocks with complete factor data. Sector leaders: PBI (#8 overall), RAMP (#18 overall) and VSH (#21 overall). The sector's strongest names lean on value and low-volatility. Its leaders are in strong uptrends (median 12-month return +37%). New in the sector's top ten: NEXN.",
    "picks": [
     {
      "rank": 8,
@@ -2956,7 +2956,7 @@
    ]
   },
   "Consumer Discretionary": {
-   "commentary": "Consumer Discretionary: 284 stocks with complete factor data. Sector leaders: SHO (#11 overall), VNCE (#30 overall) and ITRN (#91 overall). The sector's strongest names lean on momentum and low-volatility. Its leaders are in strong uptrends (median 12-month return +51%). New in the sector's top ten: ITRN and TGT.",
+   "commentary": "Consumer Discretionary: 284 stocks with complete factor data. Sector leaders: SHO (#11 overall), VNCE (#30 overall) and ITRN (#91 overall). The sector's strongest names lean on momentum and low-volatility. Its leaders are in strong uptrends (median 12-month return +51%). New in the sector's top ten: ITRN.",
    "picks": [
     {
      "rank": 11,
@@ -3173,7 +3173,7 @@
    ]
   },
   "Materials": {
-   "commentary": "Materials: 190 stocks with complete factor data. Sector leaders: FLXS (#2 overall), EBF (#15 overall) and RIO (#35 overall). The sector's strongest names lean on value and low-volatility. Its leaders are in strong uptrends (median 12-month return +34%). New in the sector's top ten: RIO and ACCO.",
+   "commentary": "Materials: 190 stocks with complete factor data. Sector leaders: FLXS (#2 overall), EBF (#15 overall) and RIO (#35 overall). The sector's strongest names lean on value and low-volatility. Its leaders are in strong uptrends (median 12-month return +34%). New in the sector's top ten: RIO.",
    "picks": [
     {
      "rank": 2,
@@ -3596,7 +3596,7 @@
    ]
   },
   "Utilities": {
-   "commentary": "Utilities: 91 stocks with complete factor data. Sector leaders: EPD (#5 overall), EE (#23 overall) and GNE (#27 overall). The sector's strongest names lean on momentum and value. Its leaders are in strong uptrends (median 12-month return +32%). New in the sector's top ten: OGE, SMC, TRGP and SWX.",
+   "commentary": "Utilities: 91 stocks with complete factor data. Sector leaders: EPD (#5 overall), EE (#23 overall) and GNE (#27 overall). The sector's strongest names lean on momentum and value. Its leaders are in strong uptrends (median 12-month return +32%).",
    "picks": [
     {
      "rank": 5,
@@ -3809,7 +3809,7 @@
    ]
   },
   "Energy": {
-   "commentary": "Energy: 83 stocks with complete factor data. Sector leaders: APA (#143 overall), VLO (#170 overall) and TTE (#194 overall). The sector's strongest names lean on momentum and low-volatility. Its leaders are in strong uptrends (median 12-month return +102%). New in the sector's top ten: GTE, MPC, CHRD and HESM.",
+   "commentary": "Energy: 83 stocks with complete factor data. Sector leaders: APA (#143 overall), VLO (#170 overall) and TTE (#194 overall). The sector's strongest names lean on momentum and low-volatility. Its leaders are in strong uptrends (median 12-month return +102%). New in the sector's top ten: TTE.",
    "picks": [
     {
      "rank": 143,
@@ -4015,7 +4015,7 @@
    ]
   },
   "Consumer Staples": {
-   "commentary": "Consumer Staples: 64 stocks with complete factor data. Sector leaders: SENEA (#9 overall), DAR (#271 overall) and BUD (#289 overall). The sector's strongest names lean on momentum and low-volatility. Its leaders are in strong uptrends (median 12-month return +34%). New in the sector's top ten: ADM, INGR, SJM and KO.",
+   "commentary": "Consumer Staples: 64 stocks with complete factor data. Sector leaders: SENEA (#9 overall), DAR (#271 overall) and BUD (#289 overall). The sector's strongest names lean on momentum and low-volatility. Its leaders are in strong uptrends (median 12-month return +34%). New in the sector's top ten: BUD.",
    "picks": [
     {
      "rank": 9,
@@ -4238,7 +4238,7 @@
    ]
   },
   "Communication": {
-   "commentary": "Communication: 53 stocks with complete factor data. Sector leaders: AMCX (#52 overall), VSNT (#89 overall) and ZD (#215 overall). The sector's strongest names lean on momentum and value. Its leaders are in strong uptrends (median 12-month return +44%). New in the sector's top ten: VSNT, KYIV, SIRI and IDT.",
+   "commentary": "Communication: 53 stocks with complete factor data. Sector leaders: AMCX (#52 overall), VSNT (#89 overall) and ZD (#215 overall). The sector's strongest names lean on momentum and value. Its leaders are in strong uptrends (median 12-month return +44%). New in the sector's top ten: VSNT, KYIV and TIGO.",
    "picks": [
     {
      "rank": 52,
@@ -4452,7 +4452,7 @@
    ]
   },
   "Other": {
-   "commentary": "Other: 40 stocks with complete factor data. Sector leaders: MOV (#132 overall), BBDC (#500 overall) and FOSL (#580 overall). The sector's strongest names lean on momentum and quality. Its leaders are trending up (median 12-month return +23%). New in the sector's top ten: ACRS.",
+   "commentary": "Other: 40 stocks with complete factor data. Sector leaders: MOV (#132 overall), BBDC (#500 overall) and FOSL (#580 overall). The sector's strongest names lean on momentum and quality. Its leaders are trending up (median 12-month return +23%).",
    "picks": [
     {
      "rank": 132,
@@ -4932,6 +4932,11 @@
    "scan_date": "2026-10-15",
    "scored_size": 3395,
    "full_coverage": 3178
+  },
+  {
+   "scan_date": "2026-10-16",
+   "scored_size": 3386,
+   "full_coverage": 2941
   },
   {
    "scan_date": "2026-10-17",

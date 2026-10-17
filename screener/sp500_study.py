@@ -208,9 +208,11 @@ def build_payload(conn) -> dict:
     study = winners_study(hist)
 
     # index-only view of the EXISTING scan (no rescoring)
-    sid = conn.execute("SELECT MAX(scan_id) FROM scans").fetchone()[0]
-    scan_date = conn.execute("SELECT scan_date FROM scans WHERE scan_id=?",
-                             (sid,)).fetchone()[0]
+    # order by DATE, not scan_id: ids follow insertion order, and a same-day
+    # re-scan (or a reconciled record) can leave a newer id on an older date
+    sid, scan_date = conn.execute(
+        "SELECT scan_id, scan_date FROM scans "
+        "ORDER BY scan_date DESC, scan_id DESC LIMIT 1").fetchone()
     scores = db.get_scores(conn, sid)
     full = commentary.full_coverage(scores)
     mem = set(members["symbol"])
