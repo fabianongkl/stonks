@@ -35,6 +35,7 @@ import logging
 import time
 from datetime import date, datetime, timedelta
 
+import numpy as np
 import pandas as pd
 import requests
 
@@ -81,6 +82,36 @@ SHARE_INSTANT_TAGS = [
     ("us-gaap", "CommonStockSharesIssued"),
 ]
 SHARE_ANNUAL_TAG = "WeightedAverageNumberOfSharesOutstandingBasic"
+
+# A fact older than this is refused outright.  Companies that switched from
+# US GAAP to IFRS leave their old us-gaap tags behind forever: Agnico Eagle
+# still serves Assets dated 2014, equity dated 2012 and revenue dated 2010.
+# Without this guard the fallback extractor returns them as current, and the
+# ratios built on them are nonsense.  Found 2026-10-17; see
+# journal/review-2026-10.md.
+MAX_FACT_AGE_DAYS = 550        # ~18 months
+
+# Foreign private issuers (20-F / 40-F) report under IFRS, and the SEC files
+# their XBRL under the `ifrs-full` taxonomy.  The bulk frames API does NOT
+# serve ifrs-full (it 404s on every tag), so these companies are only
+# reachable through the per-company companyfacts fallback below.
+IFRS_FLOW_TAGS = {
+    "revenue": ["Revenue", "RevenueFromContractsWithCustomers",
+                "RevenueFromSaleOfGoods", "RevenueFromRenderingOfServices"],
+    "net_income": ["ProfitLoss", "ProfitLossAttributableToOwnersOfParent"],
+    "op_income": ["ProfitLossFromOperatingActivities"],
+    "gross_profit": ["GrossProfit"],
+    "cfo": ["CashFlowsFromUsedInOperatingActivities"],
+    "capex": ["PurchaseOfPropertyPlantAndEquipment",
+              "PurchaseOfPropertyPlantAndEquipmentClassifiedAsInvestingActivities"],
+}
+IFRS_INSTANT_TAGS = {
+    "assets": ["Assets"],
+    "liabilities": ["Liabilities"],
+    "equity": ["Equity", "EquityAttributableToOwnersOfParent"],
+    "cash": ["CashAndCashEquivalents"],
+}
+IFRS_SHARE_TAGS = ["NumberOfSharesOutstanding", "IssuedCapitalNumberOfShares"]
 
 
 class _SecClient:
@@ -253,6 +284,15 @@ def _fetch_bulk(client: _SecClient) -> pd.DataFrame:
 
     df = pd.DataFrame(cols)
     df.index.name = "cik"
+    # Claim US-GAAP only where the frames API returned actual us-gaap
+    # financial statements.  Shares outstanding comes from the dei
+    # taxonomy, which every filer uses regardless of accounting standard,
+    # so shares alone must not label a company as a US-GAAP reporter —
+    # otherwise an IFRS filer would be mislabelled and its real standard
+    # overridden downstream.
+    has_gaap = df[["assets", "revenue", "net_income", "equity"]].notna().any(axis=1)
+    df["reporting_standard"] = pd.Series(
+        np.where(has_gaap, "US-GAAP", None), index=df.index, dtype=object)
     return df
 
 
@@ -275,8 +315,25 @@ def _dur_days(f: dict) -> int | None:
         return None
 
 
+def _fresh(units: list[dict]) -> list[dict]:
+    """Drop facts whose period END is older than MAX_FACT_AGE_DAYS."""
+    cutoff = datetime.now() - timedelta(days=MAX_FACT_AGE_DAYS)
+    out = []
+    for f in units:
+        try:
+            if datetime.fromisoformat(f["end"]) >= cutoff:
+                out.append(f)
+        except Exception:
+            continue
+    return out
+
+
 def _cf_flow(units: list[dict]) -> tuple[float | None, float | None]:
-    """(TTM-ish, prior-annual) from a companyfacts USD fact list."""
+    """(TTM-ish, prior-annual) from a companyfacts USD fact list.
+
+    `units` must already be freshness-filtered; a prior-year comparison is
+    allowed to reach a little further back than the headline figure.
+    """
     qs = sorted((f for f in units if (_dur_days(f) or 0) in range(80, 101)),
                 key=lambda f: f["end"])
     dedup = {f["end"]: f["val"] for f in qs}
@@ -311,51 +368,92 @@ def _cf_instant(units: list[dict]) -> tuple[float | None, float | None]:
     return float(latest_val), (float(prior) if prior is not None else None)
 
 
-def _extract_companyfacts(j: dict) -> dict:
+def _extract_one(facts: dict, taxonomy: str, flow_tags: dict,
+                 instant_tags: dict, share_tags: list, dei: dict) -> dict:
+    """Pull our fields out of ONE taxonomy's facts (us-gaap or ifrs-full).
+
+    USD facts ONLY, deliberately.  Foreign issuers often report in their
+    home currency (of 231 gate-excluded stocks: 141 file Assets in USD, 42
+    in CAD, 21 in EUR, the rest scattered).  Market cap is always USD, so
+    pairing a CAD balance sheet with a USD market cap would silently inflate
+    every value ratio by the exchange rate.  Until the project has an FX
+    layer, non-USD reporters are left without fundamentals and the
+    completeness gate correctly declines to score them.  A company that
+    files in both takes the USD series.
+    """
+    src = facts.get(taxonomy, {})
     out: dict[str, float] = {}
-    gaap = j.get("facts", {}).get("us-gaap", {})
-    dei = j.get("facts", {}).get("dei", {})
 
-    for field, tags in FLOW_TAGS.items():
+    for field, tags in flow_tags.items():
         for tag in tags:
-            units = gaap.get(tag, {}).get("units", {}).get("USD")
-            if units:
-                ttm, prior = _cf_flow(units)
-                if ttm is not None:
-                    out[field] = ttm
-                    if field == "revenue" and prior is not None:
-                        out["revenue_prior"] = prior
-                    break
-
-    for field, tags in INSTANT_TAGS.items():
-        for tag in tags:
-            units = gaap.get(tag, {}).get("units", {}).get("USD")
-            if units:
-                latest, prior = _cf_instant(units)
-                if latest is not None:
-                    out[field] = latest
-                    if field == "assets" and prior is not None:
-                        out["assets_prior"] = prior
-                    break
-
-    for taxonomy, tag in SHARE_INSTANT_TAGS:
-        src = dei if taxonomy == "dei" else gaap
-        units = src.get(tag, {}).get("units", {}).get("shares")
-        if units:
-            latest, prior = _cf_instant(units)
-            if latest:
-                out["shares_out"] = latest
-                if prior:
-                    out["shares_prior"] = prior
-                break
-    if "shares_out" not in out:
-        units = gaap.get(SHARE_ANNUAL_TAG, {}).get("units", {}).get("shares")
-        if units:
+            units = _fresh(src.get(tag, {}).get("units", {}).get("USD") or [])
+            if not units:
+                continue
             ttm, prior = _cf_flow(units)
-            if ttm:
-                out["shares_out"] = ttm
-                if prior:
-                    out["shares_prior"] = prior
+            if ttm is not None:
+                out[field] = ttm
+                if field == "revenue" and prior is not None:
+                    out["revenue_prior"] = prior
+                break
+
+    for field, tags in instant_tags.items():
+        for tag in tags:
+            units = _fresh(src.get(tag, {}).get("units", {}).get("USD") or [])
+            if not units:
+                continue
+            latest, prior = _cf_instant(units)
+            if latest is not None:
+                out[field] = latest
+                if field == "assets" and prior is not None:
+                    out["assets_prior"] = prior
+                break
+
+    # Shares: the dei tag is taxonomy-independent and is tried first for both.
+    for tax, tag in ([("dei", "EntityCommonStockSharesOutstanding")]
+                     + [(taxonomy, t) for t in share_tags]):
+        store = dei if tax == "dei" else src
+        units = _fresh(store.get(tag, {}).get("units", {}).get("shares") or [])
+        if not units:
+            continue
+        latest, prior = _cf_instant(units)
+        if latest:
+            out["shares_out"] = latest
+            if prior:
+                out["shares_prior"] = prior
+            break
+    return out
+
+
+def _extract_companyfacts(j: dict) -> dict:
+    """Fundamentals for one company, from whichever accounting standard it
+    actually reports under.
+
+    US GAAP is tried first; if it yields less than IFRS does, the IFRS
+    reading wins.  This is what makes foreign private issuers (20-F / 40-F
+    filers) visible at all — the bulk frames API serves only us-gaap, so
+    without this they arrive with no fundamentals and are correctly refused
+    by the completeness gate.  Comparing field counts rather than simply
+    preferring us-gaap matters because companies that MIGRATED to IFRS keep
+    their abandoned us-gaap tags on file (see MAX_FACT_AGE_DAYS).
+    """
+    facts = j.get("facts", {})
+    dei = facts.get("dei", {})
+
+    gaap = _extract_one(facts, "us-gaap", FLOW_TAGS, INSTANT_TAGS,
+                        [t for _, t in SHARE_INSTANT_TAGS
+                         if _ != "dei"] + [SHARE_ANNUAL_TAG], dei)
+    ifrs = _extract_one(facts, "ifrs-full", IFRS_FLOW_TAGS, IFRS_INSTANT_TAGS,
+                        IFRS_SHARE_TAGS, dei)
+
+    core = ("assets", "equity", "revenue", "net_income")
+    g_core = sum(1 for k in core if k in gaap)
+    i_core = sum(1 for k in core if k in ifrs)
+    if i_core > g_core or (i_core == g_core and len(ifrs) > len(gaap)):
+        out, standard = dict(ifrs), "IFRS"
+    else:
+        out, standard = dict(gaap), "US-GAAP"
+    if out:
+        out["reporting_standard"] = standard
     return out
 
 
@@ -367,7 +465,8 @@ def companyfacts_fill(df: pd.DataFrame, ciks_needed: list[int]) -> pd.DataFrame:
     if not ciks_needed:
         return df
     cache = (pd.read_parquet(_CF_CACHE) if _CF_CACHE.exists()
-             else pd.DataFrame(columns=["cik", "fetched"] + _CF_FIELDS))
+             else pd.DataFrame(columns=["cik", "fetched", "reporting_standard"]
+                               + _CF_FIELDS))
     cutoff = (date.today() - timedelta(days=CF_CACHE_DAYS)).isoformat()
     fresh = cache[cache["fetched"] >= cutoff]
     have = set(fresh["cik"])
@@ -389,15 +488,30 @@ def companyfacts_fill(df: pd.DataFrame, ciks_needed: list[int]) -> pd.DataFrame:
         newly = pd.DataFrame(rows)
         cache = pd.concat([cache[~cache["cik"].isin(set(newly["cik"]))], newly],
                           ignore_index=True)
-        for f in _CF_FIELDS:
+        for f in _CF_FIELDS + ["reporting_standard"]:
             if f not in cache.columns:
                 cache[f] = pd.NA
         cache.to_parquet(_CF_CACHE, index=False)
         fresh = cache[cache["fetched"] >= cutoff]
 
-    fill = fresh[fresh["cik"].isin(set(ciks_needed))].set_index("cik")[_CF_FIELDS]
-    fill = fill.astype(float)
+    sel = fresh[fresh["cik"].isin(set(ciks_needed))].set_index("cik")
+    fill = sel[_CF_FIELDS].astype(float)
     filled = df.combine_first(fill.reindex(df.index.union(fill.index)))
+
+    # Reporting standard is a label, not a number — carried separately so it
+    # survives the float coercion above.
+    if "reporting_standard" in sel.columns:
+        std = sel["reporting_standard"].reindex(filled.index)
+        if "reporting_standard" in filled.columns:
+            # the fallback compared BOTH taxonomies for these companies, so
+            # its verdict wins over the bulk layer's assumption
+            filled["reporting_standard"] = std.combine_first(
+                filled["reporting_standard"])
+        else:
+            filled["reporting_standard"] = std
+        ifrs_n = int((std == "IFRS").sum())
+        log.info("companyfacts fallback: %d companies read under IFRS", ifrs_n)
+
     n = (df.reindex(filled.index)["shares_out"].isna()
          & filled["shares_out"].notna()).sum()
     log.info("companyfacts fallback: recovered shares data for %d companies", int(n))

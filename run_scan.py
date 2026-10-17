@@ -90,9 +90,16 @@ def main() -> int:
     if need:
         fill = fundamentals.companyfacts_fill(
             funda.reindex(df["cik"].unique()), need)
-        fund_cols = [c for c in fill.columns if c in funda.columns]
-        df = df.drop(columns=fund_cols).merge(
+        # take every fundamental column the fallback produced, including
+        # reporting_standard, which a cached bulk frame may predate
+        fund_cols = [c for c in fill.columns
+                     if c in funda.columns or c == "reporting_standard"]
+        df = df.drop(columns=[c for c in fund_cols if c in df.columns]).merge(
             fill[fund_cols], left_on="cik", right_index=True, how="left")
+
+    if "reporting_standard" not in df.columns:
+        df["reporting_standard"] = pd.NA
+    df["reporting_standard"] = df["reporting_standard"].fillna("unknown")
 
     df["market_cap"] = df["last_close"] * df["shares_out"]
     df = df[~(df["market_cap"] < config.MIN_MARKET_CAP)]   # keeps NaN mcap

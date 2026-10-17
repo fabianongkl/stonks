@@ -16,7 +16,8 @@ import pandas as pd
 from . import config, factors
 
 SCORE_COLS = [
-    "symbol", "name", "exchange", "sector", "close", "market_cap", "dollar_volume",
+    "symbol", "name", "exchange", "sector", "reporting_standard",
+    "close", "market_cap", "dollar_volume",
     "composite", "rank", "n_factors", "n_metrics", "eligible",
     "value_score", "quality_score", "momentum_score", "low_vol_score",
     "earnings_yield", "fcf_yield", "book_to_market", "issuance",
@@ -25,7 +26,7 @@ SCORE_COLS = [
     "mom_12_1", "mom_6", "volatility", "revenue_growth",
 ]
 
-TEXT_COLS = {"symbol", "name", "exchange", "sector"}
+TEXT_COLS = {"symbol", "name", "exchange", "sector", "reporting_standard"}
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS scans (

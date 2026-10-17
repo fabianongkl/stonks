@@ -12,3 +12,6 @@ data/cache/*
 backtest/cache/
 __pycache__/
 *.pyc
+
+# scratch space used when reconciling database conflicts
+.tmpdb/

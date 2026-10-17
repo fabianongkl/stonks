@@ -278,6 +278,18 @@ no results were harmed in the making of these changes):
 - **Turnover hysteresis.** A book holding must be beyond its rank tolerance
   at two consecutive reviews before being sold (`config.REVIEW_STRIKES`);
   a holding that leaves the scan universe entirely is still sold at once.
+- **IFRS support + staleness guard.** Foreign private issuers report under
+  IFRS, which the SEC files under the `ifrs-full` taxonomy; the bulk frames
+  API serves only us-gaap, so they arrived with no fundamentals and were
+  correctly refused by the completeness gate. The per-company fallback now
+  reads both taxonomies and keeps whichever yields more core fields.
+  Critically, companies that migrated to IFRS leave abandoned us-gaap tags
+  on file (Agnico Eagle still serves assets dated 2014), so facts older than
+  `MAX_FACT_AGE_DAYS` (550) are now refused outright. USD-denominated facts
+  only: pairing a non-USD balance sheet with a USD market cap would inflate
+  every value ratio by the exchange rate, so non-USD reporters remain
+  unscored pending an FX layer. Each stock records its `reporting_standard`
+  so the cohorts can be monitored. Eligible pool 2,944 -> 3,008.
 
 **v0.2.1 — 2026-09-01**: learning-trigger independence fix. The weight
 adaptation threshold now counts only non-overlapping 63-day evaluation

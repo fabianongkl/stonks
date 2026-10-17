@@ -1,5 +1,5 @@
 {
- "generated": "2026-10-16T23:52:14",
+ "generated": "2026-10-17T08:22:00",
  "scan_date": "2026-10-16",
  "universe_size": 5287,
  "scored_size": 3386,
@@ -4905,8 +4905,8 @@
   },
   {
    "scan_date": "2026-10-17",
-   "scored_size": 3390,
-   "full_coverage": 2944
+   "scored_size": 3393,
+   "full_coverage": 3008
   }
  ],
  "horizons": [
