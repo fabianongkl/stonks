@@ -50,7 +50,7 @@ def main() -> int:
     for a in portfolio.auto_rotate_if_due(conn):
         print(" ", a)
 
-    spy = portfolio.spy_close()
+    spy = portfolio.spy_close(conn)
     for b in portfolio.BOOKS:
         if portfolio.holdings(conn, b).empty:
             continue

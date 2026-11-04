@@ -342,15 +342,34 @@ def _price_map(conn, book: str, scores: pd.DataFrame) -> dict[str, float]:
     return px
 
 
-def spy_close() -> float | None:
-    try:
-        import yfinance as yf
-        h = yf.download("SPY", period="10d", auto_adjust=True, progress=False)
-        if h is not None and not h.empty:
-            v = h["Close"].iloc[-1]
-            return round(float(v.iloc[0] if hasattr(v, "iloc") else v), 2)
-    except Exception as e:
-        log.warning("SPY fetch failed: %s", e)
+def spy_close(conn=None) -> float | None:
+    """Benchmark close for the latest scan.
+
+    Primary source is the SPY price stored on the scan record, taken from the
+    same price download as every stock mark, so book and benchmark are valued
+    at the same moment.  The standalone yfinance call is only a fallback, with
+    retries, for scans recorded before SPY was part of the price panel.
+    """
+    if conn is not None:
+        row = conn.execute(
+            "SELECT spy_close FROM scans ORDER BY scan_date DESC, scan_id DESC "
+            "LIMIT 1").fetchone()
+        if row and row[0] is not None and row[0] == row[0]:
+            return round(float(row[0]), 2)
+    import time
+    import yfinance as yf
+    for attempt in range(1, 4):
+        try:
+            h = yf.download("SPY", period="10d", auto_adjust=True, progress=False)
+            if h is not None and not h.empty:
+                s = h["Close"]
+                s = (s.iloc[:, 0] if hasattr(s, "columns") else s).dropna()
+                if len(s):
+                    return round(float(s.iloc[-1]), 2)
+        except Exception as e:
+            log.warning("SPY fetch attempt %d failed: %s", attempt, e)
+        time.sleep(10 * attempt)
+    log.warning("SPY benchmark unavailable for this snapshot")
     return None
 
 
@@ -652,7 +671,7 @@ def snapshot(conn, book: str = "core",
         pos_val += h["shares"] * float(px.get(h["symbol"], 0.0))
     c = cash(conn, book)
     if spy is None:
-        spy = spy_close()
+        spy = spy_close(conn)
     conn.execute("INSERT OR REPLACE INTO pf_snapshots VALUES (?,?,?,?,?,?)",
                  (day, book, round(pos_val, 2), c, round(pos_val + c, 2), spy))
     conn.commit()

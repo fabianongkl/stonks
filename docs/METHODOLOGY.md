@@ -254,6 +254,18 @@ no results were harmed in the making of these changes):
   treated as missing instead of producing an absurd value score.
 - Bootstrap p-values on every matured-scan evaluation.
 
+**v0.2.3 (2026-11-04)**, November review (`journal/review-2026-11.md`):
+- SPY benchmark is fetched inside the scan's batched, retried price download
+  and stored on the scan record. The separate post-scan call had been
+  throttled on the cloud runner, leaving 20 of 42 snapshot days without a
+  benchmark (backfilled).
+- Scans are labelled with the trading date of their prices, not the runner's
+  clock. Late-firing scheduled jobs had labelled 21 of 43 scans a day late,
+  risking same-label collisions that would delete a scan. History relabelled
+  by a committed migration; original labels kept in `scans.run_label`; one
+  duplicate trading day archived to `scans_superseded`, not deleted.
+- `--sample` runs can no longer replace a day's full scan.
+
 **v0.2.2 — 2026-10-17** (October review — see
 `journal/review-2026-10.md` for the evidence behind each):
 - Insider metric denominator is now a *stable* market cap (shares × median

@@ -96,6 +96,7 @@ def _migrate(conn: sqlite3.Connection) -> None:
     for table, wanted in (
         ("scores", {c: ("TEXT" if c in TEXT_COLS else "REAL") for c in SCORE_COLS}),
         ("scan_eval", {"p_value": "REAL"}),
+        ("scans", {"spy_close": "REAL"}),
     ):
         have = {r[1] for r in conn.execute(f"PRAGMA table_info({table})")}
         for col, typ in wanted.items():
@@ -124,7 +125,7 @@ def set_weights(conn: sqlite3.Connection, weights: dict[str, float],
 
 def save_scan(conn: sqlite3.Connection, scan_date: str, universe_size: int,
               scored: pd.DataFrame, weights: dict[str, float],
-              notes: str = "") -> int:
+              notes: str = "", spy_close: float | None = None) -> int:
     """Insert a scan and its scores.  Re-running the same day replaces it."""
     old = conn.execute("SELECT scan_id FROM scans WHERE scan_date=?", (scan_date,)).fetchone()
     if old:
@@ -134,9 +135,10 @@ def save_scan(conn: sqlite3.Connection, scan_date: str, universe_size: int,
     full_cov = int(factors.eligible_mask(scored).sum())
     cur = conn.execute(
         "INSERT INTO scans (scan_date, universe_size, scored_size, full_coverage,"
-        " weights_json, notes, created_at) VALUES (?,?,?,?,?,?,?)",
+        " weights_json, notes, created_at, spy_close) VALUES (?,?,?,?,?,?,?,?)",
         (scan_date, universe_size, len(scored), full_cov,
-         json.dumps(weights), notes, datetime.now().isoformat(timespec="seconds")),
+         json.dumps(weights), notes, datetime.now().isoformat(timespec="seconds"),
+         spy_close),
     )
     scan_id = cur.lastrowid
 

@@ -57,7 +57,26 @@ def main() -> int:
     funda = fundamentals.fetch_fundamentals(use_cache=use_cache)
 
     # 4. Prices -------------------------------------------------------------
-    px = prices.fetch_prices(uni["symbol"].tolist(), use_cache=use_cache)
+    # SPY is fetched inside the same batched, retried download as the stocks
+    # rather than by a separate one-off call afterwards.  That separate call
+    # was throttled on the cloud runner and silently missed the benchmark on
+    # 20 of the first 42 snapshot days (2026-11 review).  SPY is not in the
+    # universe, so the inner merge below keeps it out of scoring.
+    px = prices.fetch_prices(uni["symbol"].tolist() + ["SPY"], use_cache=use_cache)
+    # The scan is labelled with the TRADING DATE of its prices, not the
+    # runner's clock.  GitHub's scheduler routinely fires the 21:30 UTC job
+    # after midnight, which labelled 21 of the first 43 scans a day late and
+    # set up a collision: one on-time run would have reused the previous
+    # night's label and same-date replacement would have deleted that scan.
+    # Price dates are unique per trading day, so labels now are too.
+    scan_label = str(max(px["date"]))
+    if scan_label != today:
+        log.info("Prices are as of %s (runner date %s); labelling scan %s",
+                 scan_label, today, scan_label)
+    spy_series = px[px["symbol"] == "SPY"].sort_values("date")["close"]
+    spy_last = float(spy_series.iloc[-1]) if len(spy_series) else None
+    if spy_last is None:
+        log.warning("SPY missing from the price panel; benchmark will fall back")
     if px.empty:
         log.error("No price data retrieved — aborting scan.")
         return 1
@@ -124,32 +143,39 @@ def main() -> int:
     # 8. Persist ------------------------------------------------------------
     # Never replace an existing same-date scan with a clearly worse one.
     existing = conn.execute(
-        "SELECT scored_size FROM scans WHERE scan_date=?", (today,)).fetchone()
+        "SELECT scored_size, notes FROM scans WHERE scan_date=?",
+        (scan_label,)).fetchone()
+    if args.sample and existing and (existing[1] or "") != "sample run":
+        log.error("Refusing to let a --sample run replace the full scan "
+                  "already recorded for %s.", scan_label)
+        conn.close()
+        return 1
     if (not args.sample and existing
             and len(scored) < config.MAX_SHRINK_VS_EXISTING * existing[0]):
         log.error("DATA-QUALITY ABORT: this run scored %d stocks but a scan "
                   "for %s already exists with %d — refusing to overwrite good "
-                  "data with a degraded rerun.", len(scored), today, existing[0])
+                  "data with a degraded rerun.", len(scored), scan_label, existing[0])
         conn.close()
         return 1
-    scan_id = db.save_scan(conn, today, universe_size, scored, weights,
-                           notes="sample run" if args.sample else "")
+    scan_id = db.save_scan(conn, scan_label, universe_size, scored, weights,
+                           notes="sample run" if args.sample else "",
+                           spy_close=spy_last)
     log.info("Scan %d saved: %s, %d scored, %d eligible (full factors and "
              "enough metrics behind each)",
-             scan_id, today, len(scored), int(factors.eligible_mask(scored).sum()))
+             scan_id, scan_label, len(scored), int(factors.eligible_mask(scored).sum()))
 
     # 9. Evaluate matured past scans & maybe learn --------------------------
     # Latest close from the FULL price panel (not just scored stocks), so
     # stocks that fell below today's tradability filters still get honest
     # outcome marks instead of vanishing from the evaluation.
     latest_close = (px.sort_values("date").groupby("symbol")["close"].last())
-    learning.update_outcomes(conn, latest_close, today)
+    learning.update_outcomes(conn, latest_close, scan_label)
     new_w = learning.maybe_update_weights(conn)
     if new_w:
         log.info("Factor weights adapted: %s", new_w)
 
     # 10. Report ------------------------------------------------------------
-    report.write_journal_entry(conn, scan_id, today)
+    report.write_journal_entry(conn, scan_id, scan_label)
     if not args.skip_dashboard:
         path = report.generate_dashboard(conn, scan_id)
         log.info("Dashboard written: %s", path)
