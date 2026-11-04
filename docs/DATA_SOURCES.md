@@ -57,7 +57,12 @@ per-company `companyfacts` fetch, cached 30 days and capped per run.
 ## 2. Yahoo Finance via `yfinance` (prices)
 
 **What:** ~14 months of split/dividend-adjusted daily closes and volumes for
-the whole universe, downloaded in batches.
+the whole universe, downloaded in batches, plus each stock's dividends and
+splits from the same request (`actions=True`). Those events are stored in the
+`corporate_actions` table and drive total-return outcomes, book dividend
+credits, SPY total return and split-adjusted share issuance (v0.3). Yahoo
+records some spin-offs as fractional "splits"; that is correct for returns
+and is excluded from the share-issuance adjustment.
 
 **Why:** it is the de-facto standard free price source in open-source finance.
 No key, whole-market coverage, adjusted prices.

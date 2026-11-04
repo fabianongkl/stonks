@@ -69,17 +69,34 @@ def main() -> int:
     # set up a collision: one on-time run would have reused the previous
     # night's label and same-date replacement would have deleted that scan.
     # Price dates are unique per trading day, so labels now are too.
-    scan_label = str(max(px["date"]))
+    #
+    # The date is the MOST COMMON latest date across symbols, and the panel is
+    # cut at it, so every stock is priced on one and the same day.  The
+    # 2026-11-05 audit found that runs starting ~00:00-01:40 UTC received the
+    # previous day's bars for most stocks but the current day for a few
+    # (SPY among them); max(date) would have labelled those scans a day ahead
+    # of their prices, as 20 earlier scans effectively were.
+    if px.empty:
+        log.error("No price data retrieved — aborting scan.")
+        return 1
+    last_dates = px.groupby("symbol")["date"].max()
+    scan_date_ = last_dates.mode().max()
+    ahead = int((last_dates > scan_date_).sum())
+    if ahead:
+        log.warning("%d symbols have bars after %s (the date most symbols end "
+                    "on); cut back so the scan is priced on one day",
+                    ahead, scan_date_)
+        px = px[px["date"] <= scan_date_]
+    scan_label = str(scan_date_)
     if scan_label != today:
         log.info("Prices are as of %s (runner date %s); labelling scan %s",
                  scan_label, today, scan_label)
+    # Dividends and splits ride in the same download (proposal A/B, 2026-11)
+    actions = prices.corporate_actions(px)
     spy_series = px[px["symbol"] == "SPY"].sort_values("date")["close"]
     spy_last = float(spy_series.iloc[-1]) if len(spy_series) else None
     if spy_last is None:
         log.warning("SPY missing from the price panel; benchmark will fall back")
-    if px.empty:
-        log.error("No price data retrieved — aborting scan.")
-        return 1
     priced = px["symbol"].nunique()
     if not args.sample and priced < config.MIN_PRICED_FRACTION * len(uni):
         log.error("DATA-QUALITY ABORT: only %d/%d symbols priced (< %.0f%%). "
@@ -134,8 +151,14 @@ def main() -> int:
         df["insider_net"] = df["cik"].map(ins).fillna(0.0)
 
     # 7. Score --------------------------------------------------------------
+    # Split-adjust the prior share count before issuance is computed.
+    df["split_ratio"] = factors.split_ratios(df, actions).to_numpy()
+    n_adj = int((df["split_ratio"] != 1.0).sum())
+    if n_adj:
+        log.info("Issuance: prior share count split-adjusted for %d stocks", n_adj)
     df = factors.fundamental_metrics(df)
     conn = db.connect()
+    db.save_corporate_actions(conn, actions)
     weights = db.get_current_weights(conn)
     scored = factors.score(df, weights)
     scored = scored.rename(columns={"last_close": "close"})

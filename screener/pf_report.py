@@ -24,17 +24,27 @@ def build_payload(conn: sqlite3.Connection, book: str = "core") -> dict:
     c = portfolio.cash(conn, book)
     total = round(float(pos["value"].sum()) + c, 2) if not pos.empty else c
 
+    # SPY on a TOTAL-return basis (dividends reinvested), like-for-like with
+    # books that now collect their dividends (2026-11 review, proposal A).
+    spy_div = pd.read_sql_query(
+        "SELECT ex_date, factor FROM corporate_actions WHERE symbol='SPY' "
+        "AND factor IS NOT NULL ORDER BY ex_date", conn)
     curve = []
-    spy0 = None
+    spy0 = spy0_date = None
     for _, s in snaps.iterrows():
-        if spy0 is None and s["spy_close"]:
-            spy0 = s["spy_close"]
+        spy = s["spy_close"]
+        if spy0 is None and spy:
+            spy0, spy0_date = spy, s["date"]
+        spy_idx = None
+        if spy0 and spy:
+            f = spy_div[(spy_div["ex_date"] > spy0_date)
+                        & (spy_div["ex_date"] <= s["date"])]["factor"].prod()
+            spy_idx = round(spy * float(f) / spy0 * 100, 2)
         curve.append({
             "date": s["date"],
             "total": s["total"],
             "pf_idx": round(s["total"] / start_cash * 100, 2),
-            "spy_idx": (round(s["spy_close"] / spy0 * 100, 2)
-                        if spy0 and s["spy_close"] else None),
+            "spy_idx": spy_idx,
         })
 
     if cfg.get("style") == "ritual" and cfg.get("worst"):
@@ -97,6 +107,7 @@ def build_payload(conn: sqlite3.Connection, book: str = "core") -> dict:
         "pnl": round(total - start_cash, 2),
         "pnl_pct": round((total / start_cash - 1) * 100, 2),
         "fees_paid": fees,
+        "dividends": portfolio.dividends_received(conn, book),
         "positions": pos.to_dict("records") if not pos.empty else [],
         "curve": curve,
         "txns": [
@@ -202,7 +213,7 @@ __NAV__
 
   <div class="tiles" id="tiles"></div>
 
-  <h2>Portfolio vs SPY (indexed to 100 at inception)</h2>
+  <h2>Portfolio vs SPY (total return, indexed to 100 at inception)</h2>
   <div class="card" id="curve-card"></div>
 
   <h2>Positions</h2>
@@ -246,13 +257,14 @@ const cls = v => v > 0 ? 'up' : v < 0 ? 'down' : '';
 const sign = v => (v > 0 ? '+' : '') + v;
 
 $('#pf-title').textContent = D.label;
-$('#pf-sub').textContent = `A hypothetical ${money(D.start_cash)} paper book — ${D.desc} — tracked daily, fees included, versus buy-and-hold SPY.`;
+$('#pf-sub').textContent = `A hypothetical ${money(D.start_cash)} paper book — ${D.desc} — tracked daily, fees and dividends included, versus buy-and-hold SPY with dividends reinvested.`;
 $('#rule-note').textContent = D.rule_note;
 $('#tiles').innerHTML = [
   [money(D.total), 'total value'],
   [`<span class="${cls(D.pnl)}">${sign(D.pnl_pct)}%</span>`, `P&L (${money(D.pnl)})`],
   [money(D.cash), 'cash'],
   [money(D.fees_paid), 'fees paid'],
+  [money(D.dividends), 'dividends received'],
   [D.positions.length, 'positions'],
 ].map(([v,l]) => `<div class="tile"><div class="v">${v}</div><div class="l">${l}</div></div>`).join('');
 

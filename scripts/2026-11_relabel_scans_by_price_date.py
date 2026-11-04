@@ -24,10 +24,20 @@ from datetime import datetime, timedelta
 DB = sys.argv[1] if len(sys.argv) > 1 else "data/screener.db"
 
 
+# NYSE full-day closures.  Added 2026-11-05: the first version rolled back
+# over weekends only, so the run on Labor Day (2026-09-07, market closed)
+# kept its own label although its prices were the 2026-09-04 close, a second
+# duplicate day in the record.  Re-running archives it like the Oct 16 one.
+NYSE_HOLIDAYS = {
+    "2026-01-01", "2026-01-19", "2026-02-16", "2026-04-03", "2026-05-25",
+    "2026-06-19", "2026-07-03", "2026-09-07", "2026-11-26", "2026-12-25",
+}
+
+
 def price_date(created: str) -> str:
     t = datetime.fromisoformat(created)
     d = t.date() if t.hour >= 21 else t.date() - timedelta(days=1)
-    while d.weekday() >= 5:
+    while d.weekday() >= 5 or d.isoformat() in NYSE_HOLIDAYS:
         d -= timedelta(days=1)
     return d.isoformat()
 
@@ -59,6 +69,10 @@ for d, sids in by_date.items():
         c.execute("INSERT INTO scores_superseded SELECT * FROM scores WHERE scan_id=?", (sid,))
         for t in ("scores", "outcomes", "scan_eval", "factor_ic", "scans"):
             c.execute(f"DELETE FROM {t} WHERE scan_id=?", (sid,))
+        # the archived run's snapshots duplicate the kept run's day; the kept
+        # run's snapshots take this date in the relabel below
+        if label[sid] != label[keep]:
+            c.execute("DELETE FROM pf_snapshots WHERE date=?", (label[sid],))
         print(f"archived scan {sid} (label {label[sid]}): {reason}")
         target.pop(sid)
 

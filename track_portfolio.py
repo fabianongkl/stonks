@@ -50,6 +50,12 @@ def main() -> int:
     for a in portfolio.auto_rotate_if_due(conn):
         print(" ", a)
 
+    # dividends and splits since the last run (total-return accounting)
+    _, last_day, _ = portfolio.latest_scan(conn)
+    for b in portfolio.BOOKS:
+        for a in portfolio.apply_corporate_actions(conn, b, last_day):
+            print(f"  [{b}]", a)
+
     spy = portfolio.spy_close(conn)
     for b in portfolio.BOOKS:
         if portfolio.holdings(conn, b).empty:

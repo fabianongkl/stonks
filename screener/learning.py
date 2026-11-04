@@ -51,7 +51,10 @@ def update_outcomes(conn: sqlite3.Connection, latest_close: pd.Series,
     scans = db.list_scans(conn)
     added = 0
     for _, scan in scans.iterrows():
-        elapsed = _trading_days_between(scan["scan_date"], today)
+        # count the horizon from the day the scan's prices are actually from
+        asof = scan.get("price_asof")
+        asof = asof if isinstance(asof, str) and asof else scan["scan_date"]
+        elapsed = _trading_days_between(asof, today)
         for horizon in config.EVAL_HORIZONS_DAYS:
             if elapsed < horizon:
                 continue
@@ -60,7 +63,8 @@ def update_outcomes(conn: sqlite3.Connection, latest_close: pd.Series,
                 (scan["scan_id"], horizon)).fetchone()
             if done:
                 continue
-            n = _evaluate(conn, int(scan["scan_id"]), horizon, elapsed, latest_close)
+            n = _evaluate(conn, int(scan["scan_id"]), horizon, elapsed,
+                          latest_close, asof, today)
             if n:
                 added += 1
                 log.info("Evaluated scan %s at %dd horizon (%d stocks)",
@@ -70,7 +74,8 @@ def update_outcomes(conn: sqlite3.Connection, latest_close: pd.Series,
 
 
 def _evaluate(conn, scan_id: int, horizon: int, elapsed: int,
-              latest_close: pd.Series) -> int:
+              latest_close: pd.Series, scan_date: str, today: str) -> int:
+    """scan_date here is the date the scan's prices are from (price_asof)."""
     scores = db.get_scores(conn, scan_id)
     if scores.empty:
         return 0
@@ -92,16 +97,31 @@ def _evaluate(conn, scan_id: int, horizon: int, elapsed: int,
         log.info("Scan %d @%dd: %d symbols missing from live data — marked at "
                  "last recorded price (survivorship guard)", scan_id, horizon, len(missing))
 
-    fwd = now / scores["close"] - 1.0
-    fwd = fwd.replace([np.inf, -np.inf], np.nan).dropna()
-    if len(fwd) < 50:
+    price_ret = now / scores["close"] - 1.0
+    price_ret = price_ret.replace([np.inf, -np.inf], np.nan).dropna()
+    if len(price_ret) < 50:
         return 0
+    # TOTAL return (2026-11 review, proposal A): the recorded closes are
+    # price-only, so dividends paid and splits effected inside the window
+    # would otherwise read as losses (ARI's $4.10 special dividend turned a
+    # ~+3% holding into a recorded -63%).  Apply every dividend (reinvested)
+    # and split with ex-date in (scan_date, today].
+    f = db.action_factors(conn, scan_date, today, price_ret.index)
+    fwd = (1.0 + price_ret) * f.reindex(price_ret.index).fillna(1.0) - 1.0
 
-    out_rows = [(scan_id, sym, horizon, elapsed, float(r)) for sym, r in fwd.items()]
+    out_rows = [(scan_id, sym, horizon, elapsed, float(fwd[sym]), float(r))
+                for sym, r in price_ret.items()]
     conn.executemany(
         "INSERT OR REPLACE INTO outcomes (scan_id, symbol, horizon_days, elapsed_days,"
-        " fwd_return) VALUES (?,?,?,?,?)", out_rows)
+        " fwd_return, price_return) VALUES (?,?,?,?,?,?)", out_rows)
+    record_eval(conn, scan_id, horizon, scores, fwd)
+    return len(fwd)
 
+
+def record_eval(conn, scan_id: int, horizon: int, scores: pd.DataFrame,
+                fwd: pd.Series) -> None:
+    """Top-decile spread, bootstrap p-value and factor ICs for one scan at
+    one horizon, from its forward returns (scores indexed by symbol)."""
     # Top decile (eligible stocks only) vs whole scored universe
     full = scores[factors.eligible_mask(scores)]
     n_top = max(10, int(len(full) * config.TOP_DECILE))
@@ -135,7 +155,6 @@ def _evaluate(conn, scan_id: int, horizon: int, elapsed: int,
         ic = float(sub[col].corr(sub["fwd"], method="spearman")) if len(sub) > 50 else None
         conn.execute("INSERT OR REPLACE INTO factor_ic VALUES (?,?,?,?)",
                      (scan_id, horizon, f, ic))
-    return len(fwd)
 
 
 def _independent_eval_count(conn: sqlite3.Connection) -> int:

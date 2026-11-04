@@ -149,7 +149,12 @@ def fundamental_metrics(df: pd.DataFrame) -> pd.DataFrame:
         out["revenue_growth"] = out["revenue"] / out["revenue_prior"] - 1.0
         # Net share issuance (Pontiff & Woodgate 2008): change in split-adjusted
         # share count over ~1 year.  Buybacks -> negative, dilution -> positive.
-        out["issuance"] = out["shares_out"] / out["shares_prior"] - 1.0
+        # SEC share counts are raw, so a split between the two filings is
+        # undone via `split_ratio` (see split_ratios(); 2026-11 review, B).
+        prior = out["shares_prior"]
+        if "split_ratio" in out.columns:
+            prior = prior * out["split_ratio"].fillna(1.0)
+        out["issuance"] = out["shares_out"] / prior - 1.0
         # Asset growth (Cooper, Gulen & Schill 2008): balance-sheet expansion
         # rate; aggressive growers underperform disciplined ones.
         out["asset_growth"] = out["assets"] / out["assets_prior"] - 1.0
@@ -202,6 +207,69 @@ def fundamental_metrics(df: pd.DataFrame) -> pd.DataFrame:
 # ---------------------------------------------------------------------------
 # Scoring
 # ---------------------------------------------------------------------------
+
+def _share_count_split(r: float) -> bool:
+    """True if a Yahoo 'split' ratio really changes the share count.
+
+    Yahoo also records spin-offs as splits (FDX 1.241, BDX 1.272, DD 2.39):
+    right for returns, where it carries the spun-off value through, but a
+    spin-off leaves the parent's share count unchanged.  Genuine splits are
+    exact simple ratios (2, 3:2, 1:10, 1:12); stock dividends are small
+    (SCCO 1.01, CBSH 1.05)."""
+    if not r or r <= 0:
+        return False
+    if 1.0 < r <= 1.10:
+        return True
+    for x in (r, 1.0 / r):
+        for q in (1, 2, 3, 4):
+            if x * q >= 2 - 1e-9 and abs(x * q - round(x * q)) < 1e-3 * x * q:
+                return True
+    return False
+
+
+def split_ratios(df: pd.DataFrame, events: pd.DataFrame) -> pd.Series:
+    """Split ratio to apply to each row's prior-year share count.
+
+    The SEC share counts carry no split adjustment, so a 2-for-1 split between
+    the prior and current filing reads as 100% dilution and a 1-for-10 reverse
+    split as a 90% buyback.  The 2026-11 review found splits behind about one
+    in five share-count changes over 50%.
+
+    We do not know exactly which filing dates bracket a split, so for every
+    stock with a split in the price window we test the plausible adjustments
+    (each split alone, and all of them together) and keep the one that brings
+    the share change closest to zero, and only if it does better than no
+    adjustment.  A split that predates both filings (both counts already
+    post-split) therefore leaves the metric untouched: dividing by it would
+    move the change away from zero, not towards it.
+
+    events: corporate actions (prices.corporate_actions) with SPLIT rows.
+    Returns a Series aligned to df.index, 1.0 where nothing applies.
+    """
+    out = pd.Series(1.0, index=df.index)
+    if events is None or events.empty:
+        return out
+    sp = events[events["kind"] == "SPLIT"]
+    if sp.empty:
+        return out
+    sp = sp[sp["amount"].map(_share_count_split)]
+    by_sym = sp.groupby("symbol")["amount"].apply(list).to_dict()
+    raw = df["shares_out"] / df["shares_prior"]
+    for idx, sym in df["symbol"].items():
+        ratios = by_sym.get(sym)
+        r0 = raw.get(idx)
+        if not ratios or not (r0 and r0 > 0 and r0 == r0):
+            continue
+        cands = set(ratios) | {float(np.prod(ratios))}
+        best, best_err = 1.0, abs(np.log(r0))
+        for c in cands:
+            if c and c > 0:
+                err = abs(np.log(r0 / c))
+                if err < best_err:
+                    best, best_err = c, err
+        out.at[idx] = best
+    return out
+
 
 def _rank_z(s: pd.Series, groups: pd.Series | None = None) -> pd.Series:
     """Gaussian rank z-score: rank the metric cross-sectionally, map rank

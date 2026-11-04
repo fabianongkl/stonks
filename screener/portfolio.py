@@ -165,6 +165,9 @@ def _migrate_books(conn: sqlite3.Connection) -> None:
     if "book" not in cols:
         conn.execute("ALTER TABLE pf_txns ADD COLUMN book TEXT NOT NULL DEFAULT 'core'")
     cols = {r[1] for r in conn.execute("PRAGMA table_info(pf_snapshots)")}
+    if "dividends_cum" not in cols and "book" in cols:
+        # dividends included in cash/total as of this snapshot (v0.3)
+        conn.execute("ALTER TABLE pf_snapshots ADD COLUMN dividends_cum REAL")
     if "book" not in cols:
         conn.executescript("""
             CREATE TABLE pf_snapshots_v2 (
@@ -185,9 +188,27 @@ def _migrate_books(conn: sqlite3.Connection) -> None:
 # State
 # ---------------------------------------------------------------------------
 
-def holdings(conn, book: str = "core") -> pd.DataFrame:
-    tx = pd.read_sql_query(
-        "SELECT * FROM pf_txns WHERE book=? ORDER BY txn_id", conn, params=(book,))
+def _ordered_txns(conn, book: str, before: str | None = None) -> pd.DataFrame:
+    """Ledger in economic order: by date, splits before trades on the same
+    day (a split takes effect at the open), then insertion order."""
+    q = "SELECT * FROM pf_txns WHERE book=?"
+    params: tuple = (book,)
+    if before is not None:
+        q += " AND date < ?"
+        params = (book, before)
+    tx = pd.read_sql_query(q, conn, params=params)
+    if tx.empty:
+        return tx
+    tx["_pri"] = (tx["side"] != "SPLIT").astype(int)
+    return tx.sort_values(["date", "_pri", "txn_id"]).drop(columns="_pri")
+
+
+def holdings(conn, book: str = "core", before: str | None = None) -> pd.DataFrame:
+    """Open positions.  Ledger sides: BUY, SELL, SPLIT (shares = shares
+    added, negative for a reverse split, cost unchanged) and DIV (cash only).
+    before: only transactions dated strictly earlier (position at the prior
+    close, which is what decides dividend entitlement)."""
+    tx = _ordered_txns(conn, book, before)
     if tx.empty:
         return pd.DataFrame(columns=["symbol", "shares", "cost_basis"])
     rows: dict[str, dict] = {}
@@ -196,24 +217,92 @@ def holdings(conn, book: str = "core") -> pd.DataFrame:
         if t["side"] == "BUY":
             h["cost"] += t["shares"] * t["price"] + t["fee"]
             h["shares"] += t["shares"]
-        else:
+        elif t["side"] == "SELL":
             if h["shares"] > 0:
                 h["cost"] *= (h["shares"] - t["shares"]) / h["shares"]
             h["shares"] -= t["shares"]
+        elif t["side"] == "SPLIT":
+            h["shares"] += t["shares"]
     return pd.DataFrame(
         [{"symbol": s, "shares": v["shares"], "cost_basis": round(v["cost"], 2)}
          for s, v in rows.items() if v["shares"] > 1e-9])
 
 
-def cash(conn, book: str = "core") -> float:
-    tx = pd.read_sql_query(
-        "SELECT side, shares, price, fee FROM pf_txns WHERE book=?",
-        conn, params=(book,))
+def cash(conn, book: str = "core", through: str | None = None) -> float:
+    q = "SELECT side, shares, price, fee FROM pf_txns WHERE book=?"
+    params: tuple = (book,)
+    if through is not None:
+        q += " AND date <= ?"
+        params = (book, through)
+    tx = pd.read_sql_query(q, conn, params=params)
     c = BOOKS[book]["start_cash"]
     for _, t in tx.iterrows():
         flow = t["shares"] * t["price"]
-        c += (flow - t["fee"]) if t["side"] == "SELL" else -(flow + t["fee"])
+        if t["side"] == "SELL":
+            c += flow - t["fee"]
+        elif t["side"] == "BUY":
+            c -= flow + t["fee"]
+        elif t["side"] == "DIV":
+            c += flow
     return round(c, 2)
+
+
+def dividends_received(conn, book: str) -> float:
+    row = conn.execute("SELECT COALESCE(SUM(shares*price),0) FROM pf_txns "
+                       "WHERE book=? AND side='DIV'", (book,)).fetchone()
+    return round(float(row[0]), 2)
+
+
+def apply_corporate_actions(conn, book: str, through: str) -> list[str]:
+    """Credit dividends and apply splits on this book's holdings for every
+    event with ex-date <= through that the ledger does not yet record
+    (2026-11 review, proposal A).  Idempotent: an event is booked once.
+
+    Entitlement follows the market rule: shares held at the close BEFORE the
+    ex-date receive the dividend.  Events are processed in date order so a
+    split adjusts the share count used by any later dividend.
+    """
+    syms = [r[0] for r in conn.execute(
+        "SELECT DISTINCT symbol FROM pf_txns WHERE book=? AND side='BUY'", (book,))]
+    if not syms:
+        return []
+    first_buy = conn.execute(
+        "SELECT MIN(date) FROM pf_txns WHERE book=?", (book,)).fetchone()[0]
+    ph = ",".join("?" * len(syms))
+    ev = pd.read_sql_query(
+        f"SELECT symbol, ex_date, kind, amount, factor FROM corporate_actions "
+        f"WHERE symbol IN ({ph}) AND ex_date > ? AND ex_date <= ? "
+        f"ORDER BY ex_date, CASE kind WHEN 'SPLIT' THEN 0 ELSE 1 END",
+        conn, params=(*syms, first_buy, through))
+    done = {(r[0], r[1], r[2]) for r in conn.execute(
+        "SELECT symbol, date, side FROM pf_txns WHERE book=? "
+        "AND side IN ('DIV','SPLIT')", (book,))}
+    actions = []
+    for _, e in ev.iterrows():
+        if (e["symbol"], e["ex_date"], e["kind"]) in done:
+            continue
+        held = holdings(conn, book, before=e["ex_date"]).set_index("symbol")["shares"]
+        sh = float(held.get(e["symbol"], 0.0))
+        if sh <= 1e-9:
+            continue
+        if e["kind"] == "DIV":
+            conn.execute(
+                "INSERT INTO pf_txns (book, date, symbol, side, shares, price, fee, note)"
+                " VALUES (?,?,?,?,?,?,?,?)",
+                (book, e["ex_date"], e["symbol"], "DIV", sh, float(e["amount"]), 0.0,
+                 f"dividend ${e['amount']:.4f}/sh on {sh:g} sh"))
+            actions.append(f"DIV {e['symbol']} {e['ex_date']} "
+                           f"${sh * e['amount']:,.2f}")
+        else:
+            ratio = float(e["amount"])
+            conn.execute(
+                "INSERT INTO pf_txns (book, date, symbol, side, shares, price, fee, note)"
+                " VALUES (?,?,?,?,?,?,?,?)",
+                (book, e["ex_date"], e["symbol"], "SPLIT", sh * (ratio - 1.0), 0.0, 0.0,
+                 f"split {ratio:g}:1, {sh:g} -> {sh * ratio:g} sh"))
+            actions.append(f"SPLIT {e['symbol']} {e['ex_date']} x{ratio:g}")
+        conn.commit()
+    return actions
 
 
 def _record(conn, book: str, day: str, symbol: str, side: str, shares: float,
@@ -334,7 +423,7 @@ def _price_map(conn, book: str, scores: pd.DataFrame) -> dict[str, float]:
                          "live price $%.2f", book, s, live[s])
             else:
                 last = conn.execute(
-                    "SELECT price FROM pf_txns WHERE book=? AND symbol=? "
+                    "SELECT price FROM pf_txns WHERE book=? AND symbol=? AND side IN ('BUY','SELL') "
                     "ORDER BY txn_id DESC LIMIT 1", (book, s)).fetchone()
                 px[s] = float(last[0]) if last else 0.0
                 log.warning("[%s] %s has no live price (delisted?) — carried "
@@ -672,8 +761,10 @@ def snapshot(conn, book: str = "core",
     c = cash(conn, book)
     if spy is None:
         spy = spy_close(conn)
-    conn.execute("INSERT OR REPLACE INTO pf_snapshots VALUES (?,?,?,?,?,?)",
-                 (day, book, round(pos_val, 2), c, round(pos_val + c, 2), spy))
+    conn.execute("INSERT OR REPLACE INTO pf_snapshots (date, book, positions_value,"
+                 " cash, total, spy_close, dividends_cum) VALUES (?,?,?,?,?,?,?)",
+                 (day, book, round(pos_val, 2), c, round(pos_val + c, 2), spy,
+                  dividends_received(conn, book)))
     conn.commit()
     return {"date": day, "book": book, "positions_value": round(pos_val, 2),
             "cash": c, "total": round(pos_val + c, 2), "spy_close": spy}

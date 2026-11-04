@@ -37,7 +37,10 @@ priced into the expectations below.
    became sector-aware the same day (METHODOLOGY.md changelog v0.2); the
    original ten holdings are grandfathered and simply age out through the
    normal rank-decay rule.
-5. **Benchmark:** SPY buy-and-hold from inception, same start value.
+5. **Benchmark:** SPY buy-and-hold from inception, same start value, total
+   return (dividends reinvested). Since v0.3 (2026-11-05) the books also
+   collect dividends: each one is credited to cash on its ex-date as a `DIV`
+   ledger entry, and splits adjust the share count as `SPLIT` entries.
 
 Why this strategy and not day-trading or options:
 

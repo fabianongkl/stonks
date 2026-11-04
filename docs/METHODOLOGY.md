@@ -56,7 +56,7 @@ five-factor model).
 | Earnings yield | net income ÷ market cap | higher is better |
 | Free-cash-flow yield | (operating cash flow − capex) ÷ market cap | higher is better |
 | Book-to-market | shareholders' equity ÷ market cap | higher is better |
-| Net share issuance | Δ shares outstanding over ~1 year | **lower** is better |
+| Net share issuance | Δ shares outstanding over ~1 year, split-adjusted | **lower** is better |
 
 We use several value measures rather than one because each can be individually
 distorted (buybacks distort book value, one-off charges distort earnings);
@@ -253,6 +253,43 @@ no results were harmed in the making of these changes):
   a multi-class filer — Berkshire is the canonical case) and market cap is
   treated as missing instead of producing an absurd value score.
 - Bootstrap p-values on every matured-scan evaluation.
+
+**v0.3 (2026-11-05)**, decisions on November review proposals A and B
+(`journal/review-2026-11.md`, addendum):
+- **Total-return accounting.** Forward returns, factor ICs, the decile
+  spread and all six paper books now include dividends (reinvested, on the
+  ex-date) and splits. The price download returns dividends and splits in
+  the same bulk request; they are stored permanently in `corporate_actions`.
+  Recorded entry and exit prices are unchanged; each outcome is the
+  price-only return times the dividend and split factors inside its window.
+  History restated by `scripts/2026-11_total_return_backfill.py`; the
+  price-only figures are kept in `outcomes.price_return`,
+  `scan_eval_price_only` and `factor_ic_price_only`.
+- Books are credited each dividend as a `DIV` ledger entry (shares held at
+  the prior close × dividend) and splits as `SPLIT` entries. Missed
+  dividends since inception were credited on their ex-dates and every
+  historical snapshot restated, so the curves carry no artificial jump:
+  aggressive $654.85, core $87.14, monkey $29.74, ritual $0.52.
+- The SPY benchmark is now total return (dividends reinvested), so books
+  and benchmark stay like-for-like.
+- **Split-adjusted share issuance.** SEC share counts are raw, so a split
+  between the prior and current filing read as dilution (2:1 = +100%) or a
+  reverse split as a buyback. The prior count is now adjusted by the split
+  that brings the change closest to zero, only if it does better than no
+  adjustment; spin-offs, which Yahoo also records as "splits", are excluded
+  because they leave the share count unchanged. On the 2026-11-03 data:
+  36 eligible stocks adjusted, the >50% tail shrinks from 232 to 200.
+  Applies from the next scan; past scores are not rewritten.
+- The 2026-09-07 scan (Labor Day, market closed) duplicated the 2026-09-04
+  close; archived to `scans_superseded` like the Oct 16 duplicate. The
+  relabel migration now knows NYSE holidays.
+- **Measured price dates.** Cloud runs starting ~00:00-01:40 UTC received
+  the previous day's bars for most stocks; 20 scans hold prices one trading
+  day older than their label. `scans.price_asof` records each scan's
+  measured price date and drives every dividend/split window and horizon
+  count. New scans: the scan date is the date most symbols' data ends on,
+  and the panel is cut there. Schedule moved to 03:00 UTC Tue-Sat. A same-
+  date re-scan now archives the earlier scan instead of deleting it.
 
 **v0.2.3 (2026-11-04)**, November review (`journal/review-2026-11.md`):
 - SPY benchmark is fetched inside the scan's batched, retried price download
