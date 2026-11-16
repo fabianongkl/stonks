@@ -1,0 +1,500 @@
+{
+ "meta": {
+  "events": 70455,
+  "signals": 7216,
+  "src": {
+   "8-K 2.02": 68289,
+   "10-Q/10-K": 2166
+  },
+  "signals_by_period": {
+   "development": 4902,
+   "holdout": 2314
+  },
+  "dev_fixed_mix_weights": {
+   "slots-20 ibkr": 1.0,
+   "slots-20 uncon": 1.0,
+   "slots-8 ibkr": 1.0,
+   "slots-8 uncon": 1.0,
+   "all-signals": 1.0
+  },
+  "decile_diag": {
+   "development|1": {
+    "mean": 0.0132,
+    "median": -0.0108,
+    "count": 4818
+   },
+   "development|2": {
+    "mean": -0.0028,
+    "median": -0.0099,
+    "count": 4801
+   },
+   "development|3": {
+    "mean": -0.0006,
+    "median": -0.0061,
+    "count": 4800
+   },
+   "development|4": {
+    "mean": -0.004,
+    "median": -0.0058,
+    "count": 4804
+   },
+   "development|5": {
+    "mean": -0.0007,
+    "median": -0.0051,
+    "count": 4821
+   },
+   "development|6": {
+    "mean": -0.0022,
+    "median": -0.0023,
+    "count": 4791
+   },
+   "development|7": {
+    "mean": -0.006,
+    "median": -0.0061,
+    "count": 4807
+   },
+   "development|8": {
+    "mean": -0.0005,
+    "median": -0.003,
+    "count": 4805
+   },
+   "development|9": {
+    "mean": -0.0026,
+    "median": -0.004,
+    "count": 4802
+   },
+   "development|10": {
+    "mean": -0.0056,
+    "median": -0.0157,
+    "count": 4819
+   },
+   "holdout|1": {
+    "mean": -0.0193,
+    "median": -0.0328,
+    "count": 2253
+   },
+   "holdout|2": {
+    "mean": -0.0147,
+    "median": -0.0319,
+    "count": 2240
+   },
+   "holdout|3": {
+    "mean": -0.0194,
+    "median": -0.033,
+    "count": 2241
+   },
+   "holdout|4": {
+    "mean": -0.0014,
+    "median": -0.0218,
+    "count": 2234
+   },
+   "holdout|5": {
+    "mean": -0.0195,
+    "median": -0.0281,
+    "count": 2234
+   },
+   "holdout|6": {
+    "mean": -0.0185,
+    "median": -0.0249,
+    "count": 2236
+   },
+   "holdout|7": {
+    "mean": -0.0175,
+    "median": -0.0219,
+    "count": 2228
+   },
+   "holdout|8": {
+    "mean": -0.0179,
+    "median": -0.0284,
+    "count": 2239
+   },
+   "holdout|9": {
+    "mean": -0.0121,
+    "median": -0.0272,
+    "count": 2236
+   },
+   "holdout|10": {
+    "mean": 0.0006,
+    "median": -0.025,
+    "count": 2246
+   }
+  },
+  "top_signal_fwd_abn": {
+   "development": {
+    "mean": -0.0041,
+    "median": -0.0138,
+    "count": 4902
+   },
+   "holdout": {
+    "mean": 0.0014,
+    "median": -0.0246,
+    "count": 2314
+   }
+  }
+ },
+ "metrics": {
+  "development|SPY": {
+   "cagr": 0.1248770450739427,
+   "max_dd": -0.33717260555535167,
+   "ret_dd": 0.3703653351916289,
+   "end_value": 10016.003343052244
+  },
+  "development|EW universe": {
+   "cagr": 0.11040632243849235,
+   "max_dd": -0.4067200243667012,
+   "ret_dd": 0.2714553398505635,
+   "end_value": 8771.730858327157
+  },
+  "development|slots-20 ibkr": {
+   "cagr": 0.03241221809712047,
+   "max_dd": -0.49182336189763165,
+   "ret_dd": 0.0659021522931779,
+   "end_value": 4159.557671668691,
+   "quarters_beat_spy": 0.375,
+   "turnover_pa": 3.603874255019859,
+   "fees_total": 1755.8920567300092,
+   "fees_pct_pa": 0.03876344417565348,
+   "orders": 1636,
+   "skipped_price": 19,
+   "mix_spy_weight": 1.0,
+   "mix_cagr": 0.12487704507394248,
+   "mix_max_dd": -0.33717260555535145,
+   "n_positions": 828,
+   "total_pnl": 1159.557671668681,
+   "top1pct_n": 9,
+   "top1pct_share": 1.5012707007718917,
+   "top5pct_n": 42,
+   "top5pct_share": 3.8650796553429556,
+   "hit_rate": 0.5229468599033816
+  },
+  "development|slots-20 uncon": {
+   "cagr": 0.07750646531430672,
+   "max_dd": -0.5005013783919303,
+   "ret_dd": 0.15485764607348057,
+   "end_value": 6445.612518646444,
+   "quarters_beat_spy": 0.475,
+   "turnover_pa": 3.965284011987178,
+   "fees_total": 240.38755329112348,
+   "fees_pct_pa": 0.003965284011987176,
+   "orders": 1632,
+   "skipped_price": 0,
+   "mix_spy_weight": 1.0,
+   "mix_cagr": 0.12487704507394248,
+   "mix_max_dd": -0.33717260555535145,
+   "n_positions": 826,
+   "total_pnl": 3445.6125186464415,
+   "top1pct_n": 9,
+   "top1pct_share": 0.7120814334075038,
+   "top5pct_n": 42,
+   "top5pct_share": 1.9098723674223095,
+   "hit_rate": 0.549636803874092
+  },
+  "development|slots-8 ibkr": {
+   "cagr": 0.05292303970932477,
+   "max_dd": -0.49608668434776737,
+   "ret_dd": 0.10668103252742134,
+   "end_value": 5088.333412755522,
+   "quarters_beat_spy": 0.425,
+   "turnover_pa": 3.827542484800773,
+   "fees_total": 804.1225496293065,
+   "fees_pct_pa": 0.016556188761492674,
+   "orders": 664,
+   "skipped_price": 3,
+   "mix_spy_weight": 1.0,
+   "mix_cagr": 0.12487704507394248,
+   "mix_max_dd": -0.33717260555535145,
+   "n_positions": 336,
+   "total_pnl": 2088.333412755521,
+   "top1pct_n": 4,
+   "top1pct_share": 1.1359776594928672,
+   "top5pct_n": 17,
+   "top5pct_share": 2.8397338360221314,
+   "hit_rate": 0.5505952380952381
+  },
+  "development|slots-8 uncon": {
+   "cagr": 0.07456623068646095,
+   "max_dd": -0.5121531308501481,
+   "ret_dd": 0.14559362463075215,
+   "end_value": 6267.6746535947805,
+   "quarters_beat_spy": 0.45,
+   "turnover_pa": 3.9776905567922056,
+   "fees_total": 219.9649980035571,
+   "fees_pct_pa": 0.003977690556792207,
+   "orders": 664,
+   "skipped_price": 0,
+   "mix_spy_weight": 1.0,
+   "mix_cagr": 0.12487704507394248,
+   "mix_max_dd": -0.33717260555535145,
+   "n_positions": 336,
+   "total_pnl": 3267.6746535947786,
+   "top1pct_n": 4,
+   "top1pct_share": 0.8009729114837802,
+   "top5pct_n": 17,
+   "top5pct_share": 2.106793402597401,
+   "hit_rate": 0.5595238095238095
+  },
+  "development|all-signals": {
+   "cagr": 0.09520835598071398,
+   "max_dd": -0.49921254440038065,
+   "ret_dd": 0.1907170744178146,
+   "end_value": 7616.701419275807,
+   "quarters_beat_spy": 0.525,
+   "turnover_pa": 4.706159638351117,
+   "fees_total": 300.25955107631006,
+   "fees_pct_pa": 0.004706159638351138,
+   "orders": 0,
+   "skipped_price": 0,
+   "mix_spy_weight": 1.0,
+   "mix_cagr": 0.12487704507394248,
+   "mix_max_dd": -0.33717260555535145,
+   "top1pct_share": null,
+   "top5pct_share": null,
+   "top1pct_n": 0,
+   "top5pct_n": 0,
+   "hit_rate": null,
+   "n_positions": null
+  },
+  "holdout|SPY": {
+   "cagr": 0.2014890189590608,
+   "max_dd": -0.18755237333914376,
+   "ret_dd": 1.0743080205906854,
+   "end_value": 5656.744361455142
+  },
+  "holdout|EW universe": {
+   "cagr": 0.14970376215924097,
+   "max_dd": -0.2551797888707813,
+   "ret_dd": 0.5866599499188724,
+   "end_value": 4857.981766877472
+  },
+  "holdout|slots-20 ibkr": {
+   "cagr": 0.03413791804187882,
+   "max_dd": -0.36620302887757294,
+   "ret_dd": 0.09322128805573487,
+   "end_value": 3367.786888489579,
+   "quarters_beat_spy": 0.35714285714285715,
+   "turnover_pa": 3.7781854498652017,
+   "fees_total": 608.7128515563223,
+   "fees_pct_pa": 0.06103860743425793,
+   "orders": 574,
+   "skipped_price": 35,
+   "mix_spy_weight": 1.0,
+   "mix_cagr": 0.2014890189590599,
+   "mix_max_dd": -0.1875523733391442,
+   "n_positions": 287,
+   "total_pnl": 367.786888489577,
+   "top1pct_n": 3,
+   "top1pct_share": 0.9990840713314952,
+   "top5pct_n": 15,
+   "top5pct_share": 3.132874060774473,
+   "hit_rate": 0.4808362369337979
+  },
+  "holdout|slots-20 uncon": {
+   "cagr": 0.1057863809894044,
+   "max_dd": -0.33022048290002326,
+   "ret_dd": 0.32035075492707105,
+   "end_value": 4246.21366644739,
+   "quarters_beat_spy": 0.42857142857142855,
+   "turnover_pa": 4.157645862945297,
+   "fees_total": 50.135642524261016,
+   "fees_pct_pa": 0.004157645862945296,
+   "orders": 580,
+   "skipped_price": 0,
+   "mix_spy_weight": 1.0,
+   "mix_cagr": 0.2014890189590599,
+   "mix_max_dd": -0.1875523733391442,
+   "n_positions": 290,
+   "total_pnl": 1246.2136664473892,
+   "top1pct_n": 3,
+   "top1pct_share": 0.4506754557191695,
+   "top5pct_n": 15,
+   "top5pct_share": 1.4440516244627217,
+   "hit_rate": 0.5172413793103449
+  },
+  "holdout|slots-8 ibkr": {
+   "cagr": 0.12936510188884132,
+   "max_dd": -0.302652824680096,
+   "ret_dd": 0.4274372856938646,
+   "end_value": 4565.826066674924,
+   "quarters_beat_spy": 0.42857142857142855,
+   "turnover_pa": 3.987247573363566,
+   "fees_total": 273.77337139478294,
+   "fees_pct_pa": 0.024814696492723227,
+   "orders": 238,
+   "skipped_price": 1,
+   "mix_spy_weight": 1.0,
+   "mix_cagr": 0.2014890189590599,
+   "mix_max_dd": -0.1875523733391442,
+   "n_positions": 119,
+   "total_pnl": 1565.8260666749252,
+   "top1pct_n": 2,
+   "top1pct_share": 0.35068389920574067,
+   "top5pct_n": 6,
+   "top5pct_share": 0.8695621657337259,
+   "hit_rate": 0.5462184873949579
+  },
+  "holdout|slots-8 uncon": {
+   "cagr": 0.16449141022737246,
+   "max_dd": -0.29182974289803765,
+   "ret_dd": 0.563655399185422,
+   "end_value": 5076.987343809687,
+   "quarters_beat_spy": 0.35714285714285715,
+   "turnover_pa": 4.256274494465753,
+   "fees_total": 51.7594908941882,
+   "fees_pct_pa": 0.004256274494465754,
+   "orders": 240,
+   "skipped_price": 0,
+   "mix_spy_weight": 1.0,
+   "mix_cagr": 0.2014890189590599,
+   "mix_max_dd": -0.1875523733391442,
+   "n_positions": 120,
+   "total_pnl": 2076.9873438096874,
+   "top1pct_n": 2,
+   "top1pct_share": 0.30745580533609995,
+   "top5pct_n": 6,
+   "top5pct_share": 0.7622217254970598,
+   "hit_rate": 0.5416666666666666
+  },
+  "holdout|all-signals": {
+   "cagr": 0.17480429506315054,
+   "max_dd": -0.32461836640457153,
+   "ret_dd": 0.5384916971866346,
+   "end_value": 5231.74631358246,
+   "quarters_beat_spy": 0.42857142857142855,
+   "turnover_pa": 5.27267069722004,
+   "fees_total": 70.41465396328793,
+   "fees_pct_pa": 0.0052726706972200475,
+   "orders": 0,
+   "skipped_price": 0,
+   "mix_spy_weight": 1.0,
+   "mix_cagr": 0.2014890189590599,
+   "mix_max_dd": -0.1875523733391442,
+   "top1pct_share": null,
+   "top5pct_share": null,
+   "top1pct_n": 0,
+   "top5pct_n": 0,
+   "hit_rate": null,
+   "n_positions": null
+  },
+  "full|SPY": {
+   "cagr": 0.1432303813001703,
+   "max_dd": -0.33717260555535167,
+   "ret_dd": 0.4247983938797691,
+   "end_value": 18781.26447152232
+  },
+  "full|EW universe": {
+   "cagr": 0.11952691206735411,
+   "max_dd": -0.4067200243667012,
+   "ret_dd": 0.2938800769730185,
+   "end_value": 14094.145240854803
+  },
+  "full|slots-20 ibkr": {
+   "cagr": 0.04037610070187103,
+   "max_dd": -0.5128667302705594,
+   "ret_dd": 0.07872630123730368,
+   "end_value": 5160.358557055234,
+   "quarters_beat_spy": 0.35185185185185186,
+   "turnover_pa": 3.649379209909762,
+   "fees_total": 2378.808250378317,
+   "fees_pct_pa": 0.03937112620800252,
+   "orders": 2216,
+   "skipped_price": 43,
+   "mix_spy_weight": 1.0,
+   "mix_cagr": 0.14323038130016985,
+   "mix_max_dd": -0.33717260555535145,
+   "n_positions": 1108,
+   "total_pnl": 2160.358557055224,
+   "top1pct_n": 12,
+   "top1pct_share": 1.0629300212120698,
+   "top5pct_n": 56,
+   "top5pct_share": 2.896175225568513,
+   "hit_rate": 0.5288808664259927
+  },
+  "full|slots-20 uncon": {
+   "cagr": 0.0932842693873066,
+   "max_dd": -0.5005013783919303,
+   "ret_dd": 0.1863816433173896,
+   "end_value": 10183.069658507888,
+   "quarters_beat_spy": 0.42592592592592593,
+   "turnover_pa": 4.040449877460375,
+   "fees_total": 352.1285735587847,
+   "fees_pct_pa": 0.004040449877460369,
+   "orders": 2212,
+   "skipped_price": 0,
+   "mix_spy_weight": 1.0,
+   "mix_cagr": 0.14323038130016985,
+   "mix_max_dd": -0.33717260555535145,
+   "n_positions": 1106,
+   "total_pnl": 7183.069658507891,
+   "top1pct_n": 12,
+   "top1pct_share": 0.5296195653345913,
+   "top5pct_n": 56,
+   "top5pct_share": 1.4515330061882985,
+   "hit_rate": 0.554249547920434
+  },
+  "full|slots-8 ibkr": {
+   "cagr": 0.04149944380292614,
+   "max_dd": -0.5835865715481132,
+   "ret_dd": 0.07111103275189867,
+   "end_value": 5237.235570757694,
+   "quarters_beat_spy": 0.3888888888888889,
+   "turnover_pa": 3.847667548707536,
+   "fees_total": 1086.8332362490441,
+   "fees_pct_pa": 0.016739517058992327,
+   "orders": 896,
+   "skipped_price": 4,
+   "mix_spy_weight": 1.0,
+   "mix_cagr": 0.14323038130016985,
+   "mix_max_dd": -0.33717260555535145,
+   "n_positions": 448,
+   "total_pnl": 2237.235570757697,
+   "top1pct_n": 5,
+   "top1pct_share": 1.393071945944716,
+   "top5pct_n": 23,
+   "top5pct_share": 3.649687586439154,
+   "hit_rate": 0.5379464285714286
+  },
+  "full|slots-8 uncon": {
+   "cagr": 0.06575654449690083,
+   "max_dd": -0.5543043930755023,
+   "ret_dd": 0.11862894344397533,
+   "end_value": 7179.883043069826,
+   "quarters_beat_spy": 0.4074074074074074,
+   "turnover_pa": 4.004854131653264,
+   "fees_total": 306.901201213913,
+   "fees_pct_pa": 0.00400485413165327,
+   "orders": 896,
+   "skipped_price": 0,
+   "mix_spy_weight": 1.0,
+   "mix_cagr": 0.14323038130016985,
+   "mix_max_dd": -0.33717260555535145,
+   "n_positions": 448,
+   "total_pnl": 4179.883043069836,
+   "top1pct_n": 5,
+   "top1pct_share": 0.9314488263879029,
+   "top5pct_n": 23,
+   "top5pct_share": 2.445600771555778,
+   "hit_rate": 0.546875
+  },
+  "full|all-signals": {
+   "cagr": 0.11898259759341911,
+   "max_dd": -0.49921254440038065,
+   "ret_dd": 0.23834056040465235,
+   "end_value": 14000.53415601731,
+   "quarters_beat_spy": 0.5,
+   "turnover_pa": 4.796874995860956,
+   "fees_total": 477.41219185177823,
+   "fees_pct_pa": 0.004796874995860961,
+   "orders": 0,
+   "skipped_price": 0,
+   "mix_spy_weight": 1.0,
+   "mix_cagr": 0.14323038130016985,
+   "mix_max_dd": -0.33717260555535145,
+   "top1pct_share": null,
+   "top5pct_share": null,
+   "top1pct_n": 0,
+   "top5pct_n": 0,
+   "hit_rate": null,
+   "n_positions": null
+  }
+ }
+}

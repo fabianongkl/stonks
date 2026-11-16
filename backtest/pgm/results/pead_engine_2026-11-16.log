@@ -1,0 +1,48 @@
+01:38:09 building fundamental panel ...
+01:38:18 building price panels ...
+01:38:40 events after mapping: 128350 ({'8-K 2.02': 108964, '10-Q/10-K': 19386})
+01:38:45 universe events 70455, top-decile signals 7216
+01:39:01 development|slots-20 ibkr: {'cagr': 0.032, 'max_dd': -0.492, 'ret_dd': 0.066, 'end_value': 4159.558, 'quarters_beat_spy': np.float64(0.375), 'turnover_pa': np.float64(3.604), 'fees_total': np.float64(1755.892), 'fees_pct_pa': np.float64(0.039), 'orders': 1636, 'skipped_price': 19, 'mix_spy_weight': 1.0, 'mix_cagr': 0.125, 'mix_max_dd': -0.337, 'n_positions': 828, 'total_pnl': 1159.558, 'top1pct_n': 9, 'top1pct_share': 1.501, 'top5pct_n': 42, 'top5pct_share': 3.865, 'hit_rate': 0.523}
+01:39:01 development|slots-20 uncon: {'cagr': 0.078, 'max_dd': -0.501, 'ret_dd': 0.155, 'end_value': 6445.613, 'quarters_beat_spy': np.float64(0.475), 'turnover_pa': np.float64(3.965), 'fees_total': np.float64(240.388), 'fees_pct_pa': np.float64(0.004), 'orders': 1632, 'skipped_price': 0, 'mix_spy_weight': 1.0, 'mix_cagr': 0.125, 'mix_max_dd': -0.337, 'n_positions': 826, 'total_pnl': 3445.613, 'top1pct_n': 9, 'top1pct_share': 0.712, 'top5pct_n': 42, 'top5pct_share': 1.91, 'hit_rate': 0.55}
+01:39:01 development|slots-8 ibkr: {'cagr': 0.053, 'max_dd': -0.496, 'ret_dd': 0.107, 'end_value': 5088.333, 'quarters_beat_spy': np.float64(0.425), 'turnover_pa': np.float64(3.828), 'fees_total': np.float64(804.123), 'fees_pct_pa': np.float64(0.017), 'orders': 664, 'skipped_price': 3, 'mix_spy_weight': 1.0, 'mix_cagr': 0.125, 'mix_max_dd': -0.337, 'n_positions': 336, 'total_pnl': 2088.333, 'top1pct_n': 4, 'top1pct_share': 1.136, 'top5pct_n': 17, 'top5pct_share': 2.84, 'hit_rate': 0.551}
+01:39:01 development|slots-8 uncon: {'cagr': 0.075, 'max_dd': -0.512, 'ret_dd': 0.146, 'end_value': 6267.675, 'quarters_beat_spy': np.float64(0.45), 'turnover_pa': np.float64(3.978), 'fees_total': np.float64(219.965), 'fees_pct_pa': np.float64(0.004), 'orders': 664, 'skipped_price': 0, 'mix_spy_weight': 1.0, 'mix_cagr': 0.125, 'mix_max_dd': -0.337, 'n_positions': 336, 'total_pnl': 3267.675, 'top1pct_n': 4, 'top1pct_share': 0.801, 'top5pct_n': 17, 'top5pct_share': 2.107, 'hit_rate': 0.56}
+01:39:02 development|all-signals: {'cagr': 0.095, 'max_dd': -0.499, 'ret_dd': 0.191, 'end_value': 7616.701, 'quarters_beat_spy': np.float64(0.525), 'turnover_pa': np.float64(4.706), 'fees_total': np.float64(300.26), 'fees_pct_pa': np.float64(0.005), 'orders': 0, 'skipped_price': 0, 'mix_spy_weight': 1.0, 'mix_cagr': 0.125, 'mix_max_dd': -0.337, 'top1pct_share': None, 'top5pct_share': None, 'top1pct_n': 0, 'top5pct_n': 0, 'hit_rate': None, 'n_positions': None}
+01:39:05 holdout|slots-20 ibkr: {'cagr': 0.034, 'max_dd': -0.366, 'ret_dd': 0.093, 'end_value': 3367.787, 'quarters_beat_spy': np.float64(0.357), 'turnover_pa': np.float64(3.778), 'fees_total': np.float64(608.713), 'fees_pct_pa': np.float64(0.061), 'orders': 574, 'skipped_price': 35, 'mix_spy_weight': 1.0, 'mix_cagr': 0.201, 'mix_max_dd': -0.188, 'n_positions': 287, 'total_pnl': 367.787, 'top1pct_n': 3, 'top1pct_share': 0.999, 'top5pct_n': 15, 'top5pct_share': 3.133, 'hit_rate': 0.481}
+01:39:05 holdout|slots-20 uncon: {'cagr': 0.106, 'max_dd': -0.33, 'ret_dd': 0.32, 'end_value': 4246.214, 'quarters_beat_spy': np.float64(0.429), 'turnover_pa': np.float64(4.158), 'fees_total': np.float64(50.136), 'fees_pct_pa': np.float64(0.004), 'orders': 580, 'skipped_price': 0, 'mix_spy_weight': 1.0, 'mix_cagr': 0.201, 'mix_max_dd': -0.188, 'n_positions': 290, 'total_pnl': 1246.214, 'top1pct_n': 3, 'top1pct_share': 0.451, 'top5pct_n': 15, 'top5pct_share': 1.444, 'hit_rate': 0.517}
+01:39:05 holdout|slots-8 ibkr: {'cagr': 0.129, 'max_dd': -0.303, 'ret_dd': 0.427, 'end_value': 4565.826, 'quarters_beat_spy': np.float64(0.429), 'turnover_pa': np.float64(3.987), 'fees_total': np.float64(273.773), 'fees_pct_pa': np.float64(0.025), 'orders': 238, 'skipped_price': 1, 'mix_spy_weight': 1.0, 'mix_cagr': 0.201, 'mix_max_dd': -0.188, 'n_positions': 119, 'total_pnl': 1565.826, 'top1pct_n': 2, 'top1pct_share': 0.351, 'top5pct_n': 6, 'top5pct_share': 0.87, 'hit_rate': 0.546}
+01:39:05 holdout|slots-8 uncon: {'cagr': 0.164, 'max_dd': -0.292, 'ret_dd': 0.564, 'end_value': 5076.987, 'quarters_beat_spy': np.float64(0.357), 'turnover_pa': np.float64(4.256), 'fees_total': np.float64(51.759), 'fees_pct_pa': np.float64(0.004), 'orders': 240, 'skipped_price': 0, 'mix_spy_weight': 1.0, 'mix_cagr': 0.201, 'mix_max_dd': -0.188, 'n_positions': 120, 'total_pnl': 2076.987, 'top1pct_n': 2, 'top1pct_share': 0.307, 'top5pct_n': 6, 'top5pct_share': 0.762, 'hit_rate': 0.542}
+01:39:05 holdout|all-signals: {'cagr': 0.175, 'max_dd': -0.325, 'ret_dd': 0.538, 'end_value': 5231.746, 'quarters_beat_spy': np.float64(0.429), 'turnover_pa': np.float64(5.273), 'fees_total': np.float64(70.415), 'fees_pct_pa': np.float64(0.005), 'orders': 0, 'skipped_price': 0, 'mix_spy_weight': 1.0, 'mix_cagr': 0.201, 'mix_max_dd': -0.188, 'top1pct_share': None, 'top5pct_share': None, 'top1pct_n': 0, 'top5pct_n': 0, 'hit_rate': None, 'n_positions': None}
+01:39:19 full|slots-20 ibkr: {'cagr': 0.04, 'max_dd': -0.513, 'ret_dd': 0.079, 'end_value': 5160.359, 'quarters_beat_spy': np.float64(0.352), 'turnover_pa': np.float64(3.649), 'fees_total': np.float64(2378.808), 'fees_pct_pa': np.float64(0.039), 'orders': 2216, 'skipped_price': 43, 'mix_spy_weight': 1.0, 'mix_cagr': 0.143, 'mix_max_dd': -0.337, 'n_positions': 1108, 'total_pnl': 2160.359, 'top1pct_n': 12, 'top1pct_share': 1.063, 'top5pct_n': 56, 'top5pct_share': 2.896, 'hit_rate': 0.529}
+01:39:19 full|slots-20 uncon: {'cagr': 0.093, 'max_dd': -0.501, 'ret_dd': 0.186, 'end_value': 10183.07, 'quarters_beat_spy': np.float64(0.426), 'turnover_pa': np.float64(4.04), 'fees_total': np.float64(352.129), 'fees_pct_pa': np.float64(0.004), 'orders': 2212, 'skipped_price': 0, 'mix_spy_weight': 1.0, 'mix_cagr': 0.143, 'mix_max_dd': -0.337, 'n_positions': 1106, 'total_pnl': 7183.07, 'top1pct_n': 12, 'top1pct_share': 0.53, 'top5pct_n': 56, 'top5pct_share': 1.452, 'hit_rate': 0.554}
+01:39:19 full|slots-8 ibkr: {'cagr': 0.041, 'max_dd': -0.584, 'ret_dd': 0.071, 'end_value': 5237.236, 'quarters_beat_spy': np.float64(0.389), 'turnover_pa': np.float64(3.848), 'fees_total': np.float64(1086.833), 'fees_pct_pa': np.float64(0.017), 'orders': 896, 'skipped_price': 4, 'mix_spy_weight': 1.0, 'mix_cagr': 0.143, 'mix_max_dd': -0.337, 'n_positions': 448, 'total_pnl': 2237.236, 'top1pct_n': 5, 'top1pct_share': 1.393, 'top5pct_n': 23, 'top5pct_share': 3.65, 'hit_rate': 0.538}
+01:39:19 full|slots-8 uncon: {'cagr': 0.066, 'max_dd': -0.554, 'ret_dd': 0.119, 'end_value': 7179.883, 'quarters_beat_spy': np.float64(0.407), 'turnover_pa': np.float64(4.005), 'fees_total': np.float64(306.901), 'fees_pct_pa': np.float64(0.004), 'orders': 896, 'skipped_price': 0, 'mix_spy_weight': 1.0, 'mix_cagr': 0.143, 'mix_max_dd': -0.337, 'n_positions': 448, 'total_pnl': 4179.883, 'top1pct_n': 5, 'top1pct_share': 0.931, 'top5pct_n': 23, 'top5pct_share': 2.446, 'hit_rate': 0.547}
+01:39:19 full|all-signals: {'cagr': 0.119, 'max_dd': -0.499, 'ret_dd': 0.238, 'end_value': 14000.534, 'quarters_beat_spy': np.float64(0.5), 'turnover_pa': np.float64(4.797), 'fees_total': np.float64(477.412), 'fees_pct_pa': np.float64(0.005), 'orders': 0, 'skipped_price': 0, 'mix_spy_weight': 1.0, 'mix_cagr': 0.143, 'mix_max_dd': -0.337, 'top1pct_share': None, 'top5pct_share': None, 'top1pct_n': 0, 'top5pct_n': 0, 'hit_rate': None, 'n_positions': None}
+01:39:19 decile diagnostic:
+                     mean    median  count
+period      dec                           
+development 1    0.013203 -0.010831   4818
+            2   -0.002827 -0.009880   4801
+            3   -0.000640 -0.006058   4800
+            4   -0.004031 -0.005767   4804
+            5   -0.000666 -0.005078   4821
+            6   -0.002184 -0.002330   4791
+            7   -0.006004 -0.006091   4807
+            8   -0.000454 -0.002957   4805
+            9   -0.002558 -0.004009   4802
+            10  -0.005622 -0.015666   4819
+holdout     1   -0.019340 -0.032768   2253
+            2   -0.014742 -0.031859   2240
+            3   -0.019427 -0.033014   2241
+            4   -0.001422 -0.021819   2234
+            5   -0.019476 -0.028118   2234
+            6   -0.018491 -0.024892   2236
+            7   -0.017527 -0.021916   2228
+            8   -0.017929 -0.028440   2239
+            9   -0.012110 -0.027188   2236
+            10   0.000584 -0.024969   2246
+top-decile signals:
+                 mean    median  count
+period                                
+development -0.004092 -0.013787   4902
+holdout      0.001367 -0.024603   2314
+01:39:19 done
