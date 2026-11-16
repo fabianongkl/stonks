@@ -15,3 +15,6 @@ __pycache__/
 
 # scratch space used when reconciling database conflicts
 .tmpdb/
+
+# PGM backtest full ranking table (12 MB, rebuilt by backtest/pgm/engine.py)
+backtest/pgm/results/rankings.parquet
