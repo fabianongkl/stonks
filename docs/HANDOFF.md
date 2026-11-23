@@ -1,14 +1,15 @@
-# Project handoff — state, decisions, and how to continue
+# Project handoff: state, decisions, and how to continue
 
-Written 2026-09-04, at the point where day-to-day stewardship moves from a
-local Claude Code session to a claude.ai Project. Everything an assistant
-(or human) needs to continue is in this repo or at the public URLs below —
-no local files required.
+First written 2026-09-04, when day-to-day stewardship moved from a local
+Claude Code session to a claude.ai Project. Updated 2026-11-24. The October
+and November reviews were run from a local Claude Code session; either route
+works. Everything an assistant (or human) needs to continue is in this repo
+or at the public URLs below.
 
 ## What this project is
 
-An open-source, self-improving daily stock screener plus two hypothetical
-portfolios, run as a public experiment: can an AI-maintained factor model
+An open-source, self-improving daily stock screener plus six hypothetical
+paper books, run as a public experiment: can an AI-maintained factor model
 predict stock performance, and can it learn from its record? Not investment
 advice; the record's honesty is the product. Started 2026-09-01.
 
@@ -19,51 +20,96 @@ advice; the record's honesty is the product. Started 2026-09-01.
 | Dashboard (daily scan, sector commentary) | https://fabianongkl.github.io/stonks/ |
 | Core book "Claude's Picks" ($10k) | https://fabianongkl.github.io/stonks/portfolio.html |
 | Hyper-Aggressive book ($100k) | https://fabianongkl.github.io/stonks/aggressive.html |
+| Top-3 Ritual book ($10k) | https://fabianongkl.github.io/stonks/ritual.html |
+| Loser Reversal book ($10k) | https://fabianongkl.github.io/stonks/reversal.html |
+| Monkey Control book ($10k) | https://fabianongkl.github.io/stonks/monkey.html |
+| Insider Buying book ($10k) | https://fabianongkl.github.io/stonks/insider.html |
+| S&P 500 Lens | https://fabianongkl.github.io/stonks/sp500.html |
 | 5-year backtest | https://fabianongkl.github.io/stonks/backtest.html |
 | Machine-readable daily payloads | https://fabianongkl.github.io/stonks/data/YYYY-MM-DD.json |
-| Repo (code, database, journal — all committed daily) | https://github.com/fabianongkl/stonks |
+| Repo (code, database, journal, all committed daily) | https://github.com/fabianongkl/stonks |
 
 ## What runs without anyone
 
-GitHub Actions (`.github/workflows/daily-scan.yml`), weekdays 21:30 UTC:
-scan → score → snapshot both books → commit `data/screener.db`, `journal/`,
-`dashboard/` → deploy Pages. A second workflow redeploys Pages on every push.
-**No AI is involved in the daily run** — commentary is rule-generated.
+GitHub Actions (`.github/workflows/daily-scan.yml`), cron 03:00 UTC Tue-Sat
+(the night of each Mon-Fri session). GitHub starts it late: recent runs began
+about 09:40-11:40 UTC, still before the US open at 14:30 UTC. Steps:
+`run_scan.py` (scan, score, outcomes) -> `track_portfolio.py` (snapshot all
+six books, January and quarterly auto-rotations) -> `run_sp500.py` -> commit
+`data/screener.db`, `journal/`, `dashboard/` -> deploy Pages. A second
+workflow (`deploy-pages.yml`) redeploys Pages on every push.
+**No AI is involved in the daily run**; commentary is rule-generated.
+
 Data-quality guards fail the run loudly (red X, nothing committed) rather
-than record a degraded scan (<60% price coverage, or shrinking an existing
-same-date scan >20%).
+than record a degraded scan: under 60% price coverage, or a scan shrinking
+an existing same-date scan by over 20%. Each scan is labelled by its price
+date (the date most symbols' data ends on) and the panel is cut there. A
+second scan of the same price date archives the first instead of deleting it.
 
-## Where things stand (2026-09-04)
+## Where things stand (2026-11-20 close)
 
-- 3 clean daily scans recorded (Sep 1–3), ~3,460 stocks scored each,
-  ~94% full factor coverage.
-- Core book: $10,082.70 (+0.8%). Aggressive book: $100,571.98 (+0.6%).
-- No outcomes have matured yet. First 21-day evaluations: ~Sep 30.
-  First possible weight adaptation: needs 6 non-overlapping 63-day windows
-  (≈ early 2028) — by design, see METHODOLOGY.md.
-- Known incident: Sep 1's first cloud run was Yahoo-throttled and briefly
-  corrupted the record; restored from git history; hardening added.
-  If daily runs go red repeatedly, the queued fix is a Stooq price fallback
-  for the runner (see docs/DATA_SOURCES.md).
+- 50 daily scans, 2026-08-31 to 2026-11-20. The latest scored 3,288 stocks,
+  2,905 eligible (factor completeness gate). Methodology v0.3 (total return).
+- 21-day evaluations: 31 matured scans, mean top-decile spread over the
+  median +1.57%, 21 positive. The windows overlap, so this is about one
+  independent observation. First 63-day result: about Nov 27 to 30.
+- Weights are still the defaults (value 0.25, quality 0.30, momentum 0.30,
+  low-vol 0.15). Adaptation needs 6 non-overlapping 63-day windows (about
+  early 2028), by design; see METHODOLOGY.md.
+- Books at the 2026-11-20 close (SPY total return: -9.85% since 2026-08-31,
+  -10.17% since 2026-09-03):
+
+  | book | started | value | P&L | vs SPY |
+  |---|---|---|---|---|
+  | Claude's Picks (core) | 2026-08-31 | $9,574 | -4.3% | +5.6 |
+  | Loser Reversal | 2026-09-03 | $9,601 | -4.0% | +6.2 |
+  | Hyper-Aggressive | 2026-08-31 | $88,355 | -11.6% | -1.8 |
+  | Monkey Control | 2026-09-03 | $8,691 | -13.1% | -2.9 |
+  | Insider Buying | 2026-09-03 | $6,561 | -34.4% | -24.2 |
+  | Top-3 Ritual | 2026-09-03 | $4,083 | -59.2% | -49.0 |
+
+- Incidents on the record: Sep 1 throttled run (restored from git history,
+  retries and guards added; if runs go red repeatedly, the queued fix is a
+  Stooq price fallback, see docs/DATA_SOURCES.md). Sep to Nov: cloud runs
+  that started 00:00-01:40 UTC got the previous day's bars; fixed by the
+  schedule move, `scans.price_asof`, and the 2026-11-24 relabel and dedupe.
 
 ## Standing decisions (do not silently reverse)
 
 1. **The backtest never sets live weights** (results are survivorship-biased;
    tuning to them manufactures overfitting). It measured: top decile
    +6.5%/yr vs median (t=1.94), ICs low-vol +0.088 / momentum +0.043 /
-   quality 0 / value −0.018, sim book lagged SPY.
-2. **The two books are an A/B test**: core follows literature priors,
-   aggressive follows backtest-informed tilt. Don't homogenize them.
+   quality 0 / value -0.018, sim book lagged SPY.
+2. **Core vs Hyper-Aggressive is an A/B test**: core follows literature
+   priors, aggressive follows a backtest-informed tilt. Monkey Control is the
+   random control group. Don't homogenize them.
 3. **Every methodology change needs a written journal entry first**
    (docs/REVIEW_PROTOCOL.md). One structural change at a time.
-4. **No leverage/options in the paper books** — unsimulatable honestly.
-5. **Never delete history**; bad calls stay on the record.
+4. **No leverage/options in the paper books**: unsimulatable honestly.
+5. **Never delete history**; bad calls stay on the record. Duplicates and bad
+   scans are archived (`scans_superseded`, `scores_superseded`), not deleted.
+6. **Total return everywhere** (v0.3): outcomes, books and the SPY benchmark
+   include dividends and splits. Price-only figures are archived.
+7. **Price date drives the arithmetic.** `scans.price_asof` sets every window
+   and horizon; scan labels equal it. Pick the latest scan by
+   `scan_date DESC`, never `MAX(scan_id)` (ids follow insertion order).
+8. **Never run a scan, `track_portfolio.py` or any live-price step locally
+   during the US session** (14:30-21:00 UTC). It records intraday prices.
+9. **Factor completeness gate**: a factor counts only if at least half its
+   metrics are present. Use `factors.eligible_mask()`, never
+   `n_factors == 4`.
+10. **Turnover hysteresis**: a holding sells after 2 consecutive reviews
+    beyond tolerance (`REVIEW_STRIKES = 2`); universe dropouts sell at once.
+11. **Book rotations stay on schedule**: no off-schedule rebuilds (attribution
+    integrity). Insider rotates quarterly; Ritual, Reversal and Monkey each
+    January.
+12. **USD facts only** until there is an FX layer; non-USD reporters stay
+    unscored.
 
 ## Open items for the December review (target: first days of December)
 
 Updated 2026-11-24. Sources: `journal/review-2026-11.md` (agenda and
-addenda) and `journal/review-2026-10.md`. The October items above this
-point were all handled in those reviews.
+addenda) and `journal/review-2026-10.md`. The October open items were all handled in those reviews.
 
 1. **First 63-day maturity.** Scan 2026-08-31 matures on the first scan
    after 2026-11-26 (Thanksgiving week, so about Nov 27 to 30). Report the
@@ -106,25 +152,27 @@ Done since the November review:
   of intraday scan 47, 17 scans relabelled. Every scan label now equals its
   price date.
 
-## How to run the monthly review from a chat-only assistant
+## How to run the monthly review
 
-All inputs are fetchable URLs; no local execution needed:
+Inputs are fetchable URLs, so a chat-only assistant can do the analysis:
 
-1. Read the latest `journal/*.md` and `dashboard/data/<latest>.json`
-   (raw.githubusercontent.com or the Pages URLs above).
-2. Follow docs/REVIEW_PROTOCOL.md's checklist.
-3. Write the review as `journal/review-YYYY-MM.md` (commit via github.com
-   web editor, a Claude GitHub integration, or hand the file to the user).
-4. Portfolio trades: run `python track_portfolio.py --review` — needs a
-   machine. Either the user runs it locally (repo README), or add a
-   `workflow_dispatch` input to trigger it in Actions (small change,
-   documented intent).
+1. Read the latest `journal/*.md`, the previous `journal/review-YYYY-MM.md`
+   and `dashboard/data/<latest>.json` (raw.githubusercontent.com or the
+   Pages URLs above).
+2. Follow docs/REVIEW_PROTOCOL.md's checklist and the open items above.
+3. Write the review as `journal/review-YYYY-MM.md`.
+4. Portfolio trades: run `python track_portfolio.py --review` on a machine,
+   outside US market hours (rule 8). The cloud job only snapshots.
+5. One-time data corrections go in `scripts/` as idempotent, documented
+   migrations (see the 2026-11 scripts), with a journal entry.
 
 ## Repo map
 
-Start with README.md → docs/METHODOLOGY.md (every metric justified +
-changelog) → docs/PORTFOLIO_EXPERIMENT.md (book rules) →
-docs/DATA_SOURCES.md (sources + limitations) → backtest/results/REPORT.md
-(read its caveats). The user's background: beginner student, values honest
+Start with README.md -> docs/METHODOLOGY.md (every metric justified, plus
+changelog) -> docs/PORTFOLIO_EXPERIMENT.md (book rules) ->
+docs/DATA_SOURCES.md (sources and limitations) -> the latest
+`journal/review-*.md` -> backtest/results/REPORT.md (read its caveats).
+Shelved research: docs/PGM_SCREEN.md and docs/PEAD_SCREEN.md (backtests in
+`backtest/pgm/`). The user's background: beginner student, values honest
 odds tables when trades are discussed, keeps this project strictly separate
 from their other projects.
